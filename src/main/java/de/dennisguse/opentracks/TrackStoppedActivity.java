@@ -56,6 +56,21 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
         ContentProviderUtils contentProviderUtils = new ContentProviderUtils(this);
         Track track = contentProviderUtils.getTrack(trackId);
 
+        //Temporary code to illustrate JSON serialization and loading of Track model
+        //TODO! - Remove
+        //Assignee - Jean Robatto
+
+        final String JSON_SERIALIZER_LOG_TAG = "JSONSerializerTest";
+
+        final String trackJSONString = track.toJSON();
+        Log.i(JSON_SERIALIZER_LOG_TAG, trackJSONString);
+
+        final Track trackCopy = JSONSerializable.fromJSON(trackJSONString, Track.class);
+        Log.i(JSON_SERIALIZER_LOG_TAG, trackCopy.toString());
+        Log.i(JSON_SERIALIZER_LOG_TAG, trackCopy.getName());
+
+        //End
+
         viewBinding.trackEditName.setText(track.getName());
 
         viewBinding.trackEditActivityType.setText(track.getActivityTypeLocalized());
