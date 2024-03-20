@@ -151,22 +151,21 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
         firestoreCRUD.createEntry("runs", run);
 
 
- // Test
+//        TEST getEntry
 //        Map<String, Object> getRun = new HashMap<>();
-//        getRun.put("id",65);
+//        getRun.put("id",123);
 //        firestoreCRUD.getEntry("runs", getRun);
 //
-//
+//        TEST updateEntry
 //        Map<String, Object> updateRun = new HashMap<>();
-//        updateRun.put("id",65);
+//        updateRun.put("id",127);
 //        updateRun.put("ascent",1);
-//        firestoreCRUD.updateEntry("runs", getRun);
+//        firestoreCRUD.updateEntry("runs", updateRun);
 //
-//
-//
+//        TEST deleteEntry
 //        Map<String, Object> deleteRun = new HashMap<>();
-//        deleteRun.put("id",65);
-//        firestoreCRUD.deleteEntry("runs", getRun);
+//        deleteRun.put("id",125);
+//        firestoreCRUD.deleteEntry("runs", deleteRun);
 
         TrackUtils.updateTrack(TrackStoppedActivity.this, track, viewBinding.trackEditName.getText().toString(),
                 viewBinding.trackEditActivityType.getText().toString(), viewBinding.trackEditDescription.getText().toString(),
