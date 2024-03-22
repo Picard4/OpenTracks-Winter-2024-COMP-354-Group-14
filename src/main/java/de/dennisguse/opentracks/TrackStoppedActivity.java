@@ -14,6 +14,7 @@ import de.dennisguse.opentracks.data.ContentProviderUtils;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 import de.dennisguse.opentracks.data.UUIDUtils;
 import de.dennisguse.opentracks.data.models.ActivityType;
+import de.dennisguse.opentracks.data.models.CRUDConstants;
 import de.dennisguse.opentracks.data.models.DistanceFormatter;
 import de.dennisguse.opentracks.data.models.SpeedFormatter;
 import de.dennisguse.opentracks.data.models.Track;
@@ -145,10 +146,10 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
         run.put("movingTime", trackStatistics.getMovingTime().toMillis()); // ms
         run.put("stoppedTime", trackStatistics.getStopTime().toEpochMilli());
         run.put("timerTime", trackStatistics.getMovingTime().toMillis()); //ms
-        run.put("user", "skierLara"); // TODO: get current user?
+        run.put("user", "TerrylAndAxel"); // TODO: get current user?
 
         FirestoreCRUDUtil firestoreCRUD = new FirestoreCRUDUtil();
-        firestoreCRUD.createEntry("runs", run);
+        firestoreCRUD.createEntry(CRUDConstants.RUNS_TABLE, run);
 
 
 //        TEST getEntry
