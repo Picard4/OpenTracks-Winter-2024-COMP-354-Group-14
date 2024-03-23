@@ -24,7 +24,7 @@ public class RankingsRecyclerViewAdapter extends RecyclerView.Adapter<RankingsRe
         mValues = items;
     }
 
-    // TODO: Delete this method once refresh works.
+    // TODO: Delete this method once issue 67 is done.
     public static List<Ranking> makePlaceholderRankingList() {
         List<Ranking> rankings = new ArrayList<>();
         rankings.add(new Ranking(1, "Da bes", "Steamboat Springs",  25));

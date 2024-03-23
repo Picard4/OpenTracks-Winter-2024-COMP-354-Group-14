@@ -17,7 +17,7 @@ public class Ranking {
     public double score;
     public Bitmap profilePicture;
 
-    // TODO: Consider deleting this constructor once Refresh is implemented (and we have no more need for placeholder Ranking instances)
+    // TODO: Consider deleting this constructor once issue 67 is implemented (when we have no more need for placeholder Ranking instances)
     public Ranking(int rank, String username, String location, double score) {
         this.rank = rank;
         this.username = username;
