@@ -23,22 +23,22 @@ public class AboutActivity extends AbstractActivity {
 
     private AboutBinding viewBinding;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setTitle(getString(R.string.about_preference_title));
-        //checkDBConnection("FirstName","LastName");
-
-        viewBinding.aboutTextDescription.setText(getString(R.string.about_description));
-        viewBinding.aboutTextVersionName.setText(getString(R.string.about_version_name, SystemUtils.getAppVersionName(this)));
-        viewBinding.aboutTextVersionCode.setText(getString(R.string.about_version_code, SystemUtils.getAppVersionCode(this)));
-        viewBinding.aboutAppUrl.setText(getString(R.string.about_url, getString(R.string.app_web_url)));
-
-        setSupportActionBar(viewBinding.bottomAppBarLayout.bottomAppBar);
-
-        ViewUtils.makeClickableLinks(findViewById(android.R.id.content));
-    }
+//    @Override
+//    protected void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        setTitle(getString(R.string.about_preference_title));
+//        //checkDBConnection("FirstName","LastName");
+//
+//        viewBinding.aboutTextDescription.setText(getString(R.string.about_description));
+//        viewBinding.aboutTextVersionName.setText(getString(R.string.about_version_name, SystemUtils.getAppVersionName(this)));
+//        viewBinding.aboutTextVersionCode.setText(getString(R.string.about_version_code, SystemUtils.getAppVersionCode(this)));
+//        viewBinding.aboutAppUrl.setText(getString(R.string.about_url, getString(R.string.app_web_url)));
+//
+//        setSupportActionBar(viewBinding.bottomAppBarLayout.bottomAppBar);
+//
+//        ViewUtils.makeClickableLinks(findViewById(android.R.id.content));
+//    }
 
     protected View getRootView() {
         viewBinding = AboutBinding.inflate(getLayoutInflater());
