@@ -144,6 +144,19 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
         firestoreCRUD.createEntry(CRUDConstants.RUNS_TABLE, run);
 
 
+        //here are the commented out tests for Create and Read of user
+        //Map<String, Object> user = new HashMap<>();
+        //user.put("firstname", "test2user");
+        //user.put("lastname", "test2lastnameuser");
+        //user.put("id", "2");
+        //firestoreCRUD.createUser(user);
+
+        //firestoreCRUD.getUser("jNRwb1WmNMT4FXKh3hiq");
+
+
+
+
+
 //        TEST getEntry
 //        Map<String, Object> getRun = new HashMap<>();
 //        getRun.put("id",123);

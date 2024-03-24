@@ -2,6 +2,8 @@ package de.dennisguse.opentracks.util;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,11 +22,27 @@ import de.dennisguse.opentracks.data.models.CRUDConstants;
  * onSuccess and onError callbacks.
  */
 public class FirestoreCRUDUtil {
-    private FirebaseFirestore db;
+    public static FirestoreCRUDUtil instance;
+    public FirebaseFirestore db;
 
     public FirestoreCRUDUtil() {
-        db = FirebaseFirestore.getInstance(); // TODO: Singleton pattern will be implemented later, use it
+        // Initialize FirebaseFirestore instance if not already initialized
+        if (instance == null) {
+            db = FirebaseFirestore.getInstance();
+            instance = this; // Assigning the current instance to the static instance variable
+        } else {
+            // If an instance already exists, use the existing FirebaseFirestore instance
+            db = instance.db;
+        }
     }
+
+    public static FirestoreCRUDUtil getInstance() {
+        if (instance == null) {
+            instance = new FirestoreCRUDUtil();
+        }
+        return instance;
+    }
+
 
     /**
      * Creates a new entry in db
@@ -99,4 +117,56 @@ public class FirestoreCRUDUtil {
                     Log.e(CRUDConstants.TAG_ERROR, CRUDConstants.ERROR_RETRIEVING_ENTRY + e.getMessage());
                 });
     }
+
+    /**
+     *
+     * @param data The user data to be added as a new entry
+     */
+    public void createUser(Map<String, Object> data) {
+        db.collection(CRUDConstants.USERS_TABLE)
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        // Use the document ID from the DocumentReference in the log message
+                        Log.d(CRUDConstants.TAG_CREATED, CRUDConstants.SUCCESS_CREATING_DOCUMENT + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(CRUDConstants.TAG_ERROR, CRUDConstants.ERROR_CREATING_DOCUMENT + e.getMessage());
+                    }
+                });
+    }
+
+
+    /**
+     * Retrieves a user entry from the database based on the user ID
+     * @param userId The ID of the user to retrieve
+     */
+    public void getUser(String userId) {
+        db.collection(CRUDConstants.USERS_TABLE).document(userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Use the userId in the success log
+                            Log.d(CRUDConstants.TAG_GET, CRUDConstants.SUCCESS_RETRIEVING_ENTRY + userId);
+                            // Additional handling of the user data as needed
+                        } else {
+                            Log.d(CRUDConstants.TAG_GET, "No such user exists: " + userId);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(CRUDConstants.TAG_ERROR, CRUDConstants.ERROR_RETRIEVING_ENTRY + e.getMessage());
+                    }
+                });
+    }
+
 }
+
