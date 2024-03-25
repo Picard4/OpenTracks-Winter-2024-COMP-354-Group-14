@@ -22,18 +22,11 @@ import de.dennisguse.opentracks.data.models.CRUDConstants;
  * onSuccess and onError callbacks.
  */
 public class FirestoreCRUDUtil {
-    public static FirestoreCRUDUtil instance;
-    public FirebaseFirestore db;
+    private static FirestoreCRUDUtil instance;
+    private FirebaseFirestore db;
 
-    public FirestoreCRUDUtil() {
-        // Initialize FirebaseFirestore instance if not already initialized
-        if (instance == null) {
-            db = FirebaseFirestore.getInstance();
-            instance = this; // Assigning the current instance to the static instance variable
-        } else {
-            // If an instance already exists, use the existing FirebaseFirestore instance
-            db = instance.db;
-        }
+    private FirestoreCRUDUtil() {//Private so no one else can instantiate outside of the class
+        this.db = FirebaseFirestore.getInstance();
     }
 
     public static FirestoreCRUDUtil getInstance() {

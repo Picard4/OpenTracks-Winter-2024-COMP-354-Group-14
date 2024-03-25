@@ -140,7 +140,7 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
         run.put("timerTime", trackStatistics.getMovingTime().toMillis()); //ms
         run.put("user", "TerrylAndAxel"); // TODO: get current user?
 
-        FirestoreCRUDUtil firestoreCRUD = new FirestoreCRUDUtil();
+        FirestoreCRUDUtil firestoreCRUD = FirestoreCRUDUtil.getInstance();
         firestoreCRUD.createEntry(CRUDConstants.RUNS_TABLE, run);
 
 
