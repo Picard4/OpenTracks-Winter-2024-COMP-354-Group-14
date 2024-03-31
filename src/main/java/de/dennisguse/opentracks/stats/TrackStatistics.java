@@ -20,8 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import com.google.gson.annotations.Expose;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
