@@ -46,7 +46,7 @@ public class Track {
     private UUID uuid = UUID.randomUUID();
 
     private String name = "";
-    String description = "";
+    private String description = "";
     private String activityTypeLocalized = "";
 
     private ActivityType activityType;
