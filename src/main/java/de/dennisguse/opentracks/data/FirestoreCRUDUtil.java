@@ -36,6 +36,7 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
     /**
      * Gets an instance of FirestoreCRUDUtil.
+     *
      * @return An instance of FirestoreCRUDUtil.
      */
     public static FirestoreCRUDUtil getInstance() {
@@ -47,10 +48,11 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
     /**
      * Creates a new entry in the Firestore database.
+     *
      * @param collection The collection in which to create the entry ("users" or "runs").
-     * @param id The unique identifier of the entry.
-     * @param jsonData The data to be added as the new entry.
-     * @param callback The callback to be invoked on operation success or failure.
+     * @param id         The unique identifier of the entry.
+     * @param jsonData   The data to be added as the new entry.
+     * @param callback   The callback to be invoked on operation success or failure.
      */
     public void createEntry(final String collection, final String id, final JsonObject jsonData, final ActionCallback callback) {
         Map<String, Object> adaptedData = FireStoreAdapter.toMap(jsonData);
@@ -58,11 +60,11 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
         db.collection(collection)
                 .document(id).set(adaptedData)
-                .addOnSuccessListener(documentReference-> {
+                .addOnSuccessListener(documentReference -> {
                     Log.d(CRUDConstants.TAG_CREATED, CRUDConstants.SUCCESS_CREATING_DOCUMENT + id);
                     if (callback != null) callback.onSuccess();
                 })
-                .addOnFailureListener(e-> {
+                .addOnFailureListener(e -> {
                     Log.e(CRUDConstants.TAG_ERROR, CRUDConstants.ERROR_CREATING_DOCUMENT + e.getMessage());
                     if (callback != null) callback.onFailure();
                 });
@@ -70,20 +72,21 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
     /**
      * Updates an existing entry in the Firestore database.
+     *
      * @param collection The collection containing the entry to be updated.
-     * @param id The unique identifier of the entry.
-     * @param data The new data to be updated in the entry.
-     * @param callback The callback to be invoked on operation success or failure.
+     * @param id         The unique identifier of the entry.
+     * @param data       The new data to be updated in the entry.
+     * @param callback   The callback to be invoked on operation success or failure.
      */
     public void updateEntry(final String collection, final String id, final JsonObject data, final ActionCallback callback) {
         Map<String, Object> adaptedData = FireStoreAdapter.toMap(data);
         db.collection(collection).document(id)
                 .update(adaptedData)
-                .addOnSuccessListener(documentReference-> {
+                .addOnSuccessListener(documentReference -> {
                     Log.d(CRUDConstants.TAG_UPDATED, CRUDConstants.SUCCESS_UPDATING_DOCUMENT + id);
                     if (callback != null) callback.onSuccess();
                 })
-                .addOnFailureListener(e-> {
+                .addOnFailureListener(e -> {
                     Log.e(CRUDConstants.TAG_ERROR, CRUDConstants.ERROR_UPDATING_DOCUMENT + e.getMessage());
                     if (callback != null) callback.onFailure();
                 });
@@ -91,9 +94,10 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
     /**
      * Deletes an existing entry from the Firestore database.
+     *
      * @param collection The collection containing the entry to be deleted.
-     * @param id The unique identifier of the entry.
-     * @param callback The callback to be invoked on operation success or failure.
+     * @param id         The unique identifier of the entry.
+     * @param callback   The callback to be invoked on operation success or failure.
      */
     public void deleteEntry(final String collection, final String id, final ActionCallback callback) {
         db.collection(collection).document(id)
@@ -110,9 +114,10 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
     /**
      * Retrieves an existing entry from the Firestore database.
+     *
      * @param collection The collection containing the entry to be retrieved.
-     * @param id The unique identifier of the entry.
-     * @param callback The callback to be invoked on operation success or failure.
+     * @param id         The unique identifier of the entry.
+     * @param callback   The callback to be invoked on operation success or failure.
      */
     public void getEntry(final String collection, final String id, final ReadCallback callback) {
         DocumentReference docRef = db.collection(collection).document(id);
@@ -139,8 +144,9 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
     /**
      * Retrieves all documents from an existing collection from the db, adapted from Firestore docs.
+     *
      * @param collection The collection to be retrieved
-     * @param callback The callback to be invoked on operation success or failure.
+     * @param callback   The callback to be invoked on operation success or failure.
      */
     public void getCollection(String collection, ReadCallback callback) {
         db.collection(collection).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -149,8 +155,7 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
                 if (task.isSuccessful()) {
                     ArrayList<JsonObject> documents = new ArrayList<JsonObject>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        if(document != null)
-                        {
+                        if (document != null) {
                             documents.add(FireStoreAdapter.toJson(document.getData()));
 
                         }
