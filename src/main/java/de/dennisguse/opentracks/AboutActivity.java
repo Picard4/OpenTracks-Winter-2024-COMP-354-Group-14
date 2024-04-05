@@ -11,10 +11,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
+import de.dennisguse.opentracks.data.interfaces.ReadCallback;
+import de.dennisguse.opentracks.data.models.CRUDConstants;
 import de.dennisguse.opentracks.databinding.AboutBinding;
 import de.dennisguse.opentracks.ui.util.ViewUtils;
 import de.dennisguse.opentracks.util.SystemUtils;
@@ -28,6 +33,28 @@ public class AboutActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
 
         setTitle(getString(R.string.about_preference_title));
+        ReadCallback callback = new ReadCallback() {
+            @Override
+            public void onSuccess(JsonObject data) {
+
+
+            }
+
+            @Override
+            public void onSuccess(ArrayList<JsonObject> data) {
+                Log.d("COLLECTION", "Data" + " => " + data.toString());
+
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        };
+        FirestoreCRUDUtil dbUtil = FirestoreCRUDUtil.getInstance();
+
+        dbUtil.getCollection("users",callback);
 
 
         viewBinding.aboutTextDescription.setText(getString(R.string.about_description));

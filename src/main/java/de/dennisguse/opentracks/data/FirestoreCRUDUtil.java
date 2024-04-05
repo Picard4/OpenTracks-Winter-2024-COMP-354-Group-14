@@ -9,8 +9,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import de.dennisguse.opentracks.data.adapters.FireStoreAdapter;
@@ -24,7 +27,7 @@ import de.dennisguse.opentracks.data.models.CRUDConstants;
  * success and failure callbacks.
  */
 public class FirestoreCRUDUtil implements ExternalStorageUtil {
-    private FirebaseFirestore db;
+    private final FirebaseFirestore db;
     private static FirestoreCRUDUtil instance;
 
     private FirestoreCRUDUtil() {
@@ -132,5 +135,37 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
                 }
             }
         });
+    }
+
+    /**
+     * Retrieves all documents from an existing collection from the db, adapted from Firestore docs.
+     * @param collection The collection to be retrieved
+     * @param callback The callback to be invoked on operation success or failure.
+     */
+    public void getCollection(String collection, ReadCallback callback) {
+        db.collection(collection).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<JsonObject> documents = new ArrayList<JsonObject>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(document != null)
+                        {
+                            documents.add(FireStoreAdapter.toJson(document.getData()));
+
+                        }
+                    }
+                    callback.onSuccess(documents);
+                    Log.d(CRUDConstants.TAG_GET_COLLECTION, CRUDConstants.SUCCESS_RETRIEVING_COLLECTION + " => " + collection);
+
+
+                } else {
+                    Log.e(CRUDConstants.TAG_ERROR, CRUDConstants.ERROR_RETRIEVING_COLLECTION + task.getException());
+                    callback.onFailure();
+                }
+            }
+        });
+
+
     }
 }
