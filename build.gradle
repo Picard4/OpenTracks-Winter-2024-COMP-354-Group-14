@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 buildscript {
     repositories {
@@ -7,6 +8,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath 'com.google.gms:google-services:4.4.1'
     }
 }
 
@@ -126,6 +128,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-firestore:24.10.3'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -148,4 +151,6 @@ dependencies {
     androidTestImplementation 'org.mockito:mockito-android:5.8.0'
 
     androidTestUtil 'androidx.test:orchestrator:1.4.2'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
