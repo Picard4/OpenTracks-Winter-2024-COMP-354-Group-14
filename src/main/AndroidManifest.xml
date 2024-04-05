@@ -74,6 +74,9 @@
             android:name=".ui.friends.FriendsActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.leaderboard.LeaderboardActivity"
             android:exported="false"
             android:label="@string/title_activity_leaderboard"
