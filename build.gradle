@@ -142,6 +142,7 @@ dependencies {
     implementation 'androidx.mediarouter:mediarouter:1.6.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
 
     androidTestImplementation 'androidx.test:core:1.5.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
