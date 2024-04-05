@@ -49,6 +49,8 @@ public interface ExternalStorageUtil {
         createEntry(CRUDConstants.USERS_TABLE, id, jsonData, callback);
     }
 
+   
+
     /**
      * Retrieves a user entry from external storage based on the user ID.
      *
