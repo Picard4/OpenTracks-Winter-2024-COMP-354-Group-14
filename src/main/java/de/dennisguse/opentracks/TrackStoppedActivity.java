@@ -11,6 +11,8 @@ import com.google.gson.JsonObject;
 
 import java.util.UUID;
 
+import java.util.UUID;
+
 import de.dennisguse.opentracks.data.ContentProviderUtils;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 import de.dennisguse.opentracks.data.models.ActivityType;
@@ -129,6 +131,10 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
     }
 
     private void storeTrackMetaData(ContentProviderUtils contentProviderUtils, Track track) {
+
+        //Save run on the external DB
+        //NOTE - The UI should be augmented to display success/failure to the user
+        FirestoreCRUDUtil.getInstance().createEntry(CRUDConstants.RUNS_TABLE, track.getUuid().toString(), track.toJSON(), null);
 
         //Save run on the external DB
         //NOTE - The UI should be augmented to display success/failure to the user
