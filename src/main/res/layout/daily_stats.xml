@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -12,8 +10,9 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_statistics_24dp"
-            app:title="@string/menu_aggregated_statistics" />
+            app:navigationIcon="@drawable/ic_activity_daily_stats"
+            app:title="@string/daily_stats_name"
+            app:navigationIconTint="?attr/colorControlNormal"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -23,27 +22,20 @@
         android:paddingBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/aggregated_stats_list"
+        <Spinner
+            android:id="@+id/daily_metric"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="@android:dimen/app_icon_size" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/aggregated_stats_list_2"
+        <Spinner
+            android:id="@+id/daily_data_point"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:layout_height="@android:dimen/app_icon_size" />
 
-        <TextView
-            android:id="@+id/aggregated_stats_empty_view"
-            style="?attr/textAppearanceHeadline4"
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/dailyChart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="@string/aggregated_stats_empty_message" />
-
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <include

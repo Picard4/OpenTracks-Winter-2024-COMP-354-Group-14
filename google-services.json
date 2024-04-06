@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "565517681261",
+    "project_id": "opentracksgroup13",
+    "storage_bucket": "opentracksgroup13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565517681261:android:3d890da56f4d050c5db564",
+        "android_client_info": {
+          "package_name": "de.dennisguse.opentracks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE-AY-KCPndV5AR-hZG-ECDW0gqrbCGPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565517681261:android:1fa68c2689d5b5105db564",
+        "android_client_info": {
+          "package_name": "de.dennisguse.opentracks.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE-AY-KCPndV5AR-hZG-ECDW0gqrbCGPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

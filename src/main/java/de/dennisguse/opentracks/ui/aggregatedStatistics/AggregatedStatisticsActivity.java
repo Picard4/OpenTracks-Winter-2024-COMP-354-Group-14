@@ -24,6 +24,8 @@ import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.TrackSelection;
 import de.dennisguse.opentracks.data.models.Track;
 import de.dennisguse.opentracks.databinding.AggregatedStatsBinding;
+import de.dennisguse.opentracks.ui.aggregatedStatistics.dailyStats.DailyStatsActivity;
+import de.dennisguse.opentracks.util.IntentUtils;
 import de.dennisguse.opentracks.util.IntentDashboardUtils;
 
 public class AggregatedStatisticsActivity extends AbstractActivity implements FilterDialogFragment.FilterDialogListener {
@@ -41,7 +43,6 @@ public class AggregatedStatisticsActivity extends AbstractActivity implements Fi
     private boolean areFiltersApplied;
     private MenuItem filterItem;
     private MenuItem clearFilterItem;
-    Button button1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +72,6 @@ public class AggregatedStatisticsActivity extends AbstractActivity implements Fi
         });
 
         setSupportActionBar(viewBinding.bottomAppBarLayout.bottomAppBar);
-
-        // add button to redirect to Overall statistics page.
-        button1 = (Button) (findViewById(R.id.StatsButtonId));
-
-        button1.setOnClickListener(view -> {
-            Intent intent = new Intent(AggregatedStatisticsActivity.this, StatisticsActivity.class);
-            startActivity(intent);
-        });
     }
 
     private void checkListEmpty() {
@@ -124,6 +117,11 @@ public class AggregatedStatisticsActivity extends AbstractActivity implements Fi
         if (item.getItemId() == R.id.aggregated_statistics_clear_filter) {
             setMenuVisibility(false);
             viewModel.clearSelection();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.visualize_daily_stats) {
+            startActivity(IntentUtils.newIntent(this, DailyStatsActivity.class));
             return true;
         }
 
