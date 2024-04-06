@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.dennisguse.opentracks.data.models.Ranking;
 
-public class VerticalLeaderboardFragment extends LeaderboardFragment {
+public class MovingTimeLeaderboardFragment extends LeaderboardFragment {
 
     // Temporary boolean to confirm that refresh works when expected to; delete once Issue 67 is finished.
     private boolean refresh;

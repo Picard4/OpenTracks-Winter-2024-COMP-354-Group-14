@@ -4,49 +4,55 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.DayLeaderboardFragment;
+import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.MaxSpeedLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.DistanceLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
-import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.VerticalLeaderboardFragment;
+import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.MovingTimeLeaderboardFragment;
 
 public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
-    private VerticalLeaderboardFragment verticalLeaderboardFragment;
+    private MovingTimeLeaderboardFragment movingTimeLeaderboardFragment;
     private DistanceLeaderboardFragment distanceLeaderboardFragment;
-    private DayLeaderboardFragment dayLeaderboardFragment;
+    private MaxSpeedLeaderboardFragment maxSpeedLeaderboardFragment;
     private LeaderboardFragment currentLeaderboardFragment;
 
     public LeaderboardPagerAdapter(FragmentManager fm) {
         super(fm);
-        verticalLeaderboardFragment = new VerticalLeaderboardFragment();
+        movingTimeLeaderboardFragment = new MovingTimeLeaderboardFragment();
         distanceLeaderboardFragment = new DistanceLeaderboardFragment();
-        dayLeaderboardFragment = new DayLeaderboardFragment();
-        currentLeaderboardFragment = verticalLeaderboardFragment;
+        maxSpeedLeaderboardFragment = new MaxSpeedLeaderboardFragment();
+        currentLeaderboardFragment = movingTimeLeaderboardFragment;
     }
 
     public enum LeaderboardType {
-        Vertical(0),
-        Distance(1),
-        Day(2);
+        MovingTime(0, "Moving Time"),
+        Distance(1, "Distance"),
+        MaxSpeed(2, "Max Speed");
 
         // Assisted by https://stackoverflow.com/questions/1067352/can-i-set-enum-start-value-in-java
         private final int value;
+        private final String title;
 
-        private LeaderboardType(int value) {
+        private LeaderboardType(int value, String title) {
             this.value = value;
+            this.title = title;
         }
 
         public int getValue() {
             return value;
         }
+
+        public String getTitle() {
+            return title;
+        }
     }
 
     public void setCurrentLeaderboardFragment(int position) {
-        if (position == LeaderboardType.Vertical.value)
-            currentLeaderboardFragment = verticalLeaderboardFragment;
+        if (position == LeaderboardType.MovingTime.value)
+            currentLeaderboardFragment = movingTimeLeaderboardFragment;
         else if (position == LeaderboardType.Distance.value)
             currentLeaderboardFragment = distanceLeaderboardFragment;
-        else if (position == LeaderboardType.Day.value)
-            currentLeaderboardFragment = dayLeaderboardFragment;
+        else if (position == LeaderboardType.MaxSpeed.value)
+            currentLeaderboardFragment = maxSpeedLeaderboardFragment;
     }
 
     public void refreshCurrentLeaderboardFragment() {
@@ -61,23 +67,23 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // Return the appropriate Fragment for each tab position
-        if (position == LeaderboardType.Vertical.value)
-            return verticalLeaderboardFragment;
+        if (position == LeaderboardType.MovingTime.value)
+            return movingTimeLeaderboardFragment;
         else if (position == LeaderboardType.Distance.value)
             return distanceLeaderboardFragment;
-        else if (position == LeaderboardType.Day.value)
-            return dayLeaderboardFragment;
+        else if (position == LeaderboardType.MaxSpeed.value)
+            return maxSpeedLeaderboardFragment;
         return null;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == LeaderboardType.Vertical.value)
-            return LeaderboardType.Vertical.name();
+        if (position == LeaderboardType.MovingTime.value)
+            return LeaderboardType.MovingTime.getTitle();
         else if (position == LeaderboardType.Distance.value)
-            return LeaderboardType.Distance.name();
-        else if (position == LeaderboardType.Day.value)
-            return LeaderboardType.Day.name();
+            return LeaderboardType.Distance.getTitle();
+        else if (position == LeaderboardType.MaxSpeed.value)
+            return LeaderboardType.MaxSpeed.getTitle();
         return null;
     }
 }

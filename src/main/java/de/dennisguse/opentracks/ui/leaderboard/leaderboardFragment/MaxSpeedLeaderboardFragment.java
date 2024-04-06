@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.dennisguse.opentracks.data.models.Ranking;
 
-public class DayLeaderboardFragment extends LeaderboardFragment {
+public class MaxSpeedLeaderboardFragment extends LeaderboardFragment {
     private boolean refresh;
 
     @Override
