@@ -84,6 +84,7 @@ public class FirestoreCRUDUtilTest {
 
         verify(callback).onSuccess();
     }
+
     /**
      * Expect SUCCESSFUL deleteEntry as the proper id is passed
      */

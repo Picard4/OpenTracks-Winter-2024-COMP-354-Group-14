@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-
+/**
+ * Tests for JsonSerializer Interface
+ */
 public class JsonSerializerTest {
     final String description = "Completed track";
     final String externalId = "track_01";
@@ -14,7 +16,7 @@ public class JsonSerializerTest {
     @Test
     /**
      * Testing the toJSON method, making sure the expect key value pairs appear
-     * The unexpected keys should't resolve to true
+     * The unexpected keys shouldn't resolve to true
      */
     public void testIfValidToJson() {
         TestTrack testObject = new TestTrack(description, externalId);
@@ -46,23 +48,6 @@ public class JsonSerializerTest {
         public TestTrack(String description, String externalId) {
             this.description = description;
             this.externalId = externalId;
-        }
-        /**
-         * Get description
-         * @return description of type String
-         */
-
-
-        String getDescription() {
-            return this.description;
-        }
-
-        /**
-         * Get externalId
-         * @return externalId of type String
-         */
-        String getExternalId() {
-            return this.externalId;
         }
     }
 }
