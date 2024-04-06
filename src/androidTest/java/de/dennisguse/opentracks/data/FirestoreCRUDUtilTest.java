@@ -34,6 +34,38 @@ public class FirestoreCRUDUtilTest {
         verify(callback).onSuccess();
     }
 
+
+    /**
+     * Expect SUCCESSFUL createEntry as the proper id and valid jsonData are passed and make sure
+     * getEntry retreives what we just created
+     */
+    @Test
+    public void testCreateAndRetrieveEntry() {
+        FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
+        ReadCallback readCallback = mock(ReadCallback.class);
+        ActionCallback createCallback = mock(ActionCallback.class);
+        JsonObject jsonData = generateMockData();
+
+        doAnswer(invocation -> {
+            // get the 4th param in the `createEntry` method
+            ((ActionCallback) invocation.getArgument(3)).onSuccess();
+            return null;
+        }).when(firestoreCRUDUtil).createEntry(anyString(), anyString(), any(JsonObject.class), any(ActionCallback.class));
+
+        doAnswer(invocation -> {
+            // get the 3rd param in the `getEntry` method
+            ((ReadCallback) invocation.getArgument(2)).onSuccess(jsonData);
+            return null;
+        }).when(firestoreCRUDUtil).getEntry(anyString(), anyString(), any(ReadCallback.class));
+
+        firestoreCRUDUtil.createEntry(CRUDConstants.RUNS_TABLE, trackId, jsonData, createCallback);
+        firestoreCRUDUtil.getEntry(CRUDConstants.RUNS_TABLE, trackId, readCallback);
+
+        verify(createCallback).onSuccess();
+        verify(readCallback).onSuccess(jsonData);
+    }
+
+
     /**
      * Expect SUCCESSFUL updateEntry as the proper id and valid jsonData are passed
      */
@@ -52,6 +84,7 @@ public class FirestoreCRUDUtilTest {
 
         verify(callback).onSuccess();
     }
+
     /**
      * Expect SUCCESSFUL deleteEntry as the proper id is passed
      */
@@ -82,11 +115,12 @@ public class FirestoreCRUDUtilTest {
         JsonObject jsonData = generateMockData();
         doAnswer(invocation -> {
             // get the 3rd param in the `getEntry` method
-            ((ActionCallback) invocation.getArgument(2)).onSuccess();
+            ((ReadCallback) invocation.getArgument(2)).onSuccess(jsonData);
             return null;
         }).when(firestoreCRUDUtil).getEntry(anyString(), anyString(), any(ReadCallback.class));
         firestoreCRUDUtil.getEntry(CRUDConstants.RUNS_TABLE, trackId, callback);
 
+        System.out.println(jsonData.toString());
         verify(callback).onSuccess(jsonData);
     }
 
