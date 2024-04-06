@@ -24,6 +24,11 @@ public abstract class LeaderboardFragment extends Fragment {
         leaderboardAdapter = new LeaderboardAdapter(getLatestRankingsData());
     }
 
+    public enum AggregationStrategy {
+        Average,
+        Best;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

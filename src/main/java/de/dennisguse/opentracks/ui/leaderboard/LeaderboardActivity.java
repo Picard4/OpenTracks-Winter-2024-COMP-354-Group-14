@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import de.dennisguse.opentracks.R;
+import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
 
 public class LeaderboardActivity extends AppCompatActivity {
 
@@ -52,6 +53,12 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.btnAverageScoreAggregation).setOnClickListener(
+                v -> leaderboardPagerAdapter.setCurrentAggregationStrategy(LeaderboardFragment.AggregationStrategy.Average)
+        );
 
+        findViewById(R.id.btnBestScoreAggregation).setOnClickListener(
+                v -> leaderboardPagerAdapter.setCurrentAggregationStrategy(LeaderboardFragment.AggregationStrategy.Best)
+        );
     }
 }

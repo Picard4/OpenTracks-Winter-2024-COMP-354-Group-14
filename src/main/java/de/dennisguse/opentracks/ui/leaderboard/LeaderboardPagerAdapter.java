@@ -16,6 +16,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     private MaxSpeedLeaderboardFragment maxSpeedLeaderboardFragment;
     private AverageMovingSpeedLeaderboardFragment averageMovingSpeedLeaderboardFragment;
     private LeaderboardFragment currentLeaderboardFragment;
+    private LeaderboardFragment.AggregationStrategy currentAggregationStrategy;
 
     public LeaderboardPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -95,6 +96,11 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         else if (position == LeaderboardType.AverageMovingSpeed.value)
             return LeaderboardType.AverageMovingSpeed.getTitle();
         return null;
+    }
+
+    public void setCurrentAggregationStrategy(LeaderboardFragment.AggregationStrategy aggregationStrategy) {
+        currentAggregationStrategy = aggregationStrategy;
+        currentLeaderboardFragment.refreshRankingsData();
     }
 }
 
