@@ -45,6 +45,9 @@
         tools:targetApi="s" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <queries>
         <intent>
@@ -67,7 +70,7 @@
       <activity
             android:name=".ui.aggregatedStatistics.dailyStats.DailyStatsActivity"
             android:exported="false" />
-      <activity
+        <activity
             android:name=".ui.friends.FriendsActivity"
             android:exported="false" />
         <activity

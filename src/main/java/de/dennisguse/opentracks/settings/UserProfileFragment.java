@@ -3,22 +3,36 @@ package de.dennisguse.opentracks.settings;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.getUnitSystem;
 
 import android.app.AlertDialog;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.Intent;
+import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
+import androidx.core.app.ActivityCompat;
+
+import com.github.dhaval2404.imagepicker.ImagePicker;
+
+import java.util.Objects;
 
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Height;
@@ -28,9 +42,28 @@ import de.dennisguse.opentracks.data.models.SpeedFormatter;
 import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
 
+ // You can choose any value for the request code
+
+
 public class UserProfileFragment extends PreferenceFragmentCompat {
 
+    private static final int PERMISSION_REQUEST_CODE = 1001;
+    private static final int IMAGE_PICKER_REQUEST_CODE = 101;
+
+
     SwitchPreference leaderboardSwitch;
+
+    private void startImagePicker() {
+        try {
+            ImagePicker.with(this)
+                    .crop()
+                    .compress(1024)
+                    .maxResultSize(1080, 1080)
+                    .start();
+        } catch (Exception e) {
+            Log.e("UserProfileFragment", "Error starting image picker: " + e.getMessage());
+        }
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -40,6 +73,28 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         if (editPreference != null) {
             editPreference.setOnPreferenceClickListener(preference -> {
                 showEditProfileDialog();
+                return true;
+            });
+        }
+
+        Preference editProfilePic = findPreference("edit_profile_pic");
+        if (editProfilePic != null) {
+            editProfilePic.setOnPreferenceClickListener(preference -> {
+                Log.d("UserProfileFragment", "Edit profile picture button clicked");
+                // Check if permission is granted
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted, request it from the user
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                            PERMISSION_REQUEST_CODE);
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ||
+                            ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        // Permission is already granted, start the image picker
+                        Log.d("UserProfileFragment", "Calling startImagePicker()");
+                        startImagePicker();
+                    }
+                }
                 return true;
             });
         }
@@ -60,6 +115,44 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            boolean allPermissionsGranted = true;
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
+            }
+
+            if (allPermissionsGranted) {
+                Log.d("UserProfileFragment", "Permissions granted, starting image picker");
+                startImagePicker();
+            } else {
+                Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri imageUri = data.getData();
+        if (imageUri != null) {
+            // Update the profile picture with the selected image
+            updateProfilePicture(imageUri);
+        }
+    }
+
+    private void updateProfilePicture(Uri imageUri) {
+        // Load the image from the URI and set it to the profile picture ImageView
+        ImageView profilePictureImageView = requireView().findViewById(R.id.profileImageView);
+        profilePictureImageView.setImageURI(imageUri);
     }
 
     private void showEditProfileDialog() {
@@ -126,7 +219,6 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
         return true;
     }
-
     private void displayCustomSharingDialog(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -218,6 +310,7 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
         super.onDisplayPreferenceDialog(preference);
     }
+
 
 
 }
