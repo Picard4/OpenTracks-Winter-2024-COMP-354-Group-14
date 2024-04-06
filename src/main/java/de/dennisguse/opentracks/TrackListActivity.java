@@ -61,6 +61,7 @@ import de.dennisguse.opentracks.ui.aggregatedStatistics.ConfirmDeleteDialogFragm
 import de.dennisguse.opentracks.ui.friends.FriendsActivity;
 import de.dennisguse.opentracks.ui.leaderboard.LeaderboardActivity;
 import de.dennisguse.opentracks.ui.markers.MarkerListActivity;
+import de.dennisguse.opentracks.ui.profile.ProfileActivity;
 import de.dennisguse.opentracks.ui.util.ActivityUtils;
 import de.dennisguse.opentracks.util.IntentDashboardUtils;
 import de.dennisguse.opentracks.util.IntentUtils;
@@ -153,6 +154,7 @@ public class TrackListActivity extends AbstractTrackDeleteActivity implements Co
         recordingStatusConnection = new TrackRecordingServiceConnection(bindChangedCallback);
 
         viewBinding.friendsButton.setOnClickListener((view)->startActivity(IntentUtils.newIntent(this, FriendsActivity.class)));
+        viewBinding.profileButton.setOnClickListener((view)->startActivity(IntentUtils.newIntent(this, ProfileActivity.class)));
         viewBinding.aggregatedStatsButton.setOnClickListener((view) -> startActivity(IntentUtils.newIntent(this, AggregatedStatisticsActivity.class)));
         viewBinding.aggregatedSeasonalStatsButton.setOnClickListener((view) -> startActivity(IntentUtils.newIntent(this, SeasonalActivity.class)));
         viewBinding.leaderboardButton.setOnClickListener((view) -> startActivity(IntentUtils.newIntent(this, LeaderboardActivity.class)));

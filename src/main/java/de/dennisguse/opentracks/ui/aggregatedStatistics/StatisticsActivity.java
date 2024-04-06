@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.json.JSONException;
 
 import java.util.List;
@@ -27,14 +30,40 @@ public class StatisticsActivity extends AbstractActivity {
     private StatsBinding viewBinding;
     private MenuItem mapItem;
 
+    private AggregatedStatsCache aggregatedStatsCache;
+    private Gson gson;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
+        aggregatedStatsCache = new AggregatedStatsCache(getApplicationContext());
 
-        MockupData mockupData = new MockupData();
+        TrackStatistics cachedStats = aggregatedStatsCache.get();
+        if(cachedStats != null)
+        {
+            UpdateUI(cachedStats);
+        }
+        else
+        {
+            calculateStats();
+        }
+        setSupportActionBar(viewBinding.bottomAppBarLayout.bottomAppBar);
+    }
+
+    private void calculateStats()
+    {
+        MockupData mockupData = (MockupData) getIntent().getSerializableExtra("data");
         List<TrackStatistics> trackStatistics = mockupData.getTrackStatistics();
+        TrackStatistics summary = TrackStatistics.sumOfTotalStats(trackStatistics);
 
+        UpdateUI(summary);
+        aggregatedStatsCache.put(summary);
+
+    }
+    private void UpdateUI(TrackStatistics summary)
+    {
         TextView totalDistance = findViewById(R.id.totalTrackDistId);
         TextView totalVert = findViewById(R.id.totalVertId);
         TextView skiDays = findViewById(R.id.skiDaysId);
@@ -42,17 +71,13 @@ public class StatisticsActivity extends AbstractActivity {
         TextView avgSpeed = findViewById(R.id.avgSpeedId);
         TextView avgSlp = findViewById(R.id.avgSlopeId);
 
-        TrackStatistics summary = TrackStatistics.sumOfTotalStats(trackStatistics);
         totalDistance.setText((summary.getTotalTrackDistanceSeason().toM()) + "M");
         totalVert.setText(summary.getTotalVerticalDescentSeasonSeason().toM() + "M");
         skiDays.setText(String.valueOf(summary.getTotalSkiDaysSeason()));
         totalRuns.setText(String.valueOf(summary.getTotalRunsSeason()));
         avgSpeed.setText(summary.getAvgSpeedSeason().toKMH() + "KMH");
         avgSlp.setText((summary.getSlopePercentageSeason() + "%"));
-
-        setSupportActionBar(viewBinding.bottomAppBarLayout.bottomAppBar);
     }
-
     @Override
     protected View getRootView() {
         viewBinding = StatsBinding.inflate(getLayoutInflater());

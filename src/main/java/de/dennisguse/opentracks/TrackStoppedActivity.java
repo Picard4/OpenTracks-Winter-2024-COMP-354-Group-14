@@ -7,8 +7,16 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import com.google.gson.JsonObject;
+
+import java.util.UUID;
+
 import de.dennisguse.opentracks.data.ContentProviderUtils;
+import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 import de.dennisguse.opentracks.data.models.ActivityType;
+import de.dennisguse.opentracks.data.interfaces.ActionCallback;
+import de.dennisguse.opentracks.data.interfaces.ReadCallback;
+import de.dennisguse.opentracks.data.models.CRUDConstants;
 import de.dennisguse.opentracks.data.models.DistanceFormatter;
 import de.dennisguse.opentracks.data.models.SpeedFormatter;
 import de.dennisguse.opentracks.data.models.Track;
@@ -21,6 +29,7 @@ import de.dennisguse.opentracks.util.ExportUtils;
 import de.dennisguse.opentracks.util.IntentUtils;
 import de.dennisguse.opentracks.util.StringUtils;
 import de.dennisguse.opentracks.util.TrackUtils;
+import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
 
 public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements ChooseActivityTypeDialogFragment.ChooseActivityTypeCaller {
 
@@ -105,6 +114,11 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
     }
 
     private void storeTrackMetaData(ContentProviderUtils contentProviderUtils, Track track) {
+
+        //Save run on the external DB
+        //NOTE - The UI should be augmented to display success/failure to the user
+        FirestoreCRUDUtil.getInstance().createEntry(CRUDConstants.RUNS_TABLE, track.getUuid().toString(), track.toJSON(), null);
+
         TrackUtils.updateTrack(TrackStoppedActivity.this, track, viewBinding.trackEditName.getText().toString(),
                 viewBinding.trackEditActivityType.getText().toString(), viewBinding.trackEditDescription.getText().toString(),
                 contentProviderUtils);
