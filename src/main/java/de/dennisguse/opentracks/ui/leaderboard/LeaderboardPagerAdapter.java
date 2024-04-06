@@ -27,7 +27,9 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         distanceLeaderboardFragment = new DistanceLeaderboardFragment();
         maxSpeedLeaderboardFragment = new MaxSpeedLeaderboardFragment();
         averageMovingSpeedLeaderboardFragment = new AverageMovingSpeedLeaderboardFragment();
+
         currentLeaderboardFragment = movingTimeLeaderboardFragment;
+        currentLeaderboardType = LeaderboardFragment.LeaderboardType.Average;
     }
 
     public enum LeaderboardType {
@@ -97,8 +99,11 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    public void setCurrentAggregationStrategy(LeaderboardFragment.LeaderboardType leaderboardType) {
+    public void setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType leaderboardType) {
+        if (leaderboardType == currentLeaderboardType)
+            return;
         currentLeaderboardType = leaderboardType;
+        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
 
     public void refreshLeaderboardFragmentData() {
@@ -107,6 +112,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         distanceLeaderboardFragment.updateRankingLists(latestLeaderboardData);
         maxSpeedLeaderboardFragment.updateRankingLists(latestLeaderboardData);
         averageMovingSpeedLeaderboardFragment.updateRankingLists(latestLeaderboardData);
+        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
 
     private ArrayList<Object> readLatestLeaderboardData() {
@@ -114,4 +120,3 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         return new ArrayList<>();
     }
 }
-

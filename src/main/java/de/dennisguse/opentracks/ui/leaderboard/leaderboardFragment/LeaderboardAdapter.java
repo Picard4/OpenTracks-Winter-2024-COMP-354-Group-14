@@ -40,7 +40,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         return displayedRankingList.size();
     }
 
-    public void setDisplayedRankingList(List<Ranking> displayedRankingList, LeaderboardFragment.LeaderboardType leaderboardType) {
+    public void setDisplayedRankingList(List<Ranking> displayedRankingList) {
         this.displayedRankingList = displayedRankingList;
 
         // Since the rankingList could have been remade from the ground up, we have to call notifyDataSetChanged();

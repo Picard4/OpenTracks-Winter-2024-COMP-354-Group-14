@@ -50,4 +50,11 @@ public abstract class LeaderboardFragment extends Fragment {
         this.averageRankingList = calculateLatestAverageRankingsData(latestLeaderboardData);
         this.bestRankingList = calculateLatestBestRankingsData(latestLeaderboardData);
     }
+
+    public void setDisplayedRankingList(LeaderboardType leaderboardType) {
+        if (leaderboardType == LeaderboardType.Average)
+            leaderboardAdapter.setDisplayedRankingList(averageRankingList);
+        else if (leaderboardType == LeaderboardType.Best)
+            leaderboardAdapter.setDisplayedRankingList(bestRankingList);
+    }
 }

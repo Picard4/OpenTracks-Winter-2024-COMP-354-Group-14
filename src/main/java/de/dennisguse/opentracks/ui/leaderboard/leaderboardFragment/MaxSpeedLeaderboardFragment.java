@@ -14,10 +14,10 @@ public class MaxSpeedLeaderboardFragment extends LeaderboardFragment {
         // TODO: Replace the test data with code that gathers the appropriate Ranking data
         List<Ranking> latestRankingsData;
         if (!averageRefresh)
-            // Get a smaller data set if this is the first time the rankings data is being collected
-            latestRankingsData = getAltTestData();
-        else
+            // Get a different data set if this is the first time the rankings data is being collected
             latestRankingsData = getTestData();
+        else
+            latestRankingsData = getAltTestData();
         // All future rankings data collections should be refreshes
         averageRefresh = true;
         return latestRankingsData;
@@ -28,7 +28,7 @@ public class MaxSpeedLeaderboardFragment extends LeaderboardFragment {
         // TODO: Replace the test data with code that gathers the appropriate Ranking data
         List<Ranking> latestRankingsData;
         if (!bestRefresh)
-            // Get a smaller data set if this is the first time the rankings data is being collected
+            // Get a different data set if this is the first time the rankings data is being collected
             latestRankingsData = getAltTestData();
         else
             latestRankingsData = getTestData();
