@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.dennisguse.opentracks.R;
@@ -23,7 +24,7 @@ public abstract class LeaderboardFragment extends Fragment {
     private List<Ranking> bestRankingList;
 
     public LeaderboardFragment() {
-        leaderboardAdapter = new LeaderboardAdapter(averageRankingList);
+        leaderboardAdapter = new LeaderboardAdapter(new ArrayList<>());
     }
 
     public enum LeaderboardType {
