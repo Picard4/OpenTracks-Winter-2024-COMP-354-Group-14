@@ -42,7 +42,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         findViewById(R.id.btnRefresh).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                leaderboardPagerAdapter.refreshCurrentLeaderboardFragment();
+                leaderboardPagerAdapter.refreshLeaderboardFragmentData();
             }
         });
 
@@ -54,11 +54,11 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnAverageScoreAggregation).setOnClickListener(
-                v -> leaderboardPagerAdapter.setCurrentAggregationStrategy(LeaderboardFragment.AggregationStrategy.Average)
+                v -> leaderboardPagerAdapter.setCurrentAggregationStrategy(LeaderboardFragment.LeaderboardType.Average)
         );
 
         findViewById(R.id.btnBestScoreAggregation).setOnClickListener(
-                v -> leaderboardPagerAdapter.setCurrentAggregationStrategy(LeaderboardFragment.AggregationStrategy.Best)
+                v -> leaderboardPagerAdapter.setCurrentAggregationStrategy(LeaderboardFragment.LeaderboardType.Best)
         );
     }
 }

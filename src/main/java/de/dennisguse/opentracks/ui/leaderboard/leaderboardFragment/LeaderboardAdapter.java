@@ -14,8 +14,6 @@ import de.dennisguse.opentracks.data.models.Ranking;
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
     private List<Ranking> displayedRankingList;
-    private List<Ranking> averageRankingList;
-    private List<Ranking> bestRankingList;
 
     public LeaderboardAdapter(List<Ranking> displayedRankingList) {
         this.displayedRankingList = displayedRankingList;
@@ -42,21 +40,9 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         return displayedRankingList.size();
     }
 
-    public void setDisplayedRankingList(List<Ranking> displayedRankingList, LeaderboardFragment.AggregationStrategy aggregationStrategy) {
+    public void setDisplayedRankingList(List<Ranking> displayedRankingList, LeaderboardFragment.LeaderboardType leaderboardType) {
         this.displayedRankingList = displayedRankingList;
-        if (aggregationStrategy == LeaderboardFragment.AggregationStrategy.Average)
-            this.averageRankingList = displayedRankingList;
-        else if (aggregationStrategy == LeaderboardFragment.AggregationStrategy.Best)
-            this.bestRankingList = displayedRankingList;
-        // Since the rankingList could have been remade from the ground up, we have to call notifyDataSetChanged();
-        notifyDataSetChanged();
-    }
 
-    public void swapDisplayedRankingList(LeaderboardFragment.AggregationStrategy aggregationStrategy) {
-        if (aggregationStrategy == LeaderboardFragment.AggregationStrategy.Average)
-            this.displayedRankingList = this.averageRankingList;
-        else if (aggregationStrategy == LeaderboardFragment.AggregationStrategy.Best)
-            this.displayedRankingList = this.bestRankingList;
         // Since the rankingList could have been remade from the ground up, we have to call notifyDataSetChanged();
         notifyDataSetChanged();
     }

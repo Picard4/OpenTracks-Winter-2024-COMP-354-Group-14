@@ -6,19 +6,34 @@ import java.util.List;
 import de.dennisguse.opentracks.data.models.Ranking;
 
 public class MaxSpeedLeaderboardFragment extends LeaderboardFragment {
-    private boolean refresh;
+    private boolean averageRefresh;
+    private boolean bestRefresh;
 
     @Override
-    protected List<Ranking> getLatestRankingsData() {
+    protected List<Ranking> calculateLatestAverageRankingsData(List<Object> latestLeaderboardData) {
         // TODO: Replace the test data with code that gathers the appropriate Ranking data
         List<Ranking> latestRankingsData;
-        if (!refresh)
+        if (!averageRefresh)
             // Get a smaller data set if this is the first time the rankings data is being collected
             latestRankingsData = getAltTestData();
         else
             latestRankingsData = getTestData();
         // All future rankings data collections should be refreshes
-        refresh = true;
+        averageRefresh = true;
+        return latestRankingsData;
+    }
+
+    @Override
+    protected List<Ranking> calculateLatestBestRankingsData(List<Object> latestLeaderboardData) {
+        // TODO: Replace the test data with code that gathers the appropriate Ranking data
+        List<Ranking> latestRankingsData;
+        if (!bestRefresh)
+            // Get a smaller data set if this is the first time the rankings data is being collected
+            latestRankingsData = getAltTestData();
+        else
+            latestRankingsData = getTestData();
+        // All future rankings data collections should be refreshes
+        bestRefresh = true;
         return latestRankingsData;
     }
 

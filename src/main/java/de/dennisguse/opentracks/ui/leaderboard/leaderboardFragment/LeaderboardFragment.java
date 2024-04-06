@@ -19,12 +19,14 @@ public abstract class LeaderboardFragment extends Fragment {
 
     private RecyclerView leaderboardRecyclerView;
     private LeaderboardAdapter leaderboardAdapter;
+    private List<Ranking> averageRankingList;
+    private List<Ranking> bestRankingList;
 
     public LeaderboardFragment() {
-        leaderboardAdapter = new LeaderboardAdapter(getLatestRankingsData());
+        leaderboardAdapter = new LeaderboardAdapter(averageRankingList);
     }
 
-    public enum AggregationStrategy {
+    public enum LeaderboardType {
         Average,
         Best;
     }
@@ -41,16 +43,11 @@ public abstract class LeaderboardFragment extends Fragment {
         return view;
     }
 
-    public void refreshRankingsData(AggregationStrategy aggregationStrategy) {
-        leaderboardAdapter.setDisplayedRankingList(getLatestRankingsData(aggregationStrategy), aggregationStrategy);
-    }
+    protected abstract List<Ranking> calculateLatestAverageRankingsData(List<Object> latestLeaderboardData);
+    protected abstract List<Ranking> calculateLatestBestRankingsData(List<Object> latestLeaderboardData);
 
-    protected abstract List<Ranking> getLatestRankingsData(AggregationStrategy aggregationStrategy);
-
-    public void setCurrentAggregationStrategy(AggregationStrategy aggregationStrategy) {
-        if (aggregationStrategy == currentAggregationStrategy)
-            return;
-        currentAggregationStrategy = aggregationStrategy;
-        refreshRankingsData();
+    public void updateRankingLists(List<Object> latestLeaderboardData) {
+        this.averageRankingList = calculateLatestAverageRankingsData(latestLeaderboardData);
+        this.bestRankingList = calculateLatestBestRankingsData(latestLeaderboardData);
     }
 }
