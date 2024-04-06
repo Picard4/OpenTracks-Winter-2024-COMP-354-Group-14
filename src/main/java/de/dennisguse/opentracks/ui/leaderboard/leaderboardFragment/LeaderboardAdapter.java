@@ -13,10 +13,12 @@ import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Ranking;
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
-    private List<Ranking> rankingList;
+    private List<Ranking> displayedRankingList;
+    private List<Ranking> averageRankingList;
+    private List<Ranking> bestRankingList;
 
-    public LeaderboardAdapter(List<Ranking> rankingList) {
-        this.rankingList = rankingList;
+    public LeaderboardAdapter(List<Ranking> displayedRankingList) {
+        this.displayedRankingList = displayedRankingList;
     }
 
     @NonNull
@@ -28,7 +30,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Ranking ranking = rankingList.get(position);
+        Ranking ranking = displayedRankingList.get(position);
         holder.usernameText.setText(ranking.getUsername());
         holder.locationText.setText(ranking.getLocation());
         holder.rankText.setText(String.valueOf(ranking.getRank()));
@@ -37,11 +39,24 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
     @Override
     public int getItemCount() {
-        return rankingList.size();
+        return displayedRankingList.size();
     }
 
-    public void setRankingList(List<Ranking> rankingList) {
-        this.rankingList = rankingList;
+    public void setDisplayedRankingList(List<Ranking> displayedRankingList, LeaderboardFragment.AggregationStrategy aggregationStrategy) {
+        this.displayedRankingList = displayedRankingList;
+        if (aggregationStrategy == LeaderboardFragment.AggregationStrategy.Average)
+            this.averageRankingList = displayedRankingList;
+        else if (aggregationStrategy == LeaderboardFragment.AggregationStrategy.Best)
+            this.bestRankingList = displayedRankingList;
+        // Since the rankingList could have been remade from the ground up, we have to call notifyDataSetChanged();
+        notifyDataSetChanged();
+    }
+
+    public void swapDisplayedRankingList(LeaderboardFragment.AggregationStrategy aggregationStrategy) {
+        if (aggregationStrategy == LeaderboardFragment.AggregationStrategy.Average)
+            this.displayedRankingList = this.averageRankingList;
+        else if (aggregationStrategy == LeaderboardFragment.AggregationStrategy.Best)
+            this.displayedRankingList = this.bestRankingList;
         // Since the rankingList could have been remade from the ground up, we have to call notifyDataSetChanged();
         notifyDataSetChanged();
     }

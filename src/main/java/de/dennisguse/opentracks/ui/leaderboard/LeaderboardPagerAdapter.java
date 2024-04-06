@@ -100,7 +100,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
 
     public void setCurrentAggregationStrategy(LeaderboardFragment.AggregationStrategy aggregationStrategy) {
         currentAggregationStrategy = aggregationStrategy;
-        currentLeaderboardFragment.refreshRankingsData();
+        currentLeaderboardFragment.setCurrentAggregationStrategy(aggregationStrategy);
     }
 }
 

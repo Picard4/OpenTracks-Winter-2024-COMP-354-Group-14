@@ -41,9 +41,16 @@ public abstract class LeaderboardFragment extends Fragment {
         return view;
     }
 
-    public void refreshRankingsData() {
-        leaderboardAdapter.setRankingList(getLatestRankingsData());
+    public void refreshRankingsData(AggregationStrategy aggregationStrategy) {
+        leaderboardAdapter.setDisplayedRankingList(getLatestRankingsData(aggregationStrategy), aggregationStrategy);
     }
 
-    protected abstract List<Ranking> getLatestRankingsData();
+    protected abstract List<Ranking> getLatestRankingsData(AggregationStrategy aggregationStrategy);
+
+    public void setCurrentAggregationStrategy(AggregationStrategy aggregationStrategy) {
+        if (aggregationStrategy == currentAggregationStrategy)
+            return;
+        currentAggregationStrategy = aggregationStrategy;
+        refreshRankingsData();
+    }
 }
