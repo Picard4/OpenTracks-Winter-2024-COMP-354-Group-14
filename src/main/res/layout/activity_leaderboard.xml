@@ -10,9 +10,9 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:background="#ececec"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <com.google.android.material.tabs.TabLayout
@@ -43,8 +43,9 @@
     <LinearLayout
         android:id="@+id/filterBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="74dp"
         android:layout_below="@id/topBar"
+        android:layout_marginTop="1dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp">
@@ -72,15 +73,60 @@
             android:layout_marginStart="4dp"
             android:text="All Resorts"
             app:cornerRadius="8dp" />
+
     </LinearLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
-        android:layout_below="@id/filterBar"
-        android:layout_above="@id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomBar"
+        android:layout_below="@id/filterBar"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="43dp" />
 
+    <LinearLayout
+        android:id="@+id/halfThickBar"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_above="@id/bottomBar"
+        android:gravity="center|end"
+        android:orientation="horizontal"
+        android:padding="1dp">
+
+        <Button
+            android:id="@+id/btnTen"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="10"
+            android:textSize="12sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:cornerRadius="8dp" />
+
+        <Button
+            android:id="@+id/btnTwentyFive"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="25"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/colorForegroundDelete"
+            app:cornerRadius="8dp" />
+
+        <Button
+            android:id="@+id/btnFifty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="50"
+            android:textColor="@color/colorForegroundDelete"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:cornerRadius="8dp" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
@@ -99,9 +145,9 @@
             android:id="@+id/back"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="bottom"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_gravity="bottom"
             app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
 
         <Button
