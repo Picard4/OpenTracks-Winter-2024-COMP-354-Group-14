@@ -41,6 +41,10 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     }
 
     public void setDisplayedRankingList(List<Ranking> displayedRankingList) {
+        // This if statement is just here to improve efficiency
+        if (this.displayedRankingList == displayedRankingList)
+            return;
+
         this.displayedRankingList = displayedRankingList;
 
         // Since the rankingList could have been remade from the ground up, we have to call notifyDataSetChanged();
