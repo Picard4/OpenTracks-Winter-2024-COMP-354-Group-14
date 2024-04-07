@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +57,17 @@ import de.dennisguse.opentracks.data.models.CRUDConstants;
 
 
 import de.dennisguse.opentracks.data.models.UserModel;
+
+
+
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import java.util.Calendar;
+import java.util.Locale;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import java.util.Arrays;
+import java.util.Locale;
 
 
 
@@ -177,26 +189,46 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         // Inflate the custom layout for the edit dialog.
         View formView = LayoutInflater.from(getContext()).inflate(R.layout.edit_profile_form, null);
 
-        // Initialize all the EditText fields.
+        // Initialize all the EditText fields and Spinners.
         EditText editNickname = formView.findViewById(R.id.editNickname);
         EditText editDateOfBirth = formView.findViewById(R.id.editDateOfBirth);
         EditText editHeight = formView.findViewById(R.id.editHeight);
         EditText editWeight = formView.findViewById(R.id.editWeight);
-        EditText editGender = formView.findViewById(R.id.editGender);
-        EditText editLocation = formView.findViewById(R.id.editLocation);
 
-        // Create the AlertDialog.
+        Spinner spinnerGender = formView.findViewById(R.id.spinnerGender);
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.gender_options, android.R.layout.simple_spinner_item);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGender.setAdapter(genderAdapter);
+
+        Spinner spinnerLocation = formView.findViewById(R.id.spinnerLocation);
+        String[] isoCountryCodes = Locale.getISOCountries();
+        String[] countryNames = new String[isoCountryCodes.length];
+
+        for (int i = 0; i < isoCountryCodes.length; i++) {
+            Locale locale = new Locale("", isoCountryCodes[i]);
+            countryNames[i] = locale.getDisplayCountry();
+        }
+
+        Arrays.sort(countryNames); // Sort the country names alphabetically
+
+        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, countryNames);
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLocation.setAdapter(locationAdapter);
+
+        // Set up the AlertDialog.
         new AlertDialog.Builder(getContext())
                 .setTitle(R.string.edit_profile_title)
                 .setView(formView)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    // Collect data from the EditText fields.
+                    // Collect data from the fields.
                     String nickname = editNickname.getText().toString();
                     String dateOfBirth = editDateOfBirth.getText().toString();
                     String height = editHeight.getText().toString();
                     String weight = editWeight.getText().toString();
-                    String gender = editGender.getText().toString();
-                    String location = editLocation.getText().toString();
+                    String gender = spinnerGender.getSelectedItem().toString();
+                    String location = spinnerLocation.getSelectedItem().toString();
 
                     // Validate and save the data if valid
 //TODO: Add back validation
@@ -211,6 +243,26 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
+        editDateOfBirth.setOnClickListener(view -> {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view1, year1, monthOfYear, dayOfMonth) -> {
+                // The month value is 0-based, so we add 1 to it for display.
+                String selectedDate = String.format(Locale.getDefault(), "%02d-%02d-%04d", dayOfMonth, monthOfYear + 1, year1);
+                editDateOfBirth.setText(selectedDate);
+            }, year, month, day);
+
+            // Prevent future dates from being selected
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+            // Show the date picker dialog
+            datePickerDialog.show();
+        });
     }
 
     // TODO: Implement saving logic here.
