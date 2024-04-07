@@ -4,15 +4,20 @@ import static de.dennisguse.opentracks.settings.PreferencesUtils.getUnitSystem;
 
 import android.app.AlertDialog;
 import android.app.Activity;
+import android.content.ContextWrapper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +27,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.Intent;
+
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
@@ -33,6 +40,9 @@ import androidx.core.app.ActivityCompat;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 import de.dennisguse.opentracks.R;
@@ -165,6 +175,82 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         // Load the image from the URI and set it to the profile picture ImageView
         ImageView profilePictureImageView = requireView().findViewById(R.id.profileImageView);
         profilePictureImageView.setImageURI(imageUri);
+
+        // Convert the image URI to a Bitmap
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Save the Bitmap to internal storage
+        if (bitmap != null) {
+            saveImageToInternalStorage(bitmap);
+            // Display the profile picture after saving
+            displayProfilePicture();
+
+        }
+    }
+
+    public void saveImageToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(requireContext());
+        // Get the directory for the app's private pictures directory.
+        File directory = cw.getDir("profilePicDir", Context.MODE_PRIVATE);
+
+        Log.d("MyApp", "Directory Path: " + directory.getAbsolutePath());
+
+        // Create imageDir
+        File myPath = new File(directory, "profile.jpg");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(myPath);
+            // Use the compress method on the Bitmap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("MyApp", "Error saving image: " + e.getMessage());
+        } finally {
+            try {
+                if (fos != null)
+                    fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("MyApp", "Error closing FileOutputStream: " + e.getMessage());
+            }
+        }
+
+    }
+
+    private void displayProfilePicture() {
+        View view = requireView();
+        if (view != null) {
+            // Get the directory for the app's private pictures directory
+            ContextWrapper cw = new ContextWrapper(requireContext());
+            File directory = cw.getDir("profilePicDir", Context.MODE_PRIVATE);
+
+            // Create image file
+            File myPath = new File(directory, "profile.jpg");
+
+            // Check if the file exists
+            if (myPath.exists()) {
+                // If the file exists, load the image from the file
+                Bitmap bitmap = BitmapFactory.decodeFile(myPath.getAbsolutePath());
+
+                // Set the loaded bitmap to the ImageView
+                ImageView profileImageView = view.findViewById(R.id.profileImageView);
+                if (profileImageView != null) {
+                    profileImageView.setImageBitmap(bitmap);
+                } else {
+                    Log.e("UserProfileFragment", "ImageView not found in the layout");
+                }
+            } else {
+                Log.e("UserProfileFragment", "Path does not exist");
+            }
+        } else {
+            Log.e("UserProfileFragment", "Fragment view is null");
+        }
     }
 
     private void showEditProfileDialog() {
@@ -356,6 +442,11 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
             heightView.setText(heightStrings.first + heightStrings.second);
             weightView.setText(weightStrings.first + weightStrings.second);
+
+            //check if profile picture has been changed from default and load the new picture
+            if (ProfilePictureExists()) {
+                displayProfilePicture();
+            }
         }, 50);
     }
 
@@ -375,7 +466,12 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
         super.onDisplayPreferenceDialog(preference);
     }
-
+    private boolean ProfilePictureExists() {
+        ContextWrapper cw = new ContextWrapper(requireContext());
+        File directory = cw.getDir("profilePicDir", Context.MODE_PRIVATE);
+        File myPath = new File(directory, "profile.jpg");
+        return myPath.exists();
+    }
 
 
 }
