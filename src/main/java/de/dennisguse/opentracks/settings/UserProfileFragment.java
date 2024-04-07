@@ -65,6 +65,13 @@ import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
 import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
+import de.dennisguse.opentracks.data.adapters.FireStoreAdapter;
+
+import de.dennisguse.opentracks.data.models.UserModel;
+
+
+import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
+import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 import de.dennisguse.opentracks.data.interfaces.ReadCallback;
 import de.dennisguse.opentracks.data.interfaces.ActionCallback;
 import de.dennisguse.opentracks.data.adapters.FireStoreAdapter;

@@ -1,6 +1,9 @@
 package de.dennisguse.opentracks.data.models;
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.google.gson.JsonObject;
+
+import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
