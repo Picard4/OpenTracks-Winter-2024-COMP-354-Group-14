@@ -25,6 +25,18 @@ public class UserModel {
     private boolean socialAllow; //Bool flag for leaderboard appearance permission
     private String profilePicURL; //To be replaced by firestore path - https://
 
+    // Empty constructor
+    public UserModel() {
+        this.nickname = "";
+        this.country = "";
+        this.dateOfBirth = 0;
+        this.gender = "";
+        this.height = 0;
+        this.weight = 0;
+        this.socialAllow = false;
+        this.profilePicURL = "";
+    }
+
     private static final String SHARED_PREFS_NAME = "UserPrefs";
     private static final String PREF_SOCIAL_ALLOW = "socialAllow";
     private transient Context context;
