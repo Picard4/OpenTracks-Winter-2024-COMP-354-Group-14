@@ -54,7 +54,7 @@ public class AboutActivity extends AbstractActivity {
         };
         FirestoreCRUDUtil dbUtil = FirestoreCRUDUtil.getInstance();
 
-        dbUtil.getCollection("users",callback);
+        dbUtil.getUserRuns("ali",callback);
 
 
         viewBinding.aboutTextDescription.setText(getString(R.string.about_description));

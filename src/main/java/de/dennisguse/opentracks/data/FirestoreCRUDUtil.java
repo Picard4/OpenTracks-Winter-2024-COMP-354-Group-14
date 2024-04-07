@@ -173,4 +173,30 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
 
     }
+
+    @Override
+    public void getUserRuns(String id, ReadCallback callback) {
+        db.collection("runs").whereEqualTo("user",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<JsonObject> documents = new ArrayList<JsonObject>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document != null) {
+                            documents.add(FireStoreAdapter.toJson(document.getData()));
+
+                        }
+                    }
+                    callback.onSuccess(documents);
+                    Log.d(CRUDConstants.TAG_GET_COLLECTION, CRUDConstants.SUCCESS_CREATING_DOCUMENT + " => " + id);
+
+
+                } else {
+                    Log.e(CRUDConstants.TAG_ERROR, CRUDConstants.ERROR_RETRIEVING_COLLECTION + task.getException());
+                    callback.onFailure();
+                }
+            }
+        });
+
+    }
 }

@@ -56,6 +56,24 @@ public interface ExternalStorageUtil {
     void getCollection(final String collection, final ReadCallback callback);
 
     /**
+     * Gets all users
+     *
+     */
+    default void getUsers(final ReadCallback callback)
+    {
+        getCollection(CRUDConstants.USERS_TABLE,callback);
+    }
+    void getUserRuns(final String id, final ReadCallback callback);
+
+    /**
+     * Gets all runs
+     */
+    default void getRuns(final ReadCallback callback)
+    {
+        getCollection(CRUDConstants.RUNS_TABLE,callback);
+    }
+
+    /**
      * Retrieves a user entry from external storage based on the user ID.
      *
      * @param id The ID of the user to retrieve
