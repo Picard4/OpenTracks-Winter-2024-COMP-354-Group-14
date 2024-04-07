@@ -1,4 +1,7 @@
 package de.dennisguse.opentracks.data.models;
+import com.google.gson.JsonObject;
+
+import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 
 public class UserModel {
 

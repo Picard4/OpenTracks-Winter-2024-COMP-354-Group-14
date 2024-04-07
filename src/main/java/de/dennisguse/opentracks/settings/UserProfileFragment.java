@@ -31,6 +31,8 @@ import androidx.preference.SwitchPreference;
 import androidx.core.app.ActivityCompat;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.gson.JsonObject;
+
 
 import java.util.Objects;
 
@@ -41,6 +43,13 @@ import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.data.models.SpeedFormatter;
 import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
+import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
+import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
+import de.dennisguse.opentracks.data.adapters.FireStoreAdapter;
+
+import de.dennisguse.opentracks.data.models.UserModel;
+
+
 
  // You can choose any value for the request code
 
@@ -184,12 +193,23 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                     if (validateInputs(nickname, dateOfBirth, height, weight, gender, location)) {
                         saveProfileData(nickname, dateOfBirth, height, weight, gender, location);
                         showToast("Profile updated successfully!");
+
                     } else {
                         showToast("Please check your inputs.");
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
+    }
+
+    // TODO: Implement saving logic here.
+    private void saveProfileData(String nickname, String dateOfBirth, String height, String weight, String gender, String location) {
+
+        UserModel user = new UserModel();
+        JsonObject userJson = user.toJSON();
+        UserModel userSerializable = JSONSerializable.fromJSON(userJson, user.class);
+
+        FirestoreCRUDUtil.getInstance().createEntry("users", nickname, user.toJSON(), null);
     }
 
     // A simple method to show toast messages.
@@ -266,10 +286,7 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                 .show();
     }
 
-    // TODO: Implement saving logic here.
-    private void saveProfileData(String nickname, String dateOfBirth, String height, String weight, String gender, String location) {
 
-    }
 
     @Override
     public void onStart() {
