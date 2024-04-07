@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
 import de.dennisguse.opentracks.R;
+import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
 
 public class LeaderboardActivity extends AppCompatActivity {
 
@@ -40,12 +42,30 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btnRefresh).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                leaderboardPagerAdapter.refreshCurrentLeaderboardFragment();
-            }
+        /* Button Events */
+        
+        findViewById(R.id.btnRefresh).setOnClickListener(v -> leaderboardPagerAdapter.refreshLeaderboardFragmentData());
+
+        findViewById(R.id.back).setOnClickListener(v -> onBackPressed());
+
+        android.view.View averageButton = findViewById(R.id.btnAverageScoreAggregation);
+        android.view.View bestButton = findViewById(R.id.btnBestScoreAggregation);
+        android.view.View everyoneButton = findViewById(R.id.btnEveryone);
+        android.view.View thisSeasonButton = findViewById(R.id.btnThisSeason);
+        android.view.View allResortsButton = findViewById(R.id.btnAllResorts);
+
+        int optionAvailableColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks);
+        int optionSelectedColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks_transparent);
+
+        averageButton.setBackgroundColor(optionSelectedColor);
+        everyoneButton.setBackgroundColor(optionSelectedColor);
+
+        averageButton.setOnClickListener(v -> {
+            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Average);
+            averageButton.setBackgroundColor(optionSelectedColor);
+            bestButton.setBackgroundColor(optionAvailableColor);
         });
+
 
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,5 +98,32 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
 
+        bestButton.setOnClickListener(v -> {
+            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Best);
+            averageButton.setBackgroundColor(optionAvailableColor);
+            bestButton.setBackgroundColor(optionSelectedColor);
+        });
+
+        everyoneButton.setOnClickListener(v -> {
+
+
+            everyoneButton.setBackgroundColor(optionSelectedColor);
+            thisSeasonButton.setBackgroundColor(optionAvailableColor);
+            allResortsButton.setBackgroundColor(optionAvailableColor);
+        });
+
+        thisSeasonButton.setOnClickListener(v -> {
+
+            everyoneButton.setBackgroundColor(optionAvailableColor);
+            thisSeasonButton.setBackgroundColor(optionSelectedColor);
+            allResortsButton.setBackgroundColor(optionAvailableColor);
+        });
+
+        allResortsButton.setOnClickListener(v -> {
+
+            everyoneButton.setBackgroundColor(optionAvailableColor);
+            thisSeasonButton.setBackgroundColor(optionAvailableColor);
+            allResortsButton.setBackgroundColor(optionSelectedColor);
+        });
     }
 }

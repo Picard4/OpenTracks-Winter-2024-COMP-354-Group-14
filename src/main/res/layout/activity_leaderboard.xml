@@ -21,22 +21,28 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabVert"
+                android:id="@+id/tabMovingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vertical" />
+                android:text="Moving Time" />
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabDist"
+                android:id="@+id/tabDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Distance" />
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabDay"
+                android:id="@+id/tabMaxSpeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Day" />
+                android:text="Max Speed" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabAverageSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Average Speed" />
         </com.google.android.material.tabs.TabLayout>
     </LinearLayout>
 
@@ -151,7 +157,7 @@
             app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/btnAverageScoreAggregation"
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
@@ -159,7 +165,7 @@
             app:cornerRadius="8dp" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/btnBestScoreAggregation"
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_marginStart="4dp"
