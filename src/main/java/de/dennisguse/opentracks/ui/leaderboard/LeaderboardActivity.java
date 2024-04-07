@@ -88,7 +88,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
 
         everyoneButton.setOnClickListener(v -> {
-            
+
             everyoneButton.setBackgroundColor(optionSelectedColor);
             thisSeasonButton.setBackgroundColor(optionAvailableColor);
             allResortsButton.setBackgroundColor(optionAvailableColor);

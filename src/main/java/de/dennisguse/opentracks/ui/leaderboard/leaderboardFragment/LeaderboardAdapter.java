@@ -41,7 +41,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     }
 
     public void setDisplayedRankingList(List<Ranking> displayedRankingList) {
-        // This if statement is just here to improve efficiency
+        // This if statement is just here to improve efficiency if the user switched LeaderboardFragments but not LeaderboardType
         if (this.displayedRankingList == displayedRankingList)
             return;
 
