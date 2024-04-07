@@ -1,7 +1,6 @@
 package de.dennisguse.opentracks.ui.leaderboard;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -9,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import de.dennisguse.opentracks.R;
+import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
 
 public class LeaderboardActivity extends AppCompatActivity {
 
@@ -38,20 +38,16 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.btnRefresh).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                leaderboardPagerAdapter.refreshCurrentLeaderboardFragment();
-            }
-        });
+        findViewById(R.id.btnRefresh).setOnClickListener(v -> leaderboardPagerAdapter.refreshLeaderboardFragmentData());
 
-        findViewById(R.id.back).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                onBackPressed();
-            }
-        });
+        findViewById(R.id.back).setOnClickListener(v -> onBackPressed());
 
+        findViewById(R.id.btnAverageScoreAggregation).setOnClickListener(
+                v -> leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Average)
+        );
 
+        findViewById(R.id.btnBestScoreAggregation).setOnClickListener(
+                v -> leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Best)
+        );
     }
 }
