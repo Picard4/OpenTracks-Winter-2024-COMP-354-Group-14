@@ -48,6 +48,21 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         findViewById(R.id.back).setOnClickListener(v -> onBackPressed());
 
+        findViewById(R.id.btnTen).setOnClickListener(v -> {
+            numberOfUsers = 10;
+            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+        });
+
+        findViewById(R.id.btnTwentyFive).setOnClickListener(v -> {
+            numberOfUsers = 25;
+            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+        });
+
+        findViewById(R.id.btnFifty).setOnClickListener(v -> {
+            numberOfUsers = 50;
+            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+        });
+
         android.view.View averageButton = findViewById(R.id.btnAverageScoreAggregation);
         android.view.View bestButton = findViewById(R.id.btnBestScoreAggregation);
         android.view.View everyoneButton = findViewById(R.id.btnEveryone);
@@ -66,38 +81,6 @@ public class LeaderboardActivity extends AppCompatActivity {
             bestButton.setBackgroundColor(optionAvailableColor);
         });
 
-
-        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        findViewById(R.id.btnTen).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                numberOfUsers = 10;
-                //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
-            }
-        });
-
-        findViewById(R.id.btnTwentyFive).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                numberOfUsers = 25;
-                //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
-            }
-        });
-
-        findViewById(R.id.btnFifty).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                numberOfUsers = 50;
-                //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
-            }
-        });
-
         bestButton.setOnClickListener(v -> {
             leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Best);
             averageButton.setBackgroundColor(optionAvailableColor);
@@ -105,8 +88,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
 
         everyoneButton.setOnClickListener(v -> {
-
-
+            
             everyoneButton.setBackgroundColor(optionSelectedColor);
             thisSeasonButton.setBackgroundColor(optionAvailableColor);
             allResortsButton.setBackgroundColor(optionAvailableColor);
