@@ -12,6 +12,8 @@ import de.dennisguse.opentracks.R;
 
 public class LeaderboardActivity extends AppCompatActivity {
 
+    private int numberOfUsers = 10;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +47,36 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.back).setOnClickListener(new View.OnClickListener(){
+        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 onBackPressed();
             }
         });
 
+        findViewById(R.id.btnTen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                numberOfUsers = 10;
+                //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            }
+        });
+
+        findViewById(R.id.btnTwentyFive).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                numberOfUsers = 25;
+                //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            }
+        });
+
+        findViewById(R.id.btnFifty).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                numberOfUsers = 50;
+                //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            }
+        });
 
     }
 }
