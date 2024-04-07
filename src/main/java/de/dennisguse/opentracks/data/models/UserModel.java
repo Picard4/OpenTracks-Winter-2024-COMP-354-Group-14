@@ -11,6 +11,18 @@ public class UserModel {
     private boolean socialAllow; //Bool flag for leaderboard appearance permission
     private String profilePicURL; //To be replaced by firestore path - https://
 
+    // Empty constructor
+    public UserModel() {
+        this.nickname = "";
+        this.country = "";
+        this.dateOfBirth = 0;
+        this.gender = "";
+        this.height = 0;
+        this.weight = 0;
+        this.socialAllow = false;
+        this.profilePicURL = ""; 
+    }
+
     public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight, boolean socialAllow, String profilePicURL) {
 
         this.nickname = nickname;
