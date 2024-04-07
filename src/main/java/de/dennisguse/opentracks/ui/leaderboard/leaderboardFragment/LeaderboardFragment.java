@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.dennisguse.opentracks.R;
@@ -19,12 +20,14 @@ public abstract class LeaderboardFragment extends Fragment {
 
     private RecyclerView leaderboardRecyclerView;
     private LeaderboardAdapter leaderboardAdapter;
+    private List<Ranking> averageRankingList;
+    private List<Ranking> bestRankingList;
 
     public LeaderboardFragment() {
-        leaderboardAdapter = new LeaderboardAdapter(getLatestRankingsData());
+        leaderboardAdapter = new LeaderboardAdapter(new ArrayList<>());
     }
 
-    public enum AggregationStrategy {
+    public enum LeaderboardType {
         Average,
         Best;
     }
@@ -41,9 +44,18 @@ public abstract class LeaderboardFragment extends Fragment {
         return view;
     }
 
-    public void refreshRankingsData() {
-        leaderboardAdapter.setRankingList(getLatestRankingsData());
+    protected abstract List<Ranking> calculateLatestAverageRankingsData(List<Object> latestLeaderboardData);
+    protected abstract List<Ranking> calculateLatestBestRankingsData(List<Object> latestLeaderboardData);
+
+    public void updateRankingLists(List<Object> latestLeaderboardData) {
+        this.averageRankingList = calculateLatestAverageRankingsData(latestLeaderboardData);
+        this.bestRankingList = calculateLatestBestRankingsData(latestLeaderboardData);
     }
 
-    protected abstract List<Ranking> getLatestRankingsData();
+    public void setDisplayedRankingList(LeaderboardType leaderboardType) {
+        if (leaderboardType == LeaderboardType.Average)
+            leaderboardAdapter.setDisplayedRankingList(averageRankingList);
+        else if (leaderboardType == LeaderboardType.Best)
+            leaderboardAdapter.setDisplayedRankingList(bestRankingList);
+    }
 }

@@ -8,19 +8,34 @@ import de.dennisguse.opentracks.data.models.Ranking;
 public class MovingTimeLeaderboardFragment extends LeaderboardFragment {
 
     // Temporary boolean to confirm that refresh works when expected to; delete once Issue 67 is finished.
-    private boolean refresh;
+    private boolean averageRefresh;
+    private boolean bestRefresh;
 
     @Override
-    protected List<Ranking> getLatestRankingsData() {
+    protected List<Ranking> calculateLatestAverageRankingsData(List<Object> latestLeaderboardData) {
         // TODO: Replace the test data with code that gathers the appropriate Ranking data
         List<Ranking> latestRankingsData;
-        if (!refresh)
-            // Get a smaller data set if this is the first time the rankings data is being collected
+        if (!averageRefresh)
+            // Get a different data set if this is the first time the rankings data is being collected
+            latestRankingsData = getTestData();
+        else
+            latestRankingsData = getAltTestData();
+        // All future rankings data collections should be refreshes
+        averageRefresh = true;
+        return latestRankingsData;
+    }
+
+    @Override
+    protected List<Ranking> calculateLatestBestRankingsData(List<Object> latestLeaderboardData) {
+        // TODO: Replace the test data with code that gathers the appropriate Ranking data
+        List<Ranking> latestRankingsData;
+        if (!bestRefresh)
+            // Get a different data set if this is the first time the rankings data is being collected
             latestRankingsData = getAltTestData();
         else
             latestRankingsData = getTestData();
         // All future rankings data collections should be refreshes
-        refresh = true;
+        bestRefresh = true;
         return latestRankingsData;
     }
 

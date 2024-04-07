@@ -4,6 +4,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.AverageMovingSpeedLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.MaxSpeedLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.DistanceLeaderboardFragment;
@@ -16,7 +19,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     private MaxSpeedLeaderboardFragment maxSpeedLeaderboardFragment;
     private AverageMovingSpeedLeaderboardFragment averageMovingSpeedLeaderboardFragment;
     private LeaderboardFragment currentLeaderboardFragment;
-    private LeaderboardFragment.AggregationStrategy currentAggregationStrategy;
+    private LeaderboardFragment.LeaderboardType currentLeaderboardType;
 
     public LeaderboardPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -24,7 +27,10 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         distanceLeaderboardFragment = new DistanceLeaderboardFragment();
         maxSpeedLeaderboardFragment = new MaxSpeedLeaderboardFragment();
         averageMovingSpeedLeaderboardFragment = new AverageMovingSpeedLeaderboardFragment();
+
         currentLeaderboardFragment = movingTimeLeaderboardFragment;
+        currentLeaderboardType = LeaderboardFragment.LeaderboardType.Average;
+        refreshLeaderboardFragmentData();
     }
 
     public enum LeaderboardType {
@@ -52,55 +58,67 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void setCurrentLeaderboardFragment(int position) {
-        if (position == LeaderboardType.MovingTime.value)
+        if (position == LeaderboardPagerAdapter.LeaderboardType.MovingTime.value)
             currentLeaderboardFragment = movingTimeLeaderboardFragment;
-        else if (position == LeaderboardType.Distance.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.Distance.value)
             currentLeaderboardFragment = distanceLeaderboardFragment;
-        else if (position == LeaderboardType.MaxSpeed.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.MaxSpeed.value)
             currentLeaderboardFragment = maxSpeedLeaderboardFragment;
-        else if (position == LeaderboardType.AverageMovingSpeed.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.value)
             currentLeaderboardFragment = averageMovingSpeedLeaderboardFragment;
-    }
-
-    public void refreshCurrentLeaderboardFragment() {
-        currentLeaderboardFragment.refreshRankingsData();
+        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
 
     @Override
     public int getCount() {
-        return LeaderboardType.values().length;
+        return LeaderboardPagerAdapter.LeaderboardType.values().length;
     }
 
     @Override
     public Fragment getItem(int position) {
         // Return the appropriate Fragment for each tab position
-        if (position == LeaderboardType.MovingTime.value)
+        if (position == LeaderboardPagerAdapter.LeaderboardType.MovingTime.value)
             return movingTimeLeaderboardFragment;
-        else if (position == LeaderboardType.Distance.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.Distance.value)
             return distanceLeaderboardFragment;
-        else if (position == LeaderboardType.MaxSpeed.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.MaxSpeed.value)
             return maxSpeedLeaderboardFragment;
-        else if (position == LeaderboardType.AverageMovingSpeed.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.value)
             return averageMovingSpeedLeaderboardFragment;
         return null;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == LeaderboardType.MovingTime.value)
-            return LeaderboardType.MovingTime.getTitle();
-        else if (position == LeaderboardType.Distance.value)
-            return LeaderboardType.Distance.getTitle();
-        else if (position == LeaderboardType.MaxSpeed.value)
-            return LeaderboardType.MaxSpeed.getTitle();
-        else if (position == LeaderboardType.AverageMovingSpeed.value)
-            return LeaderboardType.AverageMovingSpeed.getTitle();
+        if (position == LeaderboardPagerAdapter.LeaderboardType.MovingTime.value)
+            return LeaderboardPagerAdapter.LeaderboardType.MovingTime.getTitle();
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.Distance.value)
+            return LeaderboardPagerAdapter.LeaderboardType.Distance.getTitle();
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.MaxSpeed.value)
+            return LeaderboardPagerAdapter.LeaderboardType.MaxSpeed.getTitle();
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.value)
+            return LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.getTitle();
         return null;
     }
 
-    public void setCurrentAggregationStrategy(LeaderboardFragment.AggregationStrategy aggregationStrategy) {
-        currentAggregationStrategy = aggregationStrategy;
-        currentLeaderboardFragment.refreshRankingsData();
+    public void setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType leaderboardType) {
+        if (leaderboardType == currentLeaderboardType)
+            return;
+        currentLeaderboardType = leaderboardType;
+        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
+    }
+
+    public void refreshLeaderboardFragmentData() {
+        List<Object> latestLeaderboardData = readLatestLeaderboardData();
+        movingTimeLeaderboardFragment.updateRankingLists(latestLeaderboardData);
+        distanceLeaderboardFragment.updateRankingLists(latestLeaderboardData);
+        maxSpeedLeaderboardFragment.updateRankingLists(latestLeaderboardData);
+        averageMovingSpeedLeaderboardFragment.updateRankingLists(latestLeaderboardData);
+        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
+    }
+
+    private ArrayList<Object> readLatestLeaderboardData() {
+        // This is where we get the data from the database for the runs that will be in the leaderboard.
+        return new ArrayList<>();
     }
 }
-
