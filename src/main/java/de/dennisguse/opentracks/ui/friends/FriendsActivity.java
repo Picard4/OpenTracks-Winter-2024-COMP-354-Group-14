@@ -3,6 +3,7 @@ package de.dennisguse.opentracks.ui.friends;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,15 +21,28 @@ import de.dennisguse.opentracks.databinding.AggregatedStatsBinding;
 import de.dennisguse.opentracks.databinding.FriendsPageBinding;
 
 public class FriendsActivity extends AbstractActivity {
+    ListView listView;
     private FriendsPageBinding viewBinding;
     private MenuItem searchMenuItem;
+
+    String[] username = {"John Doe",
+            "Jane Smith",
+            "David Johnson"
+    };
+
+    //placeholder for user images
+    int[] images = {R.drawable.friends_icon,R.drawable.friends_icon,R.drawable.friends_icon};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        viewBinding = FriendsPageBinding.inflate(getLayoutInflater());
-        setContentView(viewBinding.getRoot());
+        //viewBinding = FriendsPageBinding.inflate(getLayoutInflater());
+        setContentView(R.layout.friends_page);
+        listView = findViewById(R.id.friendsList);
+        FriendsAdapter friendsAdapter = new FriendsAdapter (this, username, images);
+        listView.setAdapter(friendsAdapter);
 
         BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar_layout).findViewById(R.id.bottom_app_bar);
 
