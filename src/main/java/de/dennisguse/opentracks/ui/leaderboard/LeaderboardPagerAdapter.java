@@ -30,6 +30,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
 
         currentLeaderboardFragment = movingTimeLeaderboardFragment;
         currentLeaderboardType = LeaderboardFragment.LeaderboardType.Average;
+        refreshLeaderboardFragmentData();
     }
 
     public enum LeaderboardType {
@@ -65,6 +66,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
             currentLeaderboardFragment = maxSpeedLeaderboardFragment;
         else if (position == LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.value)
             currentLeaderboardFragment = averageMovingSpeedLeaderboardFragment;
+        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
 
     @Override
