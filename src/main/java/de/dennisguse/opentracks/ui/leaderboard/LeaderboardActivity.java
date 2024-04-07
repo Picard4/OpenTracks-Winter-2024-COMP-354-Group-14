@@ -1,5 +1,6 @@
 package de.dennisguse.opentracks.ui.leaderboard;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,9 @@ import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
 
 public class LeaderboardActivity extends AppCompatActivity {
+
+    private static final String LEADERBOARD_OPTION_SELECTED = "#42599C";
+    private static final String LEADERBOARD_OPTION_AVAILABLE = "#FF6D00";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +46,21 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         findViewById(R.id.back).setOnClickListener(v -> onBackPressed());
 
-        findViewById(R.id.btnAverageScoreAggregation).setOnClickListener(
-                v -> leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Average)
-        );
+        android.view.View averageButton = findViewById(R.id.btnAverageScoreAggregation);
+        android.view.View bestButton = findViewById(R.id.btnBestScoreAggregation);
 
-        findViewById(R.id.btnBestScoreAggregation).setOnClickListener(
-                v -> leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Best)
-        );
+        averageButton.setBackgroundColor(Color.parseColor(LEADERBOARD_OPTION_SELECTED));
+
+        averageButton.setOnClickListener(v -> {
+            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Average);
+            averageButton.setBackgroundColor(Color.parseColor(LEADERBOARD_OPTION_SELECTED));
+            bestButton.setBackgroundColor(Color.parseColor(LEADERBOARD_OPTION_AVAILABLE));
+        });
+
+        bestButton.setOnClickListener(v -> {
+            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Best);
+            bestButton.setBackgroundColor(Color.parseColor(LEADERBOARD_OPTION_SELECTED));
+            averageButton.setBackgroundColor(Color.parseColor(LEADERBOARD_OPTION_AVAILABLE));
+        });
     }
 }
