@@ -194,10 +194,21 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
         Arrays.sort(countryNames); // Sort the country names alphabetically
 
+        // Move Canada to the beginning of the array
+        for (int i = 0; i < countryNames.length; i++) {
+            if (countryNames[i].equalsIgnoreCase("Canada")) {
+                String temp = countryNames[i];
+                System.arraycopy(countryNames, 0, countryNames, 1, i);
+                countryNames[0] = temp;
+                break;
+            }
+        }
+
         ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, countryNames);
         locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLocation.setAdapter(locationAdapter);
+
 
         // Set up the AlertDialog.
         new AlertDialog.Builder(getContext())
@@ -320,6 +331,8 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
     // TODO: Implement saving logic here.
     private void saveProfileData(String nickname, String dateOfBirth, String height, String weight, String gender, String location) {
+
+
 
     }
 
