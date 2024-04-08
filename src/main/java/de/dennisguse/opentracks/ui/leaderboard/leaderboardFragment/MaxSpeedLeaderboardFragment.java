@@ -1,69 +1,97 @@
 package de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.dennisguse.opentracks.data.models.Ranking;
 import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
 public class MaxSpeedLeaderboardFragment extends LeaderboardFragment {
-    private boolean averageRefresh;
-    private boolean bestRefresh;
 
     @Override
     protected List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
-        // TODO: Replace the test data with code that gathers the appropriate Ranking data
-        List<Ranking> latestRankingsData;
-        if (!averageRefresh)
-            // Get a different data set if this is the first time the rankings data is being collected
-            latestRankingsData = getTestData();
-        else
-            latestRankingsData = getAltTestData();
-        // All future rankings data collections should be refreshes
-        averageRefresh = true;
-        return latestRankingsData;
+        Map<String, List<Double>> userMaxSpeedsMap = new HashMap<>();
+        Map<String, String> userLocationsMap = new HashMap<>();
+
+        //put together all maximum speeds for each user and update their location. associate user's average speed with their last known location
+        for (LeaderboardPagerAdapter.PlaceHolderTrackUser user : latestLeaderboardData) {
+            if (!user.socialAllow)
+                continue;
+
+            List<Double> speeds = userMaxSpeedsMap.get(user.nickname);
+            if (speeds == null) {
+                speeds = new ArrayList<>();
+                userMaxSpeedsMap.put(user.nickname, speeds);
+            }
+            speeds.add(user.trackStatistics.getMaxSpeed().speed_mps());
+
+            userLocationsMap.put(user.nickname, user.location);
+        }
+
+        //calculate the average of all maximum speeds for each user
+        Map<String, Double> userAverageMaxSpeedsMap = new HashMap<>();
+        for (Map.Entry<String, List<Double>> entry : userMaxSpeedsMap.entrySet()) {
+            List<Double> speeds = entry.getValue();
+            double sum = 0;
+            for (double speed : speeds) {
+                sum += speed;
+            }
+            double average = speeds.isEmpty() ? 0 : sum / speeds.size();
+            userAverageMaxSpeedsMap.put(entry.getKey(), average);
+        }
+
+        //Sort users based on their average maximum speed
+        List<Map.Entry<String, Double>> sortedEntries = new ArrayList<>(userAverageMaxSpeedsMap.entrySet());
+        sortedEntries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+
+        List<Ranking> rankings = new ArrayList<>();
+        int rank = 0;
+        double lastAverageMaxSpeed = -1;
+        for (Map.Entry<String, Double> entry : sortedEntries) {
+            String nickname = entry.getKey();
+            double currentAverageMaxSpeed = entry.getValue();
+            if (currentAverageMaxSpeed != lastAverageMaxSpeed) {
+                rank = rankings.size() + 1;
+            }
+            String location = userLocationsMap.get(nickname);
+            rankings.add(new Ranking(rank, nickname, location, String.format("%.2f mps", currentAverageMaxSpeed)));
+            lastAverageMaxSpeed = currentAverageMaxSpeed;
+        }
+        return rankings;
     }
 
     @Override
     protected List<Ranking> calculateLatestBestRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
-        // TODO: Replace the test data with code that gathers the appropriate Ranking data
-        List<Ranking> latestRankingsData;
-        if (!bestRefresh)
-            // Get a different data set if this is the first time the rankings data is being collected
-            latestRankingsData = getAltTestData();
-        else
-            latestRankingsData = getTestData();
-        // All future rankings data collections should be refreshes
-        bestRefresh = true;
-        return latestRankingsData;
-    }
+        Map<String, LeaderboardPagerAdapter.PlaceHolderTrackUser> maxSpeedMap = new HashMap<>();
 
-    private List<Ranking> getTestData() {
-        List<Ranking> rankings = new ArrayList<>();
-        rankings.add(new Ranking(1, "User 10", "AA",  Double.toString(25)));
-        rankings.add(new Ranking(2, "User 20", "BB",  Double.toString(24)));
-        rankings.add(new Ranking(3, "User 30", "CC",  Double.toString(23)));
-        rankings.add(new Ranking(4,  "User 40", "DD",  Double.toString(22)));
-        rankings.add(new Ranking(5,  "User 50", "EE",  Double.toString(21)));
-        rankings.add(new Ranking(6,  "User 60", "FF",  Double.toString(20)));
-        rankings.add(new Ranking(7,  "User 70", "GG",  Double.toString(19)));
-        rankings.add(new Ranking(8,  "User 80", "HH",  Double.toString(18)));
-        rankings.add(new Ranking(9,  "User 90", "II",  Double.toString(17)));
-        rankings.add(new Ranking(10,  "User 100", "JJ",  Double.toString(16)));
-        rankings.add(new Ranking(11,  "User 110", "KK",  Double.toString(15)));
-        rankings.add(new Ranking(12,  "User 120", "LL",  Double.toString(14)));
-        rankings.add(new Ranking(13,  "User 130", "MM",  Double.toString(13)));
-        rankings.add(new Ranking(14,  "User 140", "NN",  Double.toString(12)));
-        rankings.add(new Ranking(15, "User 150", "OO",  Double.toString(11)));
-        return rankings;
-    }
+        //Keep track of each users best max speed
+        for (LeaderboardPagerAdapter.PlaceHolderTrackUser user : latestLeaderboardData) {
+            if (!user.socialAllow)
+                continue;
 
-    private List<Ranking> getAltTestData() {
+            LeaderboardPagerAdapter.PlaceHolderTrackUser currentBest = maxSpeedMap.get(user.nickname);
+            if (currentBest == null || user.trackStatistics.getMaxSpeed().speed_mps() > currentBest.trackStatistics.getMaxSpeed().speed_mps()) {
+                maxSpeedMap.put(user.nickname, user);
+            }
+        }
+
+        //Sort users based on their maximum speed
+        List<LeaderboardPagerAdapter.PlaceHolderTrackUser> sortedUsers = new ArrayList<>(maxSpeedMap.values());
+        sortedUsers.sort((user1, user2) -> Double.compare(user2.trackStatistics.getMaxSpeed().speed_mps(), user1.trackStatistics.getMaxSpeed().speed_mps()));
+
         List<Ranking> rankings = new ArrayList<>();
-        rankings.add(new Ranking(1, "Day One", "Steamboat Springs",  Double.toString(25)));
-        rankings.add(new Ranking(2, "Day Two", "North California CA",  Double.toString(24)));
-        rankings.add(new Ranking(3, "Day Three", "Steamboat Springs, Color Red",  Double.toString(23)));
-        rankings.add(new Ranking(4,  "Day Four", "Montreal",  Double.toString(22)));
+        int rank = 0;
+        double lastMaxSpeed = -1;
+        for (LeaderboardPagerAdapter.PlaceHolderTrackUser user : sortedUsers) {
+            double currentMaxSpeed = user.trackStatistics.getMaxSpeed().speed_mps();
+            if (currentMaxSpeed != lastMaxSpeed) {
+                rank = rankings.size() + 1;
+            }
+            rankings.add(new Ranking(rank, user.nickname, user.location, String.format("%.2f mps", currentMaxSpeed)));
+            lastMaxSpeed = currentMaxSpeed;
+        }
         return rankings;
     }
 }
