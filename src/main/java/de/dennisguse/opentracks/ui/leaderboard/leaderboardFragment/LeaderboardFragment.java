@@ -68,4 +68,26 @@ public abstract class LeaderboardFragment extends Fragment {
             scoreDecimalFormat = new DecimalFormat("0.00000");
         return scoreDecimalFormat;
     }
+
+    protected class SummedStatTrackUser {
+        private LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser;
+        private int sumFactorCount;
+
+        public SummedStatTrackUser(LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser) {
+            this.placeHolderTrackUser = placeHolderTrackUser;
+            sumFactorCount = 1;
+        }
+
+        public LeaderboardPagerAdapter.PlaceHolderTrackUser getPlaceHolderTrackUser() {
+            return placeHolderTrackUser;
+        }
+
+        public int getSumFactorCount() {
+            return sumFactorCount;
+        }
+
+        public void incrementSumFactorCount() {
+            sumFactorCount++;
+        }
+    }
 }
