@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,8 +51,16 @@ public class FriendsActivity extends AbstractActivity {
 
         setSupportActionBar(bottomAppBar);
 
-
-
+        Button searchButton = findViewById(R.id.searchButton);
+        EditText searchBar = findViewById(R.id.searchBar);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchText = searchBar.getText().toString();
+                // Use searchText for your search logic
+                Toast.makeText(FriendsActivity.this, "Searching for: " + searchText, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
