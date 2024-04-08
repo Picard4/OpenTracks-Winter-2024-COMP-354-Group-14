@@ -273,8 +273,13 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         EditText editWeight = formView.findViewById(R.id.editWeight);
 
         // Write user data to profile
-        editNickname.setText(nicknameText.getText().toString());
-        editDateOfBirth.setText(DOBText.getText().toString());
+        if (nicknameText.getText().toString().equalsIgnoreCase("Nickname")) {
+            editNickname.setText("");
+        }
+        if (DOBText.getText().toString().equalsIgnoreCase("Date of Birth")) {
+            editDateOfBirth.setText("");
+        }
+
         editHeight.setText(heightText.getText().toString());
         editWeight.setText(weightText.getText().toString());
 
