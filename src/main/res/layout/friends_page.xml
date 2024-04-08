@@ -15,9 +15,12 @@
             app:navigationIcon="@drawable/friends_icon"
             app:title="@string/menu_friends" />
 
-        <SearchView
+        <EditText
+            android:id="@+id/searchBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:hint="@string/search_hint"
+            android:inputType="text"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
