@@ -175,8 +175,8 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
     }
 
     @Override
-    public void getUserRuns(String id, ReadCallback callback) {
-        db.collection("runs").whereEqualTo("user",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void getRunsByField(String field,String id, ReadCallback callback) {
+        db.collection("runs").whereEqualTo(field,id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

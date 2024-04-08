@@ -63,7 +63,13 @@ public interface ExternalStorageUtil {
     {
         getCollection(CRUDConstants.USERS_TABLE,callback);
     }
-    void getUserRuns(final String id, final ReadCallback callback);
+    void getRunsByField(final String field, final String id, final ReadCallback callback);
+
+    default void getUserRuns(final String id, final ReadCallback callback)
+    {
+        getRunsByField("user",id,callback);
+    }
+
 
     /**
      * Gets all runs

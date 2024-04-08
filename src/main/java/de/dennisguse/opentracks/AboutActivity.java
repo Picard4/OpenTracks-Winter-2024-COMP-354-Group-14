@@ -42,7 +42,7 @@ public class AboutActivity extends AbstractActivity {
 
             @Override
             public void onSuccess(ArrayList<JsonObject> data) {
-                Log.d("COLLECTION", "Data" + " => " + data.toString());
+                Log.d("Test", "Data" + " => " + data.toString());
 
 
             }
@@ -54,7 +54,7 @@ public class AboutActivity extends AbstractActivity {
         };
         FirestoreCRUDUtil dbUtil = FirestoreCRUDUtil.getInstance();
 
-        dbUtil.getUserRuns("ali",callback);
+        dbUtil.getUserRuns("defaultUser",callback);
 
 
         viewBinding.aboutTextDescription.setText(getString(R.string.about_description));
