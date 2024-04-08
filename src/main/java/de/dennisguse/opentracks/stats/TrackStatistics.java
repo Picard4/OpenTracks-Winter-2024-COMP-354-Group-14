@@ -75,6 +75,8 @@ public class TrackStatistics {
     // Based on when we believe the user is traveling.
     private Duration movingTime;
     // The maximum speed (meters/second) that we believe is valid.
+
+    private Speed avgMovingSpeed;
     private Speed maxSpeed;
     private Float totalAltitudeGain_m = null;
     private Float totalAltitudeLoss_m = null;
@@ -167,6 +169,7 @@ public class TrackStatistics {
         totalDistance = other.totalDistance;
         totalTime = other.totalTime;
         movingTime = other.movingTime;
+        avgMovingSpeed = Speed.of(other.totalDistance.toM() / other.movingTime.toSeconds());
         maxSpeed = other.maxSpeed;
         altitudeExtremities.set(other.altitudeExtremities.getMin(), other.altitudeExtremities.getMax());
         totalAltitudeGain_m = other.totalAltitudeGain_m;
@@ -187,6 +190,7 @@ public class TrackStatistics {
         this.totalDistance = Distance.of(totalDistance_m);
         this.totalTime = Duration.ofSeconds(totalTime_s);
         this.movingTime = Duration.ofSeconds(movingTime_s);
+        this.avgMovingSpeed = Speed.of(totalDistance_m / movingTime_s);
         this.maxSpeed = Speed.of(maxSpeed_mps);
         this.totalAltitudeGain_m = totalAltitudeGain_m;
         this.totalAltitudeLoss_m = totalAltitudeLoss_m;
@@ -226,6 +230,7 @@ public class TrackStatistics {
         totalDistance = totalDistance.plus(other.totalDistance);
         totalTime = totalTime.plus(other.totalTime);
         movingTime = movingTime.plus(other.movingTime);
+        avgMovingSpeed = Speed.of(totalDistance.toM() / movingTime.toSeconds());
         maxSpeed = Speed.max(maxSpeed, other.maxSpeed);
         if (other.altitudeExtremities.hasData()) {
             altitudeExtremities.update(other.altitudeExtremities.getMin());
@@ -262,6 +267,7 @@ public class TrackStatistics {
         setTotalDistance(Distance.of(0));
         setTotalTime(Duration.ofSeconds(0));
         setMovingTime(Duration.ofSeconds(0));
+        setAvgMovingSpeed(Speed.of(0));
         setMaxSpeed(Speed.zero());
         setTotalAltitudeGain(null);
         setTotalAltitudeLoss(null);
@@ -336,6 +342,10 @@ public class TrackStatistics {
     public void addMovingTime(TrackPoint trackPoint, TrackPoint lastTrackPoint) {
         addMovingTime(Duration.between(lastTrackPoint.getTime(), trackPoint.getTime()));
     }
+
+    public Speed getAvgMovingSpeed() { return avgMovingSpeed; }
+
+    public void setAvgMovingSpeed(Speed avgMovingSpeed) { this.avgMovingSpeed = avgMovingSpeed; }
 
     //================================================================================//
     public Duration getChairliftWaitingTime(){
@@ -590,7 +600,8 @@ public class TrackStatistics {
     public String toString() {
         return "TrackStatistics { Start Time: " + getStartTime() + "; Stop Time: " + getStopTime()
                 + "; Total Distance: " + getTotalDistance() + "; Total Time: " + getTotalTime()
-                + "; Moving Time: " + getMovingTime() + "; Max Speed: " + getMaxSpeed()
+                + "; Moving Time: " + getMovingTime() + "; Average Moving Speed: " + getAvgMovingSpeed()
+                + "; Max Speed: " + getMaxSpeed()
                 + "; Min Altitude: " + getMinAltitude() + "; Max Altitude: " + getMaxAltitude()
                 + "; Altitude Gain: " + getTotalAltitudeGain()
                 + "; Altitude Loss: " + getTotalAltitudeLoss()

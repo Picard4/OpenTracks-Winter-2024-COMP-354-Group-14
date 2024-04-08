@@ -6,88 +6,103 @@
  */
 package de.dennisguse.opentracks.data.models;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.time.Duration;
-import java.time.Instant;
-
-import de.dennisguse.opentracks.data.TrackPointIterator;
-import de.dennisguse.opentracks.data.models.TrackPoint;
+import java.util.Queue;
 
 public class TrackPointUtils {
 
-    // Set a constant for the sample interval as 5 seconds.
-    // This means we will calculate using data points that are 5 seconds apart.
-    private static final Duration SAMPLE_INTERVAL = Duration.ofSeconds(5);
     /**
-     * Calculates the moving average of speeds from track points.
+     * Calculates the moving average of speeds from a list of TrackPoints,
+     * considering only points that are at least 5 seconds apart.
      *
-     * @param iterator      An iterator over TrackPoints.
-     * @param numDataPoints The number of data points to include in the moving average.
+     * @param trackPoints   The list of track points to be analyzed.
+     * @param numDataPoints The number of data points to include in the moving average calculation.
      * @return A list of calculated moving averages.
      */
-    public static List<Double> calculateSpeedMovingAverageWithIterator(TrackPointIterator iterator, int numDataPoints) {
-        // Create a list to store the calculated moving averages.
-        // This is where the final results will be stored.
-        List<Double> movingAverages = new ArrayList<>();
+    public static List<Double> calculateSpeedMovingAverage(List<TrackPoint> trackPoints, int numDataPoints) {
+        List<Double> movingAverages = new ArrayList<>(); // Stores the resulting moving averages
+        Queue<TrackPoint> window = new LinkedList<>(); // A sliding window of track points for the moving average
+        double sumOfSpeeds = 0.0; // Sum of speeds in the current window for calculating the average
+        Instant lastTime = null; // Timestamp of the last track point added to the window
 
-        // LinkedList to store the most recent track points we're considering for the moving average.
-        LinkedList<TrackPoint> window = new LinkedList<>();
+        for (TrackPoint trackPoint : trackPoints) { // Iterate over each track point
+            Instant currentTime = trackPoint.getTime(); // Get the timestamp of the current track point
 
-        // Initialize a variable to sum the speeds of the points in the window.
-        double sumOfSpeeds = 0;
+            // Skip the current point if less than 5 seconds have passed since the last added point
+            if (lastTime != null && Duration.between(lastTime, currentTime).getSeconds() < 5) {
+                continue; // Move to the next track point without adding this one
+            }
 
-        // Variable to remember the start time of the window of points we're looking at.
-        Instant windowStartTime = null;
+            lastTime = currentTime; // Update the timestamp for the last added track point
 
-        // Use a while loop to go through each track point provided by the iterator.
-        while (iterator.hasNext()) {
-            // Get the next track point from the iterator.
-            TrackPoint currentPoint = iterator.next();
-            // Get the time at which this track point was recorded.
-            Instant currentTime = currentPoint.getTime();
+            window.offer(trackPoint); // Add the current track point to the window
+            sumOfSpeeds += trackPoint.getSpeed().toKMH(); // Add its speed to the sum
 
-            // If this is our first track point or it's been 5 seconds since the last one we looked at,
-            // we add this track point in our calculations.
-            if (windowStartTime == null || Duration.between(windowStartTime, currentTime).compareTo(SAMPLE_INTERVAL) >= 0) {
-                // If the track point has a valid speed value, then continue with the calculation.
-                if (currentPoint.hasSpeed() && !currentPoint.getSpeed().isInvalid()) {
-                    // Convert the speed from the Speed object to km/h.
-                    double currentSpeedKMH = currentPoint.getSpeed().toKMH();
-                    // Add this km/h speed to the sum of speeds.
-                    sumOfSpeeds += currentSpeedKMH;
-                    // Add this track point to the end of our LinkedList (window).
-                    window.addLast(currentPoint);
+            // If the window exceeds the desired size, remove the oldest track point
+            if (window.size() > numDataPoints) {
+                TrackPoint removed = window.poll(); // Remove the oldest track point from the window
+                sumOfSpeeds -= removed.getSpeed().toKMH(); // Subtract its speed from the sum
+            }
 
-                    // If the window now has the right number of points we want for our calculation,
-                    if (window.size() == numDataPoints) {
-                        // Calculate the moving average by dividing the sum of speeds by the number of points.
-                        double movingAverageKMH = sumOfSpeeds / numDataPoints;
-                        // Add the calculated moving average to the result list.
-                        movingAverages.add(movingAverageKMH);
-                    }
-                }
-
-                // If the window has grown beyond the number of points we want (e.g. due to data being added above),
-                // then remove the oldest point to maintain the window size.
-                if (window.size() > numDataPoints) {
-                    // Subtract the speed of the oldest point from the sum of speeds.
-                    sumOfSpeeds -= window.removeFirst().getSpeed().toKMH();
-                }
-
-                // Update the start time for the next window of points.
-                windowStartTime = currentTime;
-                // Reset the sum of speeds and the window for the next set of points.
-                sumOfSpeeds = currentPoint.getSpeed().toKMH();
-                // Reset list for next movable avg calculation
-                window.clear();
-                // Add the current track point to the end of the window list for processing
-                window.addLast(currentPoint);
+            // Calculate and add the moving average to the list if the window is at the desired size
+            if (window.size() == numDataPoints) {
+                movingAverages.add(sumOfSpeeds / numDataPoints); // Calculate and store the average speed
             }
         }
 
-        // Return the list of moving averages
-        return movingAverages;
+        return movingAverages; // Return the list of moving averages
     }
+
+
+
+
+
+
+
+    //====================================================================================
+    //               CODE BELOW REQUIRES IMPLEMENTATION OF OTHER DEPENDENCIES
+    //====================================================================================
+
+//    // Code for implementation of user input 5,10,15. Requires full implementation of others parts in order to function.
+
+
+//    private Context context;
+    // Method to retrieve the number of data points the user wants to include in the moving average
+//    private int getSelectedDataPoints(Context context) {
+//        SharedPreferences sharedPreferences = context.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+//        return sharedPreferences.getInt("SelectedValue", 5); // Default to 5 if no value is set
+//    }
+
+
+
+//    //  Code to implement on the page that uses the moving average. Dependency still required. Mock variables in place until full implementation.
+//
+//    // Method to calculate the moving average of speed for a specific activity
+//    public void calculateMovingAverageForActivity(Context context, int activityIndex) {
+//        // Retrieve the user-selected number of data points from SharedPreferences
+//        int numDataPoints = getSelectedDataPoints(context);
+//
+//
+//        // Method to retrieve the sub-activity list
+//        List<RunLiftStatistics.SkiSubActivity> skiSubActivityList = getSubActivitiesList();
+//
+//        // Retrieve the selected sub-activity using the provided index
+//        RunLiftStatistics.SkiSubActivity selectedActivity = skiSubActivityList.get(activityIndex);
+//
+//        // Retrieve track points from the selected sub-activity
+//        List<TrackPoint> trackPoints = selectedActivity.getTrackPoints();
+//
+//        // Calculate the moving averages for the selected activity using the user-selected number of data points
+//        List<Double> movingAverages = TrackPointUtils.calculateSpeedMovingAverage(trackPoints, numDataPoints);
+//
+//
+//    }
+
+
 }

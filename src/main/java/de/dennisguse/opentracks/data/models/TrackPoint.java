@@ -42,6 +42,7 @@ public class TrackPoint {
     @NonNull
     private final Instant time;
 
+    private Double slopePercentage;
     private Double latitude;
     private Double longitude;
     private Distance horizontalAccuracy;
@@ -255,6 +256,25 @@ public class TrackPoint {
     public TrackPoint setAltitudeLoss(Float altitudeLoss_m) {
         this.altitudeLoss_m = altitudeLoss_m;
         return this;
+    }
+    
+    public double getSlopePercentage() {
+    	double slopePercentage;
+    	Trackpoint previous = lastTrackPoint;
+    	
+    	// Slope percentage negative - Ski run
+    	if (this.hasAltitudeLoss())
+    	{
+	    	// Slope percentage = - altitude change / distance travelled * 100
+    		slopePercentage = -(this.getAltitudeLoss() / this.distanceToPrevious(this)) * 100;
+    		this.slopePercentage = slopePercentage;
+    		
+    		return slopePercentage;
+    	}
+    	// Slope percentage positive - Chair Lift ride
+    	slopePercentage = (this.getAltitudeGain() / this.distanceToPrevious(this)) * 100;
+		this.slopePercentage = slopePercentage;
+		return slopePercentage;
     }
 
     @NonNull

@@ -33,6 +33,13 @@
         android:title="@string/settings_sensors_title" />
 
     <Preference
+        android:icon="@drawable/ic_baseline_date_range_24"
+        android:key="@string/settings_ski_season_key"
+        android:summary="@string/settings_ski_session"
+        android:title="@string/settings_ski_season" />
+
+
+    <Preference
         android:icon="@drawable/ic_baseline_volume_up_24"
         android:key="@string/settings_announcements_key"
         android:summary="@string/settings_announcements_summary"

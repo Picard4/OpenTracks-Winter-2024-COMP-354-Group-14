@@ -3,6 +3,9 @@ package de.dennisguse.opentracks.ui.runlift;
 import androidx.annotation.Nullable;
 
 import de.dennisguse.opentracks.data.TrackPointIterator;
+import de.dennisguse.opentracks.data.models.Distance;
+import de.dennisguse.opentracks.data.models.HeartRate;
+import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.data.models.TrackPoint;
 import de.dennisguse.opentracks.stats.TrackStatistics;
 import de.dennisguse.opentracks.stats.TrackStatisticsUpdater;
@@ -77,9 +80,14 @@ public class RunLiftStatistics {
 
                 lastSkiSubActivity.add(trackStatisticsUpdater.getTrackStatistics(), trackPoint);
                 lastTrackPoint = trackPoint;
+                newSkiSubActivityAdded = true;
             }
         }
-
+        if (newSkiSubActivityAdded) {
+            lastSkiSubActivity.add(trackStatisticsUpdater.getTrackStatistics(), null);
+        } else {
+            lastSkiSubActivity.set(trackStatisticsUpdater.getTrackStatistics());
+        }
         return trackPoint != null ? trackPoint.getId() : null;
     }
 
@@ -95,8 +103,15 @@ public class RunLiftStatistics {
     public static class SkiSubActivity {
         private TrackStatistics trackStatistics;
         private final List<TrackPoint> trackPoints = new ArrayList<>();
+        private Distance distance = Distance.of(0);
+        private Duration time = Duration.ofSeconds(0);
+        private Float gain_m;
+        private Float loss_m;
+        private HeartRate avgHeartRate;
+        private Speed maxSpeed = Speed.of(0);
 
         private Duration waitTime = Duration.ofSeconds(0);
+        private Duration totalTime = Duration.ofSeconds(0);
 
         public SkiSubActivity() {
             trackStatistics = new TrackStatistics();
@@ -106,6 +121,45 @@ public class RunLiftStatistics {
             trackStatistics = new TrackStatistics(s.trackStatistics);
             trackPoints.addAll(s.trackPoints);
             waitTime = s.waitTime;
+            distance = s.distance;
+            time = s.time;
+            gain_m = s.gain_m;
+            loss_m = s.loss_m;
+            avgHeartRate = s.avgHeartRate;
+        }
+
+        public Distance getDistance() {
+            return distance;
+        }
+
+        public Speed getSpeed() {
+            return Speed.of(distance, time.minus(waitTime));
+        }
+
+        public Speed getMaxSpeed() { return maxSpeed; }
+
+        public boolean hasGain() {
+            return gain_m != null;
+        }
+
+        public Float getGain_m() {
+            return gain_m;
+        }
+
+        public boolean hasLoss() {
+            return loss_m != null;
+        }
+
+        public Float getLoss_m() {
+            return loss_m;
+        }
+
+        public boolean hasAverageHeartRate() {
+            return avgHeartRate != null;
+        }
+
+        public HeartRate getAverageHeartRate() {
+            return avgHeartRate;
         }
 
         public Duration getWaitTime() {
@@ -113,25 +167,44 @@ public class RunLiftStatistics {
         }
 
         public boolean isLift() {
-            float gain = trackStatistics.getTotalAltitudeGain() != null ? trackStatistics.getTotalAltitudeGain() : 0f;
-            float loss = trackStatistics.getTotalAltitudeLoss() != null ? trackStatistics.getTotalAltitudeLoss() : 0f;
-            return gain >= loss;
+            return gain_m >= loss_m;
         }
 
+        public Duration getTotalTime() { return totalTime; }
+
         public double getSlopePercentage() {
-            if (trackStatistics.getTotalDistance().distance_m() == 0) return 0;
-            double gain = trackStatistics.getTotalAltitudeGain() != null ? trackStatistics.getTotalAltitudeGain() : 0.0;
-            double loss = trackStatistics.getTotalAltitudeLoss() != null ? trackStatistics.getTotalAltitudeLoss() : 0.0;
-            return Math.abs(gain - loss) / trackStatistics.getTotalDistance().distance_m() * 100;
+            if (distance.distance_m() == 0) return 0;
+            return Math.abs(gain_m - loss_m) / distance.distance_m() * 100;
         }
 
         private void add(TrackStatistics trackStatistics, @Nullable TrackPoint lastTrackPoint) {
-            set(trackStatistics);
+            distance = distance.plus(trackStatistics.getTotalDistance());
+            time = time.plus(trackStatistics.getTotalTime());
+            gain_m = trackStatistics.hasTotalAltitudeGain() ? trackStatistics.getTotalAltitudeGain() : gain_m;
+            loss_m = trackStatistics.hasTotalAltitudeLoss() ? trackStatistics.getTotalAltitudeLoss() : loss_m;
+            avgHeartRate = trackStatistics.getAverageHeartRate();
+            maxSpeed = trackStatistics.getMaxSpeed();
+            totalTime = trackStatistics.getTotalTime();
+
+            //set(trackStatistics);
+            if (lastTrackPoint == null) {
+                return;
+            }
             trackPoints.add(lastTrackPoint);
+            if (hasGain() && lastTrackPoint.hasAltitudeGain()) {
+                gain_m = gain_m - lastTrackPoint.getAltitudeGain();
+            }
+            if (hasLoss() && lastTrackPoint.hasAltitudeLoss()) {
+                loss_m = loss_m - lastTrackPoint.getAltitudeLoss();
+            }
         }
 
         private void set(TrackStatistics trackStatistics) {
-            this.trackStatistics = trackStatistics;
+            distance = trackStatistics.getTotalDistance();
+            time = trackStatistics.getTotalTime();
+            gain_m = trackStatistics.hasTotalAltitudeGain() ? trackStatistics.getTotalAltitudeGain() : gain_m;
+            loss_m = trackStatistics.hasTotalAltitudeLoss() ? trackStatistics.getTotalAltitudeLoss() : loss_m;
+            avgHeartRate = trackStatistics.getAverageHeartRate();
         }
 
         public List<TrackPoint> getTrackPoints() {
