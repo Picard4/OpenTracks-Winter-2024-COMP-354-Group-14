@@ -37,13 +37,23 @@ public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
 
         List<Ranking> rankingsData = new ArrayList<>();
         int rank = 0;
+        int consecutiveTies = 0;
+        String lastScore = "";
         for (SummedStatTrackUser summedStatTrackUser : latestSummedLeaderboardData) {
-            rankingsData.add(new Ranking(
+            Ranking nextRanking = new Ranking(
                     ++rank,
                     summedStatTrackUser.getPlaceHolderTrackUser().nickname,
                     summedStatTrackUser.getPlaceHolderTrackUser().location,
                     getAverageMovingSpeedDisplay(getAverageSpeedFromSummedStatTrackUser(summedStatTrackUser))
-            ));
+            );
+            if (nextRanking.getScore().equals(lastScore)) {
+                consecutiveTies++;
+                nextRanking.setRank(rank - consecutiveTies);
+            }
+            else
+                consecutiveTies = 0;
+            rankingsData.add(nextRanking);
+            lastScore = nextRanking.getScore();
         }
         return rankingsData;
     }
@@ -65,8 +75,23 @@ public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
 
         List<Ranking> rankingsData = new ArrayList<>();
         int rank = 0;
+        int consecutiveTies = 0;
+        String lastScore = "";
         for (LeaderboardPagerAdapter.PlaceHolderTrackUser trackUser : latestLeaderboardData) {
-            rankingsData.add(new Ranking(++rank, trackUser.nickname, trackUser.location, getAverageMovingSpeedDisplay(trackUser.trackStatistics.getAverageMovingSpeed())));
+            Ranking nextRanking = new Ranking(
+                    ++rank,
+                    trackUser.nickname,
+                    trackUser.location,
+                    getAverageMovingSpeedDisplay(trackUser.trackStatistics.getAverageMovingSpeed())
+            );
+            if (nextRanking.getScore().equals(lastScore)) {
+                consecutiveTies++;
+                nextRanking.setRank(rank - consecutiveTies);
+            }
+            else
+                consecutiveTies = 0;
+            rankingsData.add(nextRanking);
+            lastScore = nextRanking.getScore();
         }
         return rankingsData;
     }
