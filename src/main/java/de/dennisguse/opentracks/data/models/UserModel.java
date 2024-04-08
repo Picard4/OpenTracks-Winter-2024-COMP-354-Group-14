@@ -12,7 +12,9 @@ import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 
 public class UserModel {
 
-    private String nickname; //User key that uniquely identifies user
+    // Attributes of User class
+
+    private String nickname; //User key that identifies user
     private String country;
     private long dateOfBirth;
     private String gender;
@@ -21,8 +23,10 @@ public class UserModel {
     private boolean socialAllow; //Bool flag for leaderboard appearance permission
     private String profilePicURL; //To be replaced by firestore path - https://
 
-    // Empty constructor
+    // Default Constructor
+
     public UserModel() {
+
         this.nickname = "";
         this.country = "";
         this.dateOfBirth = 0;
@@ -33,6 +37,20 @@ public class UserModel {
         this.profilePicURL = "";
     }
 
+    // Constructor
+
+    /**
+     * Constructs a new Car object with the given make, model, and year.
+     *
+     * @param nickname The nickname / username.
+     * @param country The country of user / not based on tracking.
+     * @param dateOfBirth The DOB.
+     * @param gender User gender.
+     * @param height User height unit default.
+     * @param weight User weight unit default.
+     * @param socialAllow Flags permission to share on leaderboard
+     * @param profilePicURL Stores path to blob.
+     */
     public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight, boolean socialAllow, String profilePicURL) {
 
         this.nickname = nickname;
@@ -54,6 +72,8 @@ public class UserModel {
         this.height = height;
         this.weight = weight;
     }
+
+    // Methods
 
     public String getNickname() {
         return nickname;
