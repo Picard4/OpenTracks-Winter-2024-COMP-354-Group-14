@@ -6,7 +6,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Duration;
 
+import de.dennisguse.opentracks.data.models.Distance;
+import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.stats.TrackStatistics;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.AverageMovingSpeedLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.MaxSpeedLeaderboardFragment;
@@ -121,17 +124,102 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     private List<PlaceHolderTrackUser> readLatestLeaderboardData() {
         // This is where we get the data from the database for the runs that will be in the leaderboard.
         List<PlaceHolderTrackUser> testData = new ArrayList();
-        testData.add(new PlaceHolderTrackUser("User One", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Two", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Three", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Four", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Five", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Six", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Seven", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Eight", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Nine", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("User Ten", true, new TrackStatistics()));
-        testData.add(new PlaceHolderTrackUser("EXCLUDE ME!", false, new TrackStatistics()));
+
+        TrackStatistics stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(500));
+        stats.setMaxSpeed(new Speed(40));
+        stats.setMovingTime(Duration.ofMinutes(900));
+        testData.add(new PlaceHolderTrackUser("User One", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(550));
+        stats.setMaxSpeed(new Speed(50));
+        stats.setMovingTime(Duration.ofMinutes(950));
+        testData.add(new PlaceHolderTrackUser("User One", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
+        testData.add(new PlaceHolderTrackUser("User Two", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(150));
+        stats.setMaxSpeed(new Speed(100));
+        stats.setMovingTime(Duration.ofHours(1));
+        testData.add(new PlaceHolderTrackUser("User Two", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(1000));
+        stats.setMaxSpeed(new Speed(20));
+        stats.setMovingTime(Duration.ofHours(3));
+        testData.add(new PlaceHolderTrackUser("User Three", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(900));
+        stats.setMaxSpeed(new Speed(19));
+        stats.setMovingTime(Duration.ofHours(4));
+        testData.add(new PlaceHolderTrackUser("User Three", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(2000));
+        stats.setMaxSpeed(new Speed(25));
+        stats.setMovingTime(Duration.ofHours(6));
+        testData.add(new PlaceHolderTrackUser("User Four", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(2500));
+        stats.setMaxSpeed(new Speed(55));
+        stats.setMovingTime(Duration.ofHours(6));
+        testData.add(new PlaceHolderTrackUser("User Four", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(10000));
+        stats.setMaxSpeed(new Speed(32));
+        stats.setMovingTime(Duration.ofHours(4));
+        testData.add(new PlaceHolderTrackUser("User Five", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(1000));
+        stats.setMaxSpeed(new Speed(50));
+        stats.setMovingTime(Duration.ofHours(1));
+        testData.add(new PlaceHolderTrackUser("User Five", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(1000));
+        stats.setMaxSpeed(new Speed(91));
+        stats.setMovingTime(Duration.ofMinutes(95));
+        testData.add(new PlaceHolderTrackUser("User Six", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(65));
+        stats.setMovingTime(Duration.ofMinutes(49));
+        testData.add(new PlaceHolderTrackUser("User Seven", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(1200));
+        stats.setMaxSpeed(new Speed(99));
+        stats.setMovingTime(Duration.ofMinutes(200));
+        testData.add(new PlaceHolderTrackUser("User Eight", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(152));
+        stats.setMaxSpeed(new Speed(102));
+        stats.setMovingTime(Duration.ofMinutes(30));
+        testData.add(new PlaceHolderTrackUser("User Nine", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(154));
+        stats.setMaxSpeed(new Speed(150));
+        stats.setMovingTime(Duration.ofMinutes(59));
+        testData.add(new PlaceHolderTrackUser("User Ten", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
+        testData.add(new PlaceHolderTrackUser("EXCLUDE ME!", false, stats));
         return testData;
     }
 
