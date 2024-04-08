@@ -257,11 +257,26 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         // Inflate the custom layout for the edit dialog.
         View formView = LayoutInflater.from(getContext()).inflate(R.layout.edit_profile_form, null);
 
+        // Get current profile content
+        TextView nicknameText = getView().findViewById(R.id.nickname);
+        TextView DOBText = getView().findViewById(R.id.dateOfBirth);
+        TextView heightText = getView().findViewById(R.id.userHeight);
+        TextView weightText = getView().findViewById(R.id.userWeight);
+//        TextView countryText = getView().findViewById(R.id.userLocation);
+//        TextView genderText = getView().findViewById(R.id.gender);
+
+
         // Initialize all the EditText fields and Spinners.
         EditText editNickname = formView.findViewById(R.id.editNickname);
         EditText editDateOfBirth = formView.findViewById(R.id.editDateOfBirth);
         EditText editHeight = formView.findViewById(R.id.editHeight);
         EditText editWeight = formView.findViewById(R.id.editWeight);
+
+        // Write user data to profile
+        editNickname.setText(nicknameText.getText().toString());
+        editDateOfBirth.setText(DOBText.getText().toString());
+        editHeight.setText(heightText.getText().toString());
+        editWeight.setText(weightText.getText().toString());
 
         Spinner spinnerGender = formView.findViewById(R.id.spinnerGender);
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getContext(),
