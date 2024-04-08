@@ -5,6 +5,7 @@ import static de.dennisguse.opentracks.settings.PreferencesUtils.getUnitSystem;
 
 import android.app.AlertDialog;
 import android.app.Activity;
+import android.os.Build;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.net.Uri;
+import android.provider.Settings;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
@@ -65,7 +67,12 @@ import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
 import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
+import de.dennisguse.opentracks.data.interfaces.ReadCallback;
+import de.dennisguse.opentracks.data.interfaces.ActionCallback;
 import de.dennisguse.opentracks.data.adapters.FireStoreAdapter;
+import de.dennisguse.opentracks.data.models.CRUDConstants;
+
+
 
 import de.dennisguse.opentracks.data.models.UserModel;
 
@@ -568,6 +575,12 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
     }
 
     @Override
+
+    // TODO: Implement saving logic here.
+    private void saveProfileData(String nickname, String dateOfBirth, String height, String weight, String gender, String location) {
+
+    }
+    //TODO: fix this
     public void onStart() {
         super.onStart();
         ((SettingsActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings_ui_title);

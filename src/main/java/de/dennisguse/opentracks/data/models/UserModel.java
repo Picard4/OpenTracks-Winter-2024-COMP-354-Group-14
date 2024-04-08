@@ -1,8 +1,15 @@
 package de.dennisguse.opentracks.data.models;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.google.gson.JsonObject;
 
+import java.time.Duration;
+import java.time.Instant;
+
+import de.dennisguse.opentracks.data.adapters.Gson_DurationTypeAdapter;
+import de.dennisguse.opentracks.data.adapters.Gson_InstantTypeAdapter;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -82,6 +89,16 @@ public class UserModel {
         this.weight = weight;
         this.socialAllow = socialAllow;
         this.profilePicURL = profilePicURL;
+    }
+
+    public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight) {
+
+        this.nickname = nickname;
+        this.country = country;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.height = height;
+        this.weight = weight;
     }
 
 
