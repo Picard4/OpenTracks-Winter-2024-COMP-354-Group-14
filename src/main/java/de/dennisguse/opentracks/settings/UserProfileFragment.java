@@ -43,6 +43,11 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 import de.dennisguse.opentracks.R;
@@ -62,9 +67,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import java.util.Arrays;
 import java.util.Locale;
-
-
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class UserProfileFragment extends PreferenceFragmentCompat {
@@ -375,8 +379,10 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
     // A method to validate the user inputs.
     private boolean validateInputs(String nickname, String dateOfBirth, String height, String weight, String gender, String location) {
-        if (nickname.isEmpty() || gender.isEmpty()) {
-            showToast("Nickname and gender cannot be empty.");
+
+        if (nickname.isEmpty() || gender.isEmpty() || dateOfBirth.isEmpty())
+        {
+            showToast("Fields cannot be empty.");
             return false;
         }
         try {
@@ -395,6 +401,48 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
         return true;
     }
+
+    /*
+    * Conversion method to appropriate data types for user object
+    * */
+    private UserModel createUserFromInput(String nickname, String dateOfBirth, String height, String weight, String gender, String location, boolean socialAllow, String path) {
+
+        // Get long date
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        Timestamp DOBlong = null;
+        long userDOB = 0;
+
+        try {
+            Date date = formatter.parse(dateOfBirth);
+            if (date != null) {
+                DOBlong = new Timestamp(date.getTime());
+                userDOB = DOBlong.getTime();
+            }
+        } catch (ParseException e) {
+            showToast("Error DOB format error");
+        }
+
+        // Height and weight conversion
+        int userHeight = 0;
+        int userWeight = 0;
+
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcherHeight = pattern.matcher(height);
+        Matcher matcherWeight = pattern.matcher(weight);
+
+        if (matcherHeight.find() && matcherWeight.find()) {
+            userHeight = Integer.parseInt(matcherHeight.group());
+            userWeight = Integer.parseInt(matcherWeight.group());
+        }
+
+        // Gender, Location correct format due to spinner handling
+
+        // Create UserModel object
+        UserModel userObject = new UserModel(nickname, location, userDOB, gender, userHeight, userWeight, socialAllow, path);
+
+        return userObject;
+    }
+
     private void displayCustomSharingDialog(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
