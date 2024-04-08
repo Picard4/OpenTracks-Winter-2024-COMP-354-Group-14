@@ -55,6 +55,7 @@ import de.dennisguse.opentracks.data.models.Height;
 import de.dennisguse.opentracks.data.models.HeightFormatter;
 import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.data.models.SpeedFormatter;
+import de.dennisguse.opentracks.data.models.UserModel;
 import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
 import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
@@ -81,7 +82,6 @@ import java.util.Locale;
 
 
 
- // You can choose any value for the request code
 
 
 public class UserProfileFragment extends PreferenceFragmentCompat {
@@ -494,16 +494,20 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
                 .setMessage(alertMessage)
                 .setPositiveButton("ALLOW", (dialog, which) -> {
+//                    UserModel userModel = new UserModel(); // Assume you have a way to initialize or get the current UserModel
+//                    userModel.setSocialAllow(true);
+                    showToast("Updated sharing permissions and data will be shared on the leaderboard.");
+                    leaderboardSwitch.setChecked(true); // Visually indicate sharing is enabled
 
-                    showToast("Updated sharing permissions");
-
-                    // TODO: Implement saving sharing permissions here.
-
+                    // TODO: Save the updated UserModel to the database
                 })
                 .setNegativeButton("CANCEL", (dialog, which) -> {
-                    // Un-toggle leaderboard switch
+//                    UserModel userModel = new UserModel(); // we need to get current UserID and initialize.
+ //                   userModel.setSocialAllow(false);
+                    showToast("Sharing not enabled. Data will remain private.");
+                    leaderboardSwitch.setChecked(false); // Visually indicate sharing is not enabled
 
-                    leaderboardSwitch.setChecked(false);
+                    // TODO: Save the updated UserModel to the database
                 })
                 .show();
     }
