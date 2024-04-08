@@ -27,11 +27,16 @@ public class FriendsActivity extends AbstractActivity {
 
     String[] username = {"John Doe",
             "Jane Smith",
-            "David Johnson"
+            "David Johnson",
+            "Alex Harris",
+            "Jordan Anderson",
+            "Rachel Taylor",
+            "Andrew Wilson",
+            "Amy Clark"
     };
 
     //placeholder for user images
-    int[] images = {R.drawable.friends_icon,R.drawable.friends_icon,R.drawable.friends_icon};
+    int[] images = {R.drawable.friends_icon,R.drawable.friends_icon,R.drawable.friends_icon,R.drawable.friends_icon,R.drawable.friends_icon,R.drawable.friends_icon,R.drawable.friends_icon,R.drawable.friends_icon};
 
 
     @Override
