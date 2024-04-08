@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.dennisguse.opentracks.data.models.Ranking;
+import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
 public class DistanceLeaderboardFragment extends LeaderboardFragment {
     private boolean averageRefresh;
     private boolean bestRefresh;
 
     @Override
-    protected List<Ranking> calculateLatestAverageRankingsData(List<Object> latestLeaderboardData) {
+    protected List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
         // TODO: Replace the test data with code that gathers the appropriate Ranking data
         List<Ranking> latestRankingsData;
         if (!averageRefresh)
@@ -24,7 +25,7 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
     }
 
     @Override
-    protected List<Ranking> calculateLatestBestRankingsData(List<Object> latestLeaderboardData) {
+    protected List<Ranking> calculateLatestBestRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
         // TODO: Replace the test data with code that gathers the appropriate Ranking data
         List<Ranking> latestRankingsData;
         if (!bestRefresh)

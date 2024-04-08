@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dennisguse.opentracks.stats.TrackStatistics;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.AverageMovingSpeedLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.MaxSpeedLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.DistanceLeaderboardFragment;
@@ -109,7 +110,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void refreshLeaderboardFragmentData() {
-        List<Object> latestLeaderboardData = readLatestLeaderboardData();
+        List<PlaceHolderTrackUser> latestLeaderboardData = readLatestLeaderboardData();
         movingTimeLeaderboardFragment.updateRankingLists(latestLeaderboardData);
         distanceLeaderboardFragment.updateRankingLists(latestLeaderboardData);
         maxSpeedLeaderboardFragment.updateRankingLists(latestLeaderboardData);
@@ -117,8 +118,33 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
 
-    private ArrayList<Object> readLatestLeaderboardData() {
+    private List<PlaceHolderTrackUser> readLatestLeaderboardData() {
         // This is where we get the data from the database for the runs that will be in the leaderboard.
-        return new ArrayList<>();
+        List<PlaceHolderTrackUser> testData = new ArrayList();
+        testData.add(new PlaceHolderTrackUser("User One", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Two", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Three", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Four", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Five", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Six", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Seven", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Eight", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Nine", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("User Ten", true, new TrackStatistics()));
+        testData.add(new PlaceHolderTrackUser("EXCLUDE ME!", false, new TrackStatistics()));
+        return testData;
+    }
+
+    // This is a placeholder class so that we can start on the LeaderboardFragment child classes without needing real data
+    public class PlaceHolderTrackUser {
+        public String nickname;
+        public boolean socialAllow;
+        public TrackStatistics trackStatistics;
+
+        public PlaceHolderTrackUser(String nickname, boolean socialAllow, TrackStatistics trackStatistics) {
+            this.nickname = nickname;
+            this.socialAllow = socialAllow;
+            this.trackStatistics = trackStatistics;
+        }
     }
 }
