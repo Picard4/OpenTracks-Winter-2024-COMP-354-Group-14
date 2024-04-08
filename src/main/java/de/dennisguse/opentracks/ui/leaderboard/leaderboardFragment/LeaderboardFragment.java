@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
 public abstract class LeaderboardFragment extends Fragment {
 
+    private static DecimalFormat scoreDecimalFormat;
     private RecyclerView leaderboardRecyclerView;
     private LeaderboardAdapter leaderboardAdapter;
     private List<Ranking> averageRankingList;
@@ -26,6 +28,7 @@ public abstract class LeaderboardFragment extends Fragment {
 
     public LeaderboardFragment() {
         leaderboardAdapter = new LeaderboardAdapter(new ArrayList<>());
+
     }
 
     public enum LeaderboardType {
@@ -58,5 +61,33 @@ public abstract class LeaderboardFragment extends Fragment {
             leaderboardAdapter.setDisplayedRankingList(averageRankingList);
         else if (leaderboardType == LeaderboardType.Best)
             leaderboardAdapter.setDisplayedRankingList(bestRankingList);
+    }
+
+    protected static DecimalFormat getScoreDecimalFormat() {
+        if (scoreDecimalFormat == null)
+            scoreDecimalFormat = new DecimalFormat("0.00000");
+        return scoreDecimalFormat;
+    }
+
+    protected class SummedStatTrackUser {
+        private LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser;
+        private int sumFactorCount;
+
+        public SummedStatTrackUser(LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser) {
+            this.placeHolderTrackUser = placeHolderTrackUser;
+            sumFactorCount = 1;
+        }
+
+        public LeaderboardPagerAdapter.PlaceHolderTrackUser getPlaceHolderTrackUser() {
+            return placeHolderTrackUser;
+        }
+
+        public int getSumFactorCount() {
+            return sumFactorCount;
+        }
+
+        public void incrementSumFactorCount() {
+            sumFactorCount++;
+        }
     }
 }
