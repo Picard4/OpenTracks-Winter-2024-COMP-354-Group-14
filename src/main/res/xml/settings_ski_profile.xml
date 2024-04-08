@@ -21,4 +21,12 @@
         android:summary="Toggle leaderboard participation"
         android:defaultValue="false" />
 
+    <ListPreference
+        android:key="@string/skiing_type_key"
+        android:title="@string/settings_skiing_type_title"
+        android:defaultValue="@string/skiing_type_default"
+        android:entries="@array/skiing_type_options"
+        android:entryValues="@array/skiing_type_values"
+        app:useSimpleSummaryProvider="true" />
+
 </androidx.preference.PreferenceScreen>
