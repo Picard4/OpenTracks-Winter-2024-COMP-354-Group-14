@@ -15,6 +15,7 @@ import java.util.List;
 
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Ranking;
+import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
 public abstract class LeaderboardFragment extends Fragment {
 
@@ -44,10 +45,10 @@ public abstract class LeaderboardFragment extends Fragment {
         return view;
     }
 
-    protected abstract List<Ranking> calculateLatestAverageRankingsData(List<Object> latestLeaderboardData);
-    protected abstract List<Ranking> calculateLatestBestRankingsData(List<Object> latestLeaderboardData);
+    protected abstract List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData);
+    protected abstract List<Ranking> calculateLatestBestRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData);
 
-    public void updateRankingLists(List<Object> latestLeaderboardData) {
+    public void updateRankingLists(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
         this.averageRankingList = calculateLatestAverageRankingsData(latestLeaderboardData);
         this.bestRankingList = calculateLatestBestRankingsData(latestLeaderboardData);
     }
