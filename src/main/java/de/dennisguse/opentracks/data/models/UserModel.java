@@ -10,17 +10,6 @@ import java.time.Instant;
 
 import de.dennisguse.opentracks.data.adapters.Gson_DurationTypeAdapter;
 import de.dennisguse.opentracks.data.adapters.Gson_InstantTypeAdapter;
-import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
-import java.time.Duration;
-import java.time.Instant;
-
-import de.dennisguse.opentracks.data.adapters.Gson_DurationTypeAdapter;
-import de.dennisguse.opentracks.data.adapters.Gson_InstantTypeAdapter;
-import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 
 public class UserModel {
 
@@ -34,20 +23,6 @@ public class UserModel {
     private int weight;
     private boolean socialAllow; //Bool flag for leaderboard appearance permission
     private String profilePicURL; //To be replaced by firestore path - https://
-
-    // Default Constructor
-
-    public UserModel() {
-
-        this.nickname = "";
-        this.country = "";
-        this.dateOfBirth = 0;
-        this.gender = "";
-        this.height = 0;
-        this.weight = 0;
-        this.socialAllow = false;
-        this.profilePicURL = "";
-    }
 
     // Constructor
 
@@ -83,18 +58,6 @@ public class UserModel {
 
     // Constructor
 
-    /**
-     * Constructs a new Car object with the given make, model, and year.
-     *
-     * @param nickname The nickname / username.
-     * @param country The country of user / not based on tracking.
-     * @param dateOfBirth The DOB.
-     * @param gender User gender.
-     * @param height User height unit default.
-     * @param weight User weight unit default.
-     * @param socialAllow Flags permission to share on leaderboard
-     * @param profilePicURL Stores path to blob.
-     */
     public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight, boolean socialAllow, String profilePicURL) {
 
         this.nickname = nickname;
@@ -137,16 +100,6 @@ public class UserModel {
         SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         // Default value is false if not set
         return prefs.getBoolean(PREF_SOCIAL_ALLOW, false);
-    }
-
-    public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight) {
-
-        this.nickname = nickname;
-        this.country = country;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.height = height;
-        this.weight = weight;
     }
 
     // Methods

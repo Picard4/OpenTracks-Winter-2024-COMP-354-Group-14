@@ -62,14 +62,14 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
         //TODO! - Remove
         //Assignee - Jean Robatto
 
-        final String JSON_SERIALIZER_LOG_TAG = "JSONSerializerTest";
-
-        final String trackJSONString = track.toJSON();
-        Log.i(JSON_SERIALIZER_LOG_TAG, trackJSONString);
-
-        final Track trackCopy = JSONSerializable.fromJSON(trackJSONString, Track.class);
-        Log.i(JSON_SERIALIZER_LOG_TAG, trackCopy.toString());
-        Log.i(JSON_SERIALIZER_LOG_TAG, trackCopy.getName());
+//        final String JSON_SERIALIZER_LOG_TAG = "JSONSerializerTest";
+//
+//        final String trackJSONString = track.toJSON();
+//        Log.i(JSON_SERIALIZER_LOG_TAG, trackJSONString);
+//
+//        final Track trackCopy = JSONSerializable.fromJSON(trackJSONString, Track.class);
+//        Log.i(JSON_SERIALIZER_LOG_TAG, trackCopy.toString());
+//        Log.i(JSON_SERIALIZER_LOG_TAG, trackCopy.getName());
 
         //End
 
@@ -134,11 +134,11 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
 
         //Save run on the external DB
         //NOTE - The UI should be augmented to display success/failure to the user
-        FirestoreCRUDUtil.getInstance().createEntry(CRUDConstants.RUNS_TABLE, track.getUuid().toString(), track.toJSON(), null);
+        //FirestoreCRUDUtil.getInstance().createEntry(CRUDConstants.RUNS_TABLE, track.getUuid().toString(), track.toJSON(), null);
 
         //Save run on the external DB
         //NOTE - The UI should be augmented to display success/failure to the user
-        FirestoreCRUDUtil.getInstance().createEntry(CRUDConstants.RUNS_TABLE, track.getUuid().toString(), track.toJSON(), null);
+        //FirestoreCRUDUtil.getInstance().createEntry(CRUDConstants.RUNS_TABLE, track.getUuid().toString(), track.toJSON(), null);
 
         TrackUtils.updateTrack(TrackStoppedActivity.this, track, viewBinding.trackEditName.getText().toString(),
                 viewBinding.trackEditActivityType.getText().toString(), viewBinding.trackEditDescription.getText().toString(),

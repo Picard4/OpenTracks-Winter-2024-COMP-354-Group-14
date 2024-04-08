@@ -1,29 +1,19 @@
 package de.dennisguse.opentracks.settings;
 
-import static android.provider.Settings.Secure.ANDROID_ID;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.getUnitSystem;
 
 import android.app.AlertDialog;
-import android.app.Activity;
-import android.os.Build;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.net.Uri;
-import android.provider.Settings;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +23,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.Intent;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
@@ -55,49 +44,25 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Height;
 import de.dennisguse.opentracks.data.models.HeightFormatter;
-import de.dennisguse.opentracks.data.models.Speed;
-import de.dennisguse.opentracks.data.models.SpeedFormatter;
 import de.dennisguse.opentracks.data.models.UserModel;
 import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
 import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
-import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 import de.dennisguse.opentracks.data.interfaces.ReadCallback;
-import de.dennisguse.opentracks.data.interfaces.ActionCallback;
-import de.dennisguse.opentracks.data.adapters.FireStoreAdapter;
-import de.dennisguse.opentracks.data.models.CRUDConstants;
-
-
-
-import de.dennisguse.opentracks.data.models.UserModel;
-
-
-import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
-import de.dennisguse.opentracks.data.interfaces.ReadCallback;
-import de.dennisguse.opentracks.data.interfaces.ActionCallback;
-import de.dennisguse.opentracks.data.adapters.FireStoreAdapter;
-import de.dennisguse.opentracks.data.models.CRUDConstants;
-
-
-
-import de.dennisguse.opentracks.data.models.UserModel;
-
 
 
 import android.app.DatePickerDialog;
-import android.widget.DatePicker;
+
 import java.util.Calendar;
 import java.util.Locale;
-import android.widget.ArrayAdapter;
+
 import android.widget.Spinner;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -169,6 +134,9 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
                     displayCustomSharingDialog();
 
+                }
+                else{
+                    displayCustomSharingDialog();
                 }
                 return false;
             }
@@ -289,6 +257,17 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         }
     }
 
+    public String removeCharsFromString(String stringToConvert) {
+        StringBuilder str = new StringBuilder();
+        for (char c : stringToConvert.toCharArray()) {
+            if (Character.isDigit(c)) {
+                str.append(c);
+            }
+        }
+        String newstr = str.toString();
+        return newstr;
+    }
+
     private void showEditProfileDialog() {
         // Inflate the custom layout for the edit dialog.
         View formView = LayoutInflater.from(getContext()).inflate(R.layout.edit_profile_form, null);
@@ -297,7 +276,11 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         TextView nicknameText = getView().findViewById(R.id.nickname);
         TextView DOBText = getView().findViewById(R.id.dateOfBirth);
         TextView heightText = getView().findViewById(R.id.userHeight);
+         String heightToEdit = heightText.getText().toString();
+         heightToEdit = removeCharsFromString(heightToEdit);
         TextView weightText = getView().findViewById(R.id.userWeight);
+        String weightToEdit = weightText.getText().toString();
+        weightToEdit= removeCharsFromString(weightToEdit);
 //        TextView countryText = getView().findViewById(R.id.userLocation);
 //        TextView genderText = getView().findViewById(R.id.gender);
 
@@ -323,8 +306,8 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         {
             editDateOfBirth.setText(DOBText.getText().toString());
         }
-        editHeight.setText(heightText.getText().toString());
-        editWeight.setText(weightText.getText().toString());
+        editHeight.setText(heightToEdit);
+        editWeight.setText(weightToEdit);
 
         Spinner spinnerGender = formView.findViewById(R.id.spinnerGender);
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getContext(),
@@ -373,10 +356,8 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                     String location = spinnerLocation.getSelectedItem().toString();
 
                     // Validate and save the data if valid
-//TODO: Add back validation
-                    if(true){
-                    //if (validateInputs(nickname, dateOfBirth, height, weight, gender, location)) {
-                        saveProfileData(nickname, location, dateOfBirth, gender, height, weight);
+                    if (validateInputs(nickname, dateOfBirth, height, weight, gender, location)) {
+                        saveProfileData( nickname,  location,  dateOfBirth,  gender,  height,  weight);
                         showToast("Profile updated successfully!");
 
                     } else {
@@ -405,12 +386,13 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
             // Show the date picker dialog
             datePickerDialog.show();
         });
+
+
     }
 
-    // TODO: Implement saving logic here.
     private void saveProfileData(String nickname, String location, String dateOfBirth, String gender, String height, String weight) {
 
-        UserModel user = new UserModel(nickname, location, (long)Integer.valueOf(dateOfBirth), gender, Integer.valueOf(height), Integer.valueOf(weight));
+        UserModel user = new UserModel(nickname, location, dateToLong(dateOfBirth), gender, Integer.valueOf(height), Integer.valueOf(weight));
 
         FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
         FirestoreCRUDUtil.getInstance().getEntry("users", systemID(), callback);
@@ -427,6 +409,7 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
             TextView textView_DOB = getView().findViewById(R.id.dateOfBirth);
             TextView textView_height = getView().findViewById(R.id.userHeight);
             TextView textView_weight = getView().findViewById(R.id.userWeight);
+            TextView textView_gender = getView().findViewById(R.id.gender);
 
             //TODO: create separate unit conversion method.
             UnitSystem unitSystem = getUnitSystem();
@@ -436,12 +419,14 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
             Weight weight = new Weight(readUser.getWeight());
             Pair<String, String> weightStrings = WeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getWeightParts(weight);
 
+            String dateInStringFormat = longToDateString(readUser.getDateOfBirth());
+
             textView_nickname.setText(readUser.getNickname());
             textView_location.setText(readUser.getCountry());
-            textView_DOB.setText(Long.toString(readUser.getDateOfBirth()));
+            textView_DOB.setText(dateInStringFormat);
             textView_height.setText(heightStrings.first + heightStrings.second);
             textView_weight.setText(weightStrings.first + weightStrings.second);
-
+            textView_gender.setText(readUser.getGender());
         }
 
         @Override
@@ -523,16 +508,50 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         return userObject;
     }
 
+    public long dateToLong(String dateOfBirth){
+        // Get long date
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        Timestamp DOBlong = null;
+        long userDOB = 0;
+
+        try {
+            Date date = formatter.parse(dateOfBirth);
+            if (date != null) {
+                DOBlong = new Timestamp(date.getTime());
+                userDOB = DOBlong.getTime();
+            }
+        } catch (ParseException e) {
+            showToast("Error DOB format error");
+        }
+        return userDOB;
+    }
+
+    public String longToDateString(long milli){
+        // Milliseconds since epoch (obtained from date.getTime())
+        long milliseconds = milli; // Example milliseconds (15th April 2024)
+
+        // Create a Date object from milliseconds
+        Date date = new Date(milliseconds);
+
+        // Create a SimpleDateFormat object for formatting the date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+        // Format the date into a legible string
+        String formattedDate = sdf.format(date);
+        return formattedDate;
+    }
+
+
     private void displayCustomSharingDialog(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         // Array to store user information
-        String[] userInfo = new String[5];
-        int[] textViewIds = {R.id.nickname, R.id.userLocation, R.id.dateOfBirth, R.id.userHeight, R.id.userWeight};
+        String[] userInfo = new String[6];
+        int[] textViewIds = {R.id.nickname, R.id.userLocation, R.id.dateOfBirth, R.id.userHeight, R.id.userWeight, R.id.gender};
 
         // Array to store detail labels
-        String[] detailNames = {"Nickname", "Location", "Date of Birth", "Height", "Weight"};
+        String[] detailNames = {"Nickname", "Location", "Date of Birth", "Height", "Weight", "Gender"};
 
         StringBuilder alertMessageBuilder = new StringBuilder("Do you allow OpenTracks to store and display the following information on the leaderboard?\n\n");
 
@@ -550,6 +569,17 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
             }
         }
 
+
+        TextView heightText = getView().findViewById(R.id.userHeight);
+        String heightToEdit = heightText.getText().toString();
+        heightToEdit = removeCharsFromString(heightToEdit);
+        TextView weightText = getView().findViewById(R.id.userWeight);
+        String weightToEdit = weightText.getText().toString();
+        weightToEdit= removeCharsFromString(weightToEdit);
+
+        UserModel user = new UserModel(userInfo[0], userInfo[1], dateToLong(userInfo[2]), userInfo[5], Integer.valueOf(heightToEdit), Integer.valueOf(weightToEdit));
+
+
         String alertMessage = alertMessageBuilder.toString();
 
         builder.setTitle("Confirm Selection")
@@ -560,26 +590,22 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 //                    userModel.setSocialAllow(true);
                     showToast("Updated sharing permissions and data will be shared on the leaderboard.");
                     leaderboardSwitch.setChecked(true); // Visually indicate sharing is enabled
-
-                    // TODO: Save the updated UserModel to the database
+                    user.setSocialAllow(true);
+                    FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
                 })
-                .setNegativeButton("CANCEL", (dialog, which) -> {
+                .setNegativeButton("DENY", (dialog, which) -> {
 //                    UserModel userModel = new UserModel(); // we need to get current UserID and initialize.
  //                   userModel.setSocialAllow(false);
                     showToast("Sharing not enabled. Data will remain private.");
                     leaderboardSwitch.setChecked(false); // Visually indicate sharing is not enabled
-
-                    // TODO: Save the updated UserModel to the database
+                    user.setSocialAllow(false);
+                    FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
                 })
                 .show();
     }
 
     @Override
 
-    // TODO: Implement saving logic here.
-    private void saveProfileData(String nickname, String dateOfBirth, String height, String weight, String gender, String location) {
-
-    }
     //TODO: fix this
     public void onStart() {
         super.onStart();
