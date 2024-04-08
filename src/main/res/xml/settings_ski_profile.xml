@@ -15,4 +15,10 @@
         android:entryValues="@array/sharing_location_values"
         android:entries="@array/sharing_location_entries" />
 
+    <SwitchPreferenceCompat
+        android:key="leaderboard_participation"
+        android:title="Participate In Leaderboard"
+        android:summary="Toggle leaderboard participation"
+        android:defaultValue="false" />
+
 </androidx.preference.PreferenceScreen>

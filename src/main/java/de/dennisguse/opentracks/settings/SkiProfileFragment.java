@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.preference.PreferenceFragmentCompat; // Assuming you're using this
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.SwitchPreferenceCompat;
 
 public class SkiProfileFragment extends PreferenceFragmentCompat {
 
@@ -29,6 +30,15 @@ public class SkiProfileFragment extends PreferenceFragmentCompat {
              return true;
          });
        }
+
+        SwitchPreferenceCompat leaderboardParticipationPref = findPreference("leaderboard_participation");
+        if (leaderboardParticipationPref != null) {
+            leaderboardParticipationPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean optedIn = (Boolean) newValue;
+                // function call for confirmatory pop-up here
+                return true;
+            });
+        }
     }
 
     private void showEditSharingPreferencesDialog() {
