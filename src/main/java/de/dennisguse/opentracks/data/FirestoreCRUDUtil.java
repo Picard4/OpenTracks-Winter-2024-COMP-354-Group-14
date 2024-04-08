@@ -174,6 +174,11 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
 
     }
 
+    /**
+     * Get runs by a specific filed and value
+     * @param field, specific attribute to search
+     * @param id, the value of that field
+     */
     @Override
     public void getRunsByField(String field,String id, ReadCallback callback) {
         db.collection("runs").whereEqualTo(field,id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

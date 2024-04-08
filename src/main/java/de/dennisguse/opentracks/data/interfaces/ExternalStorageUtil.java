@@ -65,6 +65,10 @@ public interface ExternalStorageUtil {
     }
     void getRunsByField(final String field, final String id, final ReadCallback callback);
 
+    /**
+     * Get a user's runs
+     * @param id, the user for which we fetch all runs
+     */
     default void getUserRuns(final String id, final ReadCallback callback)
     {
         getRunsByField("user",id,callback);
