@@ -430,4 +430,20 @@
 
     <string name="prefs_last_version_key" translatable="false">lastVersionKey</string>
 
+    <string name="skiing_type_key" translatable="false">skiingType</string>
+    <string name="skiing_type_default" translatable="false">@string/skiing_type_value_1</string>
+    <string name="skiing_type_value_1" translatable="false">1</string>
+    <string name="skiing_type_value_2" translatable="false">2</string>
+    <string name="skiing_type_value_3" translatable="false">3</string>
+    <string-array name="skiing_type_values">
+        <item>@string/skiing_type_value_1</item>
+        <item>@string/skiing_type_value_2</item>
+        <item>@string/skiing_type_value_3</item>
+    </string-array>
+    <string-array name="skiing_type_options">
+        <item>@string/settings_skiing_type_option_1</item>
+        <item>@string/settings_skiing_type_option_2</item>
+        <item>@string/settings_skiing_type_option_3</item>
+    </string-array>
+
 </resources>
