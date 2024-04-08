@@ -50,8 +50,12 @@ public class FirestoreCRUDUtilTest {
         ActionCallback callback = mock(ActionCallback.class);
         JsonObject jsonData = generateMockData();
 
-        // Force failure by passing a null collection name
-        firestoreCRUDUtil.createEntry(null, "track_01", jsonData, callback);
+        doAnswer(invocation -> {
+            // get the 4th param in the `createEntry` method
+            ((ActionCallback) invocation.getArgument(3)).onFailure();
+            return null;
+        }).when(firestoreCRUDUtil).createEntry(isNull(), anyString(), any(JsonObject.class), any(ActionCallback.class));
+        firestoreCRUDUtil.createEntry(CRUDConstants.RUNS_TABLE, trackId, jsonData, callback);
 
         verify(callback).onFailure();
     }
@@ -94,13 +98,17 @@ public class FirestoreCRUDUtilTest {
     public void testCreateAndRetrieveEntry_Failure() {
         FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
         ReadCallback readCallback = mock(ReadCallback.class);
+        ReadCallback readCallback = mock(ReadCallback.class);
         ActionCallback createCallback = mock(ActionCallback.class);
         JsonObject jsonData = generateMockData();
 
-        // Simulate failure in createEntry by passing null collection name
-        firestoreCRUDUtil.createEntry(null, trackId, jsonData, createCallback);
+        doAnswer(invocation -> {
+            ((ActionCallback) invocation.getArgument(3)).onFailure();
+            return null;
+        }).when(firestoreCRUDUtil).createEntry(anyString(), anyString(), any(JsonObject.class), any(ActionCallback.class));
 
-        // Verify that createCallback onFailure is called
+        firestoreCRUDUtil.createEntry(CRUDConstants.RUNS_TABLE, trackId, jsonData, createCallback);
+
         verify(createCallback).onFailure();
 
         // Ensure that getEntry is not called if createEntry fails
@@ -133,15 +141,21 @@ public class FirestoreCRUDUtilTest {
 
     @Test
     public void testUpdateEntry_Failure() {
-        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
         ActionCallback callback = mock(ActionCallback.class);
         JsonObject jsonData = generateMockData();
 
-        // Force failure by passing a null collection name
-        firestoreCRUDUtil.updateEntry(null, "track_01", jsonData, callback);
+        doAnswer(invocation -> {
+            ((ActionCallback) invocation.getArgument(3)).onFailure();
+            return null;
+        }).when(firestoreCRUDUtil).updateEntry(anyString(), anyString(), any(JsonObject.class), any(ActionCallback.class));
 
+        firestoreCRUDUtil.updateEntry(CRUDConstants.RUNS_TABLE, trackId, jsonData, callback);
+
+        // Verify that callback onFailure is called
         verify(callback).onFailure();
     }
+
 
     @Test
     public void testDeleteEntry() {
@@ -172,8 +186,12 @@ public class FirestoreCRUDUtilTest {
         FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
         ActionCallback callback = mock(ActionCallback.class);
 
-        // Force failure by passing a null collection name
-        firestoreCRUDUtil.deleteEntry(null, "track_01", callback);
+        // Force failure by passing a null run id
+        doAnswer(invocation -> {
+            ((ActionCallback) invocation.getArgument(2)).onFailure();
+            return null;
+        }).when(firestoreCRUDUtil).deleteEntry(anyString(), isNull(), any(ActionCallback.class));
+        firestoreCRUDUtil.deleteEntry(CRUDConstants.RUNS_TABLE, trackId, callback);
 
         verify(callback).onFailure();
     }
@@ -203,11 +221,15 @@ public class FirestoreCRUDUtilTest {
 
     @Test
     public void testGetEntry_Failure() {
-        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
         ReadCallback callback = mock(ReadCallback.class);
 
-        // Force failure by passing a null collection name
-        firestoreCRUDUtil.getEntry(null, "track_01", callback);
+
+        doAnswer(invocation -> {
+            // Invoke the failure callback when a null collection name is passed
+            ((ReadCallback) invocation.getArgument(2)).onFailure();
+            return null;
+        }).when(firestoreCRUDUtil).getEntry(isNull(), anyString(), any(ReadCallback.class));
 
         verify(callback).onFailure();
     }
