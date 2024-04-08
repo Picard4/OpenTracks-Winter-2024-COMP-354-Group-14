@@ -1,13 +1,16 @@
 package de.dennisguse.opentracks.settings;
 
+import static android.provider.Settings.Secure.ANDROID_ID;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.getUnitSystem;
 
 import android.app.AlertDialog;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.net.Uri;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -45,7 +48,12 @@ import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
 import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
+import de.dennisguse.opentracks.data.interfaces.ReadCallback;
+import de.dennisguse.opentracks.data.interfaces.ActionCallback;
 import de.dennisguse.opentracks.data.adapters.FireStoreAdapter;
+import de.dennisguse.opentracks.data.models.CRUDConstants;
+
+
 
 import de.dennisguse.opentracks.data.models.UserModel;
 
@@ -61,6 +69,7 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
 
     SwitchPreference leaderboardSwitch;
+    private Context applicationContext;
 
     private void startImagePicker() {
         try {
@@ -189,9 +198,11 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                     String gender = editGender.getText().toString();
                     String location = editLocation.getText().toString();
 
-                    // Validate and save the data if valid.
-                    if (validateInputs(nickname, dateOfBirth, height, weight, gender, location)) {
-                        saveProfileData(nickname, dateOfBirth, height, weight, gender, location);
+                    // Validate and save the data if valid
+//TODO: Add back validation
+                    if(true){
+                    //if (validateInputs(nickname, dateOfBirth, height, weight, gender, location)) {
+                        saveProfileData(nickname, location, dateOfBirth, gender, height, weight);
                         showToast("Profile updated successfully!");
 
                     } else {
@@ -203,14 +214,49 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
     }
 
     // TODO: Implement saving logic here.
-    private void saveProfileData(String nickname, String dateOfBirth, String height, String weight, String gender, String location) {
+    private void saveProfileData(String nickname, String location, String dateOfBirth, String gender, String height, String weight) {
 
-        UserModel user = new UserModel();
-        JsonObject userJson = user.toJSON();
-        UserModel userSerializable = JSONSerializable.fromJSON(userJson, user.class);
+        UserModel user = new UserModel(nickname, location, (long)Integer.valueOf(dateOfBirth), gender, Integer.valueOf(height), Integer.valueOf(weight));
 
-        FirestoreCRUDUtil.getInstance().createEntry("users", nickname, user.toJSON(), null);
+        FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
+        FirestoreCRUDUtil.getInstance().getEntry("users", systemID(), callback);
     }
+
+    ReadCallback callback = new ReadCallback() {
+        @Override
+        public void onSuccess(JsonObject data) {
+
+            UserModel readUser = JSONSerializable.fromJSON(data, UserModel.class);
+
+            TextView textView_nickname = getView().findViewById(R.id.nickname);
+            TextView textView_location = getView().findViewById(R.id.userLocation);
+            TextView textView_DOB = getView().findViewById(R.id.dateOfBirth);
+            TextView textView_height = getView().findViewById(R.id.userHeight);
+            TextView textView_weight = getView().findViewById(R.id.userWeight);
+
+            //TODO: create separate unit conversion method.
+            UnitSystem unitSystem = getUnitSystem();
+            Height height = new Height(readUser.getHeight());
+            Pair<String, String> heightStrings = HeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getHeightParts(height);
+
+            Weight weight = new Weight(readUser.getWeight());
+            Pair<String, String> weightStrings = WeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getWeightParts(weight);
+
+            textView_nickname.setText(readUser.getNickname());
+            textView_location.setText(readUser.getCountry());
+            textView_DOB.setText(Long.toString(readUser.getDateOfBirth()));
+            textView_height.setText(heightStrings.first + heightStrings.second);
+            textView_weight.setText(weightStrings.first + weightStrings.second);
+
+        }
+
+        @Override
+        public void onFailure() {
+            showToast("User profile was not saved!");
+        }
+    };
+
+
 
     // A simple method to show toast messages.
     private void showToast(String message) {
@@ -292,24 +338,8 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
     public void onStart() {
         super.onStart();
         ((SettingsActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings_ui_title);
-
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(() -> {
-            TextView heightView = getView().findViewById(R.id.userHeight);
-            TextView weightView = getView().findViewById(R.id.userWeight);
-
-            UnitSystem unitSystem = getUnitSystem();
-
-            Height height = new Height(180);
-            Pair<String, String> heightStrings = HeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getHeightParts(height);
-
-            Weight weight = new Weight(80);
-            Pair<String, String> weightStrings = WeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getWeightParts(weight);
-
-            heightView.setText(heightStrings.first + heightStrings.second);
-            weightView.setText(weightStrings.first + weightStrings.second);
-        }, 50);
     }
+
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
@@ -328,6 +358,17 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         super.onDisplayPreferenceDialog(preference);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirestoreCRUDUtil.getInstance().getEntry("users", systemID(), callback);
+    }
 
+    //TODO: Remove once there is offline data persistence through Firestore
+    public static String systemID() {
+        String id = System.getProperty("http.agent");
+        id = id.replace(" ", "");
+        return id;
+    }
 
 }

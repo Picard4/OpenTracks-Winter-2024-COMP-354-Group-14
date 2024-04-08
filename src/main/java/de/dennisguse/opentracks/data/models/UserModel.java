@@ -1,6 +1,13 @@
 package de.dennisguse.opentracks.data.models;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
+import java.time.Duration;
+import java.time.Instant;
+
+import de.dennisguse.opentracks.data.adapters.Gson_DurationTypeAdapter;
+import de.dennisguse.opentracks.data.adapters.Gson_InstantTypeAdapter;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 
 public class UserModel {
@@ -23,7 +30,7 @@ public class UserModel {
         this.height = 0;
         this.weight = 0;
         this.socialAllow = false;
-        this.profilePicURL = ""; 
+        this.profilePicURL = "";
     }
 
     public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight, boolean socialAllow, String profilePicURL) {
@@ -36,6 +43,16 @@ public class UserModel {
         this.weight = weight;
         this.socialAllow = socialAllow;
         this.profilePicURL = profilePicURL;
+    }
+
+    public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight) {
+
+        this.nickname = nickname;
+        this.country = country;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.height = height;
+        this.weight = weight;
     }
 
     public String getNickname() {
@@ -93,4 +110,18 @@ public class UserModel {
     public void setPictureURL(String profilePicURL) {
         this.profilePicURL = profilePicURL;
     }
+
+    public JsonObject toJSON() {
+        // Create a GsonBuilder and configure it to serialize special floating point values
+        Gson gson = new GsonBuilder()
+                .serializeSpecialFloatingPointValues()
+                .registerTypeAdapter(Instant.class, new Gson_InstantTypeAdapter())
+                .registerTypeAdapter(Duration.class, new Gson_DurationTypeAdapter())
+                .create();
+
+        // Convert the object to JsonObject using Gson
+        String jsonString = gson.toJson(this);
+        return gson.fromJson(jsonString, JsonObject.class);
+    }
+
 }
