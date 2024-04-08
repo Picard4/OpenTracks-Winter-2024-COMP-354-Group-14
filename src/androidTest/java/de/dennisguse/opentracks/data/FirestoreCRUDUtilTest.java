@@ -39,6 +39,22 @@ public class FirestoreCRUDUtilTest {
      * Expect SUCCESSFUL createEntry as the proper id and valid jsonData are passed and make sure
      * getEntry retreives what we just created
      */
+
+    /**
+     * Matching failure test: when passing a null entry
+     */
+
+    @Test
+    public void testCreateEntry_Failure() {
+        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        ActionCallback callback = mock(ActionCallback.class);
+        JsonObject jsonData = generateMockData();
+
+        // Force failure by passing a null collection name
+        firestoreCRUDUtil.createEntry(null, "track_01", jsonData, callback);
+
+        verify(callback).onFailure();
+    }
     @Test
     public void testCreateAndRetrieveEntry() {
         FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
@@ -69,6 +85,28 @@ public class FirestoreCRUDUtilTest {
     /**
      * Expect SUCCESSFUL updateEntry as the proper id and valid jsonData are passed
      */
+
+    /**
+     * Matching failure test: when passing a null entry
+     */
+
+    @Test
+    public void testCreateAndRetrieveEntry_Failure() {
+        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        ReadCallback readCallback = mock(ReadCallback.class);
+        ActionCallback createCallback = mock(ActionCallback.class);
+        JsonObject jsonData = generateMockData();
+
+        // Simulate failure in createEntry by passing null collection name
+        firestoreCRUDUtil.createEntry(null, trackId, jsonData, createCallback);
+
+        // Verify that createCallback onFailure is called
+        verify(createCallback).onFailure();
+
+        // Ensure that getEntry is not called if createEntry fails
+        verify(firestoreCRUDUtil, never()).getEntry(anyString(), anyString(), any(ReadCallback.class));
+    }
+
     @Test
     public void testUpdateEntry() {
         FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
@@ -88,6 +126,23 @@ public class FirestoreCRUDUtilTest {
     /**
      * Expect SUCCESSFUL deleteEntry as the proper id is passed
      */
+
+    /**
+     * Matching failure test:
+     */
+
+    @Test
+    public void testUpdateEntry_Failure() {
+        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        ActionCallback callback = mock(ActionCallback.class);
+        JsonObject jsonData = generateMockData();
+
+        // Force failure by passing a null collection name
+        firestoreCRUDUtil.updateEntry(null, "track_01", jsonData, callback);
+
+        verify(callback).onFailure();
+    }
+
     @Test
     public void testDeleteEntry() {
         FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
@@ -107,6 +162,24 @@ public class FirestoreCRUDUtilTest {
     /**
      * Expect SUCCESSFUL getEntry as the proper id is passed
      */
+
+    /**
+     * Matching failure test:
+     */
+
+    @Test
+    public void testDeleteEntry_Failure() {
+        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        ActionCallback callback = mock(ActionCallback.class);
+
+        // Force failure by passing a null collection name
+        firestoreCRUDUtil.deleteEntry(null, "track_01", callback);
+
+        verify(callback).onFailure();
+    }
+
+
+
     @Test
     public void testGetEntry() {
         FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
@@ -122,6 +195,21 @@ public class FirestoreCRUDUtilTest {
 
         System.out.println(jsonData.toString());
         verify(callback).onSuccess(jsonData);
+    }
+
+    /**
+     * Matching failure test
+     */
+
+    @Test
+    public void testGetEntry_Failure() {
+        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        ReadCallback callback = mock(ReadCallback.class);
+
+        // Force failure by passing a null collection name
+        firestoreCRUDUtil.getEntry(null, "track_01", callback);
+
+        verify(callback).onFailure();
     }
 
     /**
