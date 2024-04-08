@@ -11,7 +11,6 @@ import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
 public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
-    private boolean averageRefresh;
 
     @Override
     protected List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
