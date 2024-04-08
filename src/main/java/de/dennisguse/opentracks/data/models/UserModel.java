@@ -1,4 +1,6 @@
 package de.dennisguse.opentracks.data.models;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class UserModel {
 
@@ -11,6 +13,10 @@ public class UserModel {
     private boolean socialAllow; //Bool flag for leaderboard appearance permission
     private String profilePicURL; //To be replaced by firestore path - https://
 
+    private static final String SHARED_PREFS_NAME = "UserPrefs";
+    private static final String PREF_SOCIAL_ALLOW = "socialAllow";
+    private transient Context context;
+
     public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight, boolean socialAllow, String profilePicURL) {
 
         this.nickname = nickname;
@@ -21,6 +27,26 @@ public class UserModel {
         this.weight = weight;
         this.socialAllow = socialAllow;
         this.profilePicURL = profilePicURL;
+    }
+
+
+    public void setContext(Context context) {
+        this.context = context.getApplicationContext();
+    }
+
+    public void saveSharingPreference(boolean socialAllow) {
+        this.socialAllow = socialAllow;
+        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PREF_SOCIAL_ALLOW, socialAllow);
+        editor.apply();
+    }
+
+    // Method to get the user's sharing preference
+    public boolean getSharingPreference() {
+        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        // Default value is false if not set
+        return prefs.getBoolean(PREF_SOCIAL_ALLOW, false);
     }
 
     public String getNickname() {
