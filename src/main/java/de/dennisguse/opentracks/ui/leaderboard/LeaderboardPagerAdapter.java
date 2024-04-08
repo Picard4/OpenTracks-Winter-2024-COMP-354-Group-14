@@ -6,7 +6,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Duration;
 
+import de.dennisguse.opentracks.data.models.Distance;
+import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.stats.TrackStatistics;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.AverageMovingSpeedLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.MaxSpeedLeaderboardFragment;
@@ -121,16 +124,71 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     private List<PlaceHolderTrackUser> readLatestLeaderboardData() {
         // This is where we get the data from the database for the runs that will be in the leaderboard.
         List<PlaceHolderTrackUser> testData = new ArrayList();
-        testData.add(new PlaceHolderTrackUser("User One", true, new TrackStatistics()));
+        TrackStatistics stats = new TrackStatistics();
+
+        stats.setTotalDistance(new Distance(5));
+        stats.setMaxSpeed(new Speed(1));
+        stats.setMovingTime(Duration.ofMinutes(900));
+        testData.add(new PlaceHolderTrackUser("User One", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Two", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Three", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Four", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Five", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Six", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Seven", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Eight", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Nine", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("User Ten", true, new TrackStatistics()));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
         testData.add(new PlaceHolderTrackUser("EXCLUDE ME!", false, new TrackStatistics()));
         return testData;
     }
