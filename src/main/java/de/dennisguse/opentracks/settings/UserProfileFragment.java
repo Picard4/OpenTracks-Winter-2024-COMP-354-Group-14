@@ -294,10 +294,17 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         if (nicknameText.getText().toString().equalsIgnoreCase("Nickname")) {
             editNickname.setText("");
         }
+        else
+        {
+            editNickname.setText(nicknameText.getText().toString());
+        }
         if (DOBText.getText().toString().equalsIgnoreCase("Date of Birth")) {
             editDateOfBirth.setText("");
         }
-
+        else
+        {
+            editDateOfBirth.setText(DOBText.getText().toString());
+        }
         editHeight.setText(heightText.getText().toString());
         editWeight.setText(weightText.getText().toString());
 
