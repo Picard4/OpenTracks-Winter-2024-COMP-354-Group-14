@@ -35,8 +35,10 @@ public class UserModel {
     private boolean socialAllow; //Bool flag for leaderboard appearance permission
     private String profilePicURL; //To be replaced by firestore path - https://
 
-    // Empty constructor
+    // Default Constructor
+
     public UserModel() {
+
         this.nickname = "";
         this.country = "";
         this.dateOfBirth = 0;
@@ -47,6 +49,20 @@ public class UserModel {
         this.profilePicURL = "";
     }
 
+    // Constructor
+
+    /**
+     * Constructs a new Car object with the given make, model, and year.
+     *
+     * @param nickname The nickname / username.
+     * @param country The country of user / not based on tracking.
+     * @param dateOfBirth The DOB.
+     * @param gender User gender.
+     * @param height User height unit default.
+     * @param weight User weight unit default.
+     * @param socialAllow Flags permission to share on leaderboard
+     * @param profilePicURL Stores path to blob.
+     */
     private static final String SHARED_PREFS_NAME = "UserPrefs";
     private static final String PREF_SOCIAL_ALLOW = "socialAllow";
     private transient Context context;
@@ -90,6 +106,8 @@ public class UserModel {
         this.socialAllow = socialAllow;
         this.profilePicURL = profilePicURL;
     }
+
+    // Methods
 
     public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight) {
 
