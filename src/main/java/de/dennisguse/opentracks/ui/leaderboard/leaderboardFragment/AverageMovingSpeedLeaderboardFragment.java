@@ -1,14 +1,19 @@
 package de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.dennisguse.opentracks.data.models.Ranking;
+import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
 public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
     private boolean averageRefresh;
-    private boolean bestRefresh;
 
     @Override
     protected List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
@@ -26,18 +31,50 @@ public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
 
     @Override
     protected List<Ranking> calculateLatestBestRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
-        // TODO: Replace the test data with code that gathers the appropriate Ranking data
-        List<Ranking> latestRankingsData;
-        if (!bestRefresh)
-            // Get a different data set if this is the first time the rankings data is being collected
-            latestRankingsData = getAltTestData();
-        else
-            latestRankingsData = getTestData();
-        // All future rankings data collections should be refreshes
-        bestRefresh = true;
-        return latestRankingsData;
+        latestLeaderboardData = filterBestTrackStatistics(latestLeaderboardData);
+        latestLeaderboardData.sort(new SortByAverageMovingSpeed());
+
+        List<Ranking> rankingsData = new ArrayList<>();
+        int rank = 0;
+        for (LeaderboardPagerAdapter.PlaceHolderTrackUser trackUser : latestLeaderboardData) {
+            rankingsData.add(new Ranking(++rank, trackUser.nickname, trackUser.location, getAverageMovingSpeedDisplay(trackUser.trackStatistics.getAverageMovingSpeed())));
+        }
+        return rankingsData;
     }
 
+    private String getAverageMovingSpeedDisplay(Speed averageMovingSpeed) {
+        return getScoreDecimalFormat().format(averageMovingSpeed.speed_mps()) + " mps";
+    }
+
+    private List<LeaderboardPagerAdapter.PlaceHolderTrackUser> filterBestTrackStatistics(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
+        Map<String, LeaderboardPagerAdapter.PlaceHolderTrackUser> statsMap = new HashMap<>();
+        for (LeaderboardPagerAdapter.PlaceHolderTrackUser trackUser : latestLeaderboardData) {
+            if (!trackUser.socialAllow)
+                continue;
+
+            if (!statsMap.containsKey(trackUser.nickname) ||
+                    statsMap.get(trackUser.nickname).trackStatistics.getAverageMovingSpeed().lessThan(trackUser.trackStatistics.getAverageMovingSpeed())) {
+                statsMap.put(trackUser.nickname, trackUser);
+            }
+        }
+        return new ArrayList<>(statsMap.values());
+    }
+
+    private class SortByAverageMovingSpeed implements Comparator<LeaderboardPagerAdapter.PlaceHolderTrackUser> {
+        @Override
+        public int compare(LeaderboardPagerAdapter.PlaceHolderTrackUser user1, LeaderboardPagerAdapter.PlaceHolderTrackUser user2) {
+            Speed user1AverageSpeed = user1.trackStatistics.getAverageMovingSpeed();
+            Speed user2AverageSpeed = user2.trackStatistics.getAverageMovingSpeed();
+
+            if (user1AverageSpeed.lessThan(user2AverageSpeed))
+                return 1;
+            else if (user1AverageSpeed.greaterThan(user2AverageSpeed))
+                return -1;
+            return 0;
+        }
+    }
+
+    // TODO: Delete this test data once the methods are implemented
     private List<Ranking> getTestData() {
         List<Ranking> rankings = new ArrayList<>();
         rankings.add(new Ranking(1, "User 10", "AA",  Double.toString(25)));
