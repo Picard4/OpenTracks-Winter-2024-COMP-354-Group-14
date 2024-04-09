@@ -2,6 +2,7 @@ package de.dennisguse.opentracks.data.models;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.ArrayList;
 
 public class SkiRun {
 		// Run related stats
@@ -48,7 +49,7 @@ public class SkiRun {
 	    	return average_speed;
 	    }
 	    
-	    public double setAverageSpeed(double speed) {
+	    public void setAverageSpeed(double speed) {
 	    	this.average_speed = speed;
 	    }
 	    
@@ -56,7 +57,7 @@ public class SkiRun {
 	    	return average_speed;
 	    }
 	    
-	    public double setMaxSpeed(double speed) {
+	    public void setMaxSpeed(double speed) {
 	    	this.maximum_speed = speed;
 	    }
 	    
@@ -102,9 +103,9 @@ public class SkiRun {
 	    // Method to calculate run specific elevation calculation - Written by Volarr
 	    public void calculateRunSpecificElevationGain()
 	    {
-	        double prevElevation = this.trackPointsList.get(0).getAltitude().toM();
+	        double prevElevation = this.trackPoints.get(0).getAltitude().toM();
 	        for (TrackPoint tp:
-	             this.trackPointsList) {
+	             this.trackPoints) {
 	            Altitude altitude = tp.getAltitude();
 	            double tpElevationGain = prevElevation - altitude.toM();
 	            this.totalRunElevation += tpElevationGain;
@@ -117,8 +118,8 @@ public class SkiRun {
 	    {
 	    	Speed maxSpeed = Speed.zero(); // Inital max speed = 0
 	    	double totalSpeed = 0;
-	    	ArrayList<Speed> speedList = new ArrayList<>()
-	    	for (TrackPoint tp: this.trackPointsList)
+	    	ArrayList<Speed> speedList = new ArrayList<>();
+	    	for (TrackPoint tp: this.trackPoints)
 	    	{
 	    		Speed speed = tp.getSpeed();
 	    		speedList.add(speed);
@@ -132,7 +133,7 @@ public class SkiRun {
 	    	
 	    	// Set ski run maximum and average speed
 	    	this.average_speed = averageSpeed;
-	    	this.maximum_speed = maxSpeed;
+	    	this.maximum_speed = maxSpeed.toMPS();
 	    }
 	    
 	    // Method to calculate slope percentage between two provided track points (negative altitude change as descending)

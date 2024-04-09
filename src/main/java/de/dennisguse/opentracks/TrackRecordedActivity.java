@@ -123,7 +123,7 @@ public class TrackRecordedActivity extends AbstractTrackDeleteActivity implement
     private void showSelectionMenu() {
         final CharSequence[] items = {"5", "10", "15"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select value");
+        builder.setTitle("Select Number of Points for Moving Average");
         builder.setItems(items, (dialog, which) -> {
             // 'which' is the index of the selected item
             int selectedValue = Integer.parseInt(items[which].toString());

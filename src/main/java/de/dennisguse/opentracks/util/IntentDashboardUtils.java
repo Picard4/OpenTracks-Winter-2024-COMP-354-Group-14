@@ -30,6 +30,7 @@ import de.dennisguse.opentracks.data.tables.TracksColumns;
 import de.dennisguse.opentracks.io.file.TrackFileFormat;
 import de.dennisguse.opentracks.settings.PreferencesUtils;
 import de.dennisguse.opentracks.stats.OverallStatistics;
+import de.dennisguse.opentracks.services.TrackDifferentiate;
 
 /**
  * Create an {@link Intent} to request showing tracks on a Map or a Dashboard.
@@ -73,6 +74,9 @@ public class IntentDashboardUtils {
     private static final int TRACKPOINTS_URI_INDEX = 1;
     private static final int MARKERS_URI_INDEX = 2;
     private static final int NONE_SELECTED = -1;
+    
+    // Internal reference to sorted TrackPoints into two categories (1) chairLift (2) SkiRun, with internal objects to call for relevant info displaying
+    private TrackDifferentiate trackDifferentiate;
 
     private IntentDashboardUtils() {
     }
@@ -275,5 +279,16 @@ public class IntentDashboardUtils {
 
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.open_track_as_trackfileformat, trackFileFormat.getExtension())));
     }
-
+    
+    /**
+     * Constructor for internal TrackDifferentiate object which gives access to initalized chairLift and SkiRun objects which can then be called to
+     * get access internal data such as average speed, wait time, total distance, etc.
+     * 
+     * @param context the context for relevant TrackPoints to differentiate
+     * @param tid the track ids for relevant TrackPoints to differentiate
+     */
+    public TrackDifferentiate getTrackDifferentiate(Context context, Track.Id tid){
+    	trackDifferentiate = new TrackDifferentiate(tid, context);
+        return trackDifferentiate;
+    }
 }

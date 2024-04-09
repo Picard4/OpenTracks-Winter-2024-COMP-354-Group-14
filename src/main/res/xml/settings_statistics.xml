@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/settings_stats_display_title">
+
+    <PreferenceCategory app:title="@string/settings_daily_stats_title">
+        <ListPreference android:key="@string/plotting_metric_key"
+            app:title="Plotting Aggregation Metric"
+            android:defaultValue="0"
+            app:useSimpleSummaryProvider="true"/>
+        <ListPreference android:key="@string/plotting_frequency_key"
+            app:useSimpleSummaryProvider="true"
+            app:title="Plotting Aggregation Frequency"
+            android:defaultValue="0"/>
+    </PreferenceCategory>
+</PreferenceScreen>

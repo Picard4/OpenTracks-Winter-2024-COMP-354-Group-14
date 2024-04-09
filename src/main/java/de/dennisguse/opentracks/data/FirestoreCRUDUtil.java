@@ -63,7 +63,6 @@ public class FirestoreCRUDUtil implements ExternalStorageUtil {
                     Log.e(CRUDConstants.TAG_ERROR, CRUDConstants.ERROR_CREATING_DOCUMENT + e.getMessage());
                     if (callback != null) callback.onFailure();
                 });
-
     }
 
     /**

@@ -845,6 +845,11 @@ limitations under the License.
     <string name="always">Always</string>
 
     <string name="introduction_osm_dashboard">OpenTracks itself does not provide a map. Please install OSMDashboard to view your recordings on a map.</string>
+
+    <string name="settings_stats_display_summary">Default Plotting Values</string>
+    <string name="settings_stats_display_title">Statistics Display</string>
+    <string name="settings_daily_stats_title">Daily Statistics</string>
+
     <string name="run_lift_name">Name</string>
     <string name="run_lift_elevation">Elevation</string>
     <string name="run_lift_distance">Distance</string>

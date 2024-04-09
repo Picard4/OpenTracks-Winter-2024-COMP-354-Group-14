@@ -129,7 +129,9 @@ android {
 
 dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.10.3'
+    implementation 'junit:junit:4.12'
     androidTestImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'

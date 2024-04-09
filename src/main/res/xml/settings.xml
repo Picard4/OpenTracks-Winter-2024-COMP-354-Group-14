@@ -46,6 +46,12 @@
         android:title="@string/settings_announcements_statistics_title" />
 
     <Preference
+        android:icon="@drawable/ic_statistics_24dp"
+        android:key="@string/settings_stats_display_key"
+        android:summary="@string/settings_stats_display_summary"
+        android:title="@string/settings_stats_display_title" />
+
+    <Preference
         android:icon="@drawable/ic_baseline_import_export_24"
         android:key="@string/settings_import_export_key"
         android:summary="@string/settings_import_export_summary"

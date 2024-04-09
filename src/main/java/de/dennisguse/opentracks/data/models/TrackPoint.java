@@ -260,19 +260,19 @@ public class TrackPoint {
     
     public double getSlopePercentage() {
     	double slopePercentage;
-    	Trackpoint previous = lastTrackPoint;
+    	//Trackpoint previous = lastTrackPoint;
     	
     	// Slope percentage negative - Ski run
     	if (this.hasAltitudeLoss())
     	{
 	    	// Slope percentage = - altitude change / distance travelled * 100
-    		slopePercentage = -(this.getAltitudeLoss() / this.distanceToPrevious(this)) * 100;
+    		slopePercentage = -(this.getAltitudeLoss() / this.distanceToPrevious(this).toM()) * 100;
     		this.slopePercentage = slopePercentage;
     		
     		return slopePercentage;
     	}
     	// Slope percentage positive - Chair Lift ride
-    	slopePercentage = (this.getAltitudeGain() / this.distanceToPrevious(this)) * 100;
+    	slopePercentage = (this.getAltitudeGain() / this.distanceToPrevious(this).toM()) * 100;
 		this.slopePercentage = slopePercentage;
 		return slopePercentage;
     }
