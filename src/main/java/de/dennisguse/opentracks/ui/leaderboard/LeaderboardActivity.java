@@ -2,12 +2,19 @@ package de.dennisguse.opentracks.ui.leaderboard;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
 
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
@@ -58,10 +65,34 @@ public class LeaderboardActivity extends AppCompatActivity {
             //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
         });
 
-        findViewById(R.id.btnFifty).setOnClickListener(v -> {
+        findViewById(R.id.btnAll).setOnClickListener(v -> {
             numberOfUsers = 50;
             //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
         });
+
+        Spinner competencies = findViewById(R.id.spinner_competency);
+        competencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView)view).setText(null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ArrayList<String> competency_list = new ArrayList<>();
+        competency_list.add("All");
+        competency_list.add("Beginner");
+        competency_list.add("Intermediate");
+        competency_list.add("Expert");
+
+        ArrayAdapter<String> competency_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, competency_list);
+        competency_adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        competencies.setAdapter(competency_adapter);
+
 
         android.view.View averageButton = findViewById(R.id.btnAverageScoreAggregation);
         android.view.View bestButton = findViewById(R.id.btnBestScoreAggregation);
@@ -108,4 +139,6 @@ public class LeaderboardActivity extends AppCompatActivity {
             allResortsButton.setBackgroundColor(optionSelectedColor);
         });
     }
+
+
 }

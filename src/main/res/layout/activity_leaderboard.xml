@@ -104,34 +104,45 @@
             android:id="@+id/btnTen"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="10"
-            android:textSize="12sp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Top 10"
+            android:textColor="@color/colorForegroundDelete"
+            android:textSize="11sp"
             app:cornerRadius="8dp" />
 
         <Button
             android:id="@+id/btnTwentyFive"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="25"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Top 25"
             android:textColor="@color/colorForegroundDelete"
+            android:textSize="11sp"
             app:cornerRadius="8dp" />
 
         <Button
-            android:id="@+id/btnFifty"
-            android:layout_width="0dp"
+            android:id="@+id/btnAll"
+            android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="50"
-            android:textColor="@color/colorForegroundDelete"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="ALL"
+            android:textSize="11sp"
+            android:textColor="@color/colorForegroundDelete"
             app:cornerRadius="8dp" />
+
+        <Spinner
+            android:id="@+id/spinner_competency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+
     </LinearLayout>
     <LinearLayout
         android:id="@+id/bottomBar"
