@@ -1,5 +1,6 @@
 package de.dennisguse.opentracks.ui.friends;
 
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;

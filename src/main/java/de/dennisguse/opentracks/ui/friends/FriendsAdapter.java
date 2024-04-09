@@ -28,7 +28,6 @@ public class FriendsAdapter extends ArrayAdapter<String> {
         this.username = username;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
