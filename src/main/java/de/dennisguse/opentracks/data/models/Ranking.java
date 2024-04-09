@@ -11,11 +11,11 @@ public class Ranking {
     private int rank;
     private String username;
     private String location;
-    private double score;
+    private String score;
     private Bitmap profilePicture;
 
     // TODO: Consider deleting this constructor once issue 67 is implemented (and we have no more need for placeholder Ranking instances)
-    public Ranking(int rank, String username, String location, double score) {
+    public Ranking(int rank, String username, String location, String score) {
         setRank(rank);
         setUsername(username);
         setLocation(location);
@@ -23,7 +23,7 @@ public class Ranking {
     }
 
     // The full constructor for a Ranking instance.
-    public Ranking(int rank, String username, String location, double score, Bitmap profilePicture) {
+    public Ranking(int rank, String username, String location, String score, Bitmap profilePicture) {
         setRank(rank);
         setUsername(username);
         setLocation(location);
@@ -56,11 +56,11 @@ public class Ranking {
         this.location = location;
     }
 
-    public double getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(String score) {
         this.score = score;
     }
 

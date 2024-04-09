@@ -1,6 +1,5 @@
 package de.dennisguse.opentracks.data.interfaces;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public interface ReadCallback {
