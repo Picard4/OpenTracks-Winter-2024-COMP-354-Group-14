@@ -1,10 +1,23 @@
 package de.dennisguse.opentracks.data.models;
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import android.content.Context;
+import android.content.SharedPreferences;
+import com.google.gson.JsonObject;
+
+import java.time.Duration;
+import java.time.Instant;
+
+import de.dennisguse.opentracks.data.adapters.Gson_DurationTypeAdapter;
+import de.dennisguse.opentracks.data.adapters.Gson_InstantTypeAdapter;
 
 public class UserModel {
 
-    private String nickname; //User key that uniquely identifies user
+    // Attributes of User class
+
+    private String nickname; //User key that identifies user
     private String country;
     private long dateOfBirth;
     private String gender;
@@ -13,9 +26,39 @@ public class UserModel {
     private boolean socialAllow; //Bool flag for leaderboard appearance permission
     private String profilePicURL; //To be replaced by firestore path - https://
 
+    // Constructor
+
+    /**
+     * Constructs a new Car object with the given make, model, and year.
+     *
+     * @param nickname The nickname / username.
+     * @param country The country of user / not based on tracking.
+     * @param dateOfBirth The DOB.
+     * @param gender User gender.
+     * @param height User height unit default.
+     * @param weight User weight unit default.
+     * @param socialAllow Flags permission to share on leaderboard
+     * @param profilePicURL Stores path to blob.
+     */
     private static final String SHARED_PREFS_NAME = "UserPrefs";
     private static final String PREF_SOCIAL_ALLOW = "socialAllow";
     private transient Context context;
+
+    // Default Constructor
+
+    public UserModel() {
+
+        this.nickname = "";
+        this.country = "";
+        this.dateOfBirth = 0;
+        this.gender = "";
+        this.height = 0;
+        this.weight = 0;
+        this.socialAllow = false;
+        this.profilePicURL = "";
+    }
+
+    // Constructor
 
     public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight, boolean socialAllow, String profilePicURL) {
 
@@ -27,6 +70,16 @@ public class UserModel {
         this.weight = weight;
         this.socialAllow = socialAllow;
         this.profilePicURL = profilePicURL;
+    }
+
+    public UserModel(String nickname, String country, long dateOfBirth, String gender, int height, int weight) {
+
+        this.nickname = nickname;
+        this.country = country;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.height = height;
+        this.weight = weight;
     }
 
 
@@ -48,6 +101,8 @@ public class UserModel {
         // Default value is false if not set
         return prefs.getBoolean(PREF_SOCIAL_ALLOW, false);
     }
+
+    // Methods
 
     public String getNickname() {
         return nickname;
@@ -104,4 +159,18 @@ public class UserModel {
     public void setPictureURL(String profilePicURL) {
         this.profilePicURL = profilePicURL;
     }
+
+    public JsonObject toJSON() {
+        // Create a GsonBuilder and configure it to serialize special floating point values
+        Gson gson = new GsonBuilder()
+                .serializeSpecialFloatingPointValues()
+                .registerTypeAdapter(Instant.class, new Gson_InstantTypeAdapter())
+                .registerTypeAdapter(Duration.class, new Gson_DurationTypeAdapter())
+                .create();
+
+        // Convert the object to JsonObject using Gson
+        String jsonString = gson.toJson(this);
+        return gson.fromJson(jsonString, JsonObject.class);
+    }
+
 }

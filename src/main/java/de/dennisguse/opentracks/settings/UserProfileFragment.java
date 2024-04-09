@@ -8,9 +8,9 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.Intent;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
@@ -39,6 +38,7 @@ import androidx.preference.SwitchPreference;
 import androidx.core.app.ActivityCompat;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,6 +58,10 @@ import de.dennisguse.opentracks.data.models.SpeedFormatter;
 import de.dennisguse.opentracks.data.models.UserModel;
 import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
+import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
+import de.dennisguse.opentracks.data.interfaces.ReadCallback;
+import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
+
 
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
@@ -78,6 +82,7 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
 
     SwitchPreference leaderboardSwitch;
+    private Context applicationContext;
 
     private void startImagePicker() {
         try {
@@ -137,6 +142,9 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
                     displayCustomSharingDialog();
 
+                }
+                else{
+                    displayCustomSharingDialog();
                 }
                 return false;
             }
@@ -257,6 +265,17 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         }
     }
 
+    public String removeCharsFromString(String stringToConvert) {
+        StringBuilder str = new StringBuilder();
+        for (char c : stringToConvert.toCharArray()) {
+            if (Character.isDigit(c)) {
+                str.append(c);
+            }
+        }
+        String newstr = str.toString();
+        return newstr;
+    }
+
     private void showEditProfileDialog() {
         // Inflate the custom layout for the edit dialog.
         View formView = LayoutInflater.from(getContext()).inflate(R.layout.edit_profile_form, null);
@@ -265,7 +284,11 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         TextView nicknameText = getView().findViewById(R.id.nickname);
         TextView DOBText = getView().findViewById(R.id.dateOfBirth);
         TextView heightText = getView().findViewById(R.id.userHeight);
+         String heightToEdit = heightText.getText().toString();
+         heightToEdit = removeCharsFromString(heightToEdit);
         TextView weightText = getView().findViewById(R.id.userWeight);
+        String weightToEdit = weightText.getText().toString();
+        weightToEdit= removeCharsFromString(weightToEdit);
 //        TextView countryText = getView().findViewById(R.id.userLocation);
 //        TextView genderText = getView().findViewById(R.id.gender);
 
@@ -340,10 +363,11 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                     String gender = spinnerGender.getSelectedItem().toString();
                     String location = spinnerLocation.getSelectedItem().toString();
 
-                    // Validate and save the data if valid.
+                    // Validate and save the data if valid
                     if (validateInputs(nickname, dateOfBirth, height, weight, gender, location)) {
-                        saveProfileData(nickname, dateOfBirth, height, weight, gender, location);
+                        saveProfileData( nickname,  location,  dateOfBirth,  gender,  height,  weight);
                         showToast("Profile updated successfully!");
+
                     } else {
                         showToast("Please check your inputs.");
                     }
@@ -370,7 +394,56 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
             // Show the date picker dialog
             datePickerDialog.show();
         });
+
+
     }
+
+    private void saveProfileData(String nickname, String location, String dateOfBirth, String gender, String height, String weight) {
+
+        UserModel user = new UserModel(nickname, location, dateToLong(dateOfBirth), gender, Integer.valueOf(height), Integer.valueOf(weight));
+
+        FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
+        FirestoreCRUDUtil.getInstance().getEntry("users", systemID(), callback);
+    }
+
+    ReadCallback callback = new ReadCallback() {
+        @Override
+        public void onSuccess(JsonObject data) {
+
+            UserModel readUser = JSONSerializable.fromJSON(data, UserModel.class);
+
+            TextView textView_nickname = getView().findViewById(R.id.nickname);
+            TextView textView_location = getView().findViewById(R.id.userLocation);
+            TextView textView_DOB = getView().findViewById(R.id.dateOfBirth);
+            TextView textView_height = getView().findViewById(R.id.userHeight);
+            TextView textView_weight = getView().findViewById(R.id.userWeight);
+            TextView textView_gender = getView().findViewById(R.id.gender);
+
+            //TODO: create separate unit conversion method.
+            UnitSystem unitSystem = getUnitSystem();
+            Height height = new Height(readUser.getHeight());
+            Pair<String, String> heightStrings = HeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getHeightParts(height);
+
+            Weight weight = new Weight(readUser.getWeight());
+            Pair<String, String> weightStrings = WeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getWeightParts(weight);
+
+            String dateInStringFormat = longToDateString(readUser.getDateOfBirth());
+
+            textView_nickname.setText(readUser.getNickname());
+            textView_location.setText(readUser.getCountry());
+            textView_DOB.setText(dateInStringFormat);
+            textView_height.setText(heightStrings.first + heightStrings.second);
+            textView_weight.setText(weightStrings.first + weightStrings.second);
+            textView_gender.setText(readUser.getGender());
+        }
+
+        @Override
+        public void onFailure() {
+            showToast("User profile was not saved!");
+        }
+    };
+
+
 
     // A simple method to show toast messages.
     private void showToast(String message) {
@@ -443,16 +516,50 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         return userObject;
     }
 
+    public long dateToLong(String dateOfBirth){
+        // Get long date
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        Timestamp DOBlong = null;
+        long userDOB = 0;
+
+        try {
+            Date date = formatter.parse(dateOfBirth);
+            if (date != null) {
+                DOBlong = new Timestamp(date.getTime());
+                userDOB = DOBlong.getTime();
+            }
+        } catch (ParseException e) {
+            showToast("Error DOB format error");
+        }
+        return userDOB;
+    }
+
+    public String longToDateString(long milli){
+        // Milliseconds since epoch (obtained from date.getTime())
+        long milliseconds = milli; // Example milliseconds (15th April 2024)
+
+        // Create a Date object from milliseconds
+        Date date = new Date(milliseconds);
+
+        // Create a SimpleDateFormat object for formatting the date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+        // Format the date into a legible string
+        String formattedDate = sdf.format(date);
+        return formattedDate;
+    }
+
+
     private void displayCustomSharingDialog(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         // Array to store user information
-        String[] userInfo = new String[5];
-        int[] textViewIds = {R.id.nickname, R.id.userLocation, R.id.dateOfBirth, R.id.userHeight, R.id.userWeight};
+        String[] userInfo = new String[6];
+        int[] textViewIds = {R.id.nickname, R.id.userLocation, R.id.dateOfBirth, R.id.userHeight, R.id.userWeight, R.id.gender};
 
         // Array to store detail labels
-        String[] detailNames = {"Nickname", "Location", "Date of Birth", "Height", "Weight"};
+        String[] detailNames = {"Nickname", "Location", "Date of Birth", "Height", "Weight", "Gender"};
 
         StringBuilder alertMessageBuilder = new StringBuilder("Do you allow OpenTracks to store and display the following information on the leaderboard?\n\n");
 
@@ -470,6 +577,17 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
             }
         }
 
+
+        TextView heightText = getView().findViewById(R.id.userHeight);
+        String heightToEdit = heightText.getText().toString();
+        heightToEdit = removeCharsFromString(heightToEdit);
+        TextView weightText = getView().findViewById(R.id.userWeight);
+        String weightToEdit = weightText.getText().toString();
+        weightToEdit= removeCharsFromString(weightToEdit);
+
+        UserModel user = new UserModel(userInfo[0], userInfo[1], dateToLong(userInfo[2]), userInfo[5], Integer.valueOf(heightToEdit), Integer.valueOf(weightToEdit));
+
+
         String alertMessage = alertMessageBuilder.toString();
 
         builder.setTitle("Confirm Selection")
@@ -480,48 +598,27 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 //                    userModel.setSocialAllow(true);
                     showToast("Updated sharing permissions and data will be shared on the leaderboard.");
                     leaderboardSwitch.setChecked(true); // Visually indicate sharing is enabled
-
-                    // TODO: Save the updated UserModel to the database
+                    user.setSocialAllow(true);
+                    FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
                 })
-                .setNegativeButton("CANCEL", (dialog, which) -> {
+                .setNegativeButton("DENY", (dialog, which) -> {
 //                    UserModel userModel = new UserModel(); // we need to get current UserID and initialize.
  //                   userModel.setSocialAllow(false);
                     showToast("Sharing not enabled. Data will remain private.");
                     leaderboardSwitch.setChecked(false); // Visually indicate sharing is not enabled
-
-                    // TODO: Save the updated UserModel to the database
+                    user.setSocialAllow(false);
+                    FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
                 })
                 .show();
     }
-
-    // TODO: Implement saving logic here.
-    private void saveProfileData(String nickname, String dateOfBirth, String height, String weight, String gender, String location) {
-
-
-
-    }
-
     @Override
+
+    //TODO: fix this
     public void onStart() {
         super.onStart();
         ((SettingsActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings_ui_title);
-
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
-            TextView heightView = getView().findViewById(R.id.userHeight);
-            TextView weightView = getView().findViewById(R.id.userWeight);
-
-            UnitSystem unitSystem = getUnitSystem();
-
-            Height height = new Height(180);
-            Pair<String, String> heightStrings = HeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getHeightParts(height);
-
-            Weight weight = new Weight(80);
-            Pair<String, String> weightStrings = WeightFormatter.Builder().setUnit(unitSystem).build(getContext()).getWeightParts(weight);
-
-            heightView.setText(heightStrings.first + heightStrings.second);
-            weightView.setText(weightStrings.first + weightStrings.second);
-
             //check if profile picture has been changed from default and load the new picture
             if (ProfilePictureExists()) {
                 displayProfilePicture();
@@ -552,5 +649,17 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         return myPath.exists();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirestoreCRUDUtil.getInstance().getEntry("users", systemID(), callback);
+    }
+
+    //TODO: Remove once there is offline data persistence through Firestore
+    public static String systemID() {
+        String id = System.getProperty("http.agent");
+        id = id.replace(" ", "");
+        return id;
+    }
 
 }
