@@ -37,7 +37,7 @@ limitations under the License.
     <string name="sharing_option_share_with">Share With</string>
     <string name="sharing_option_public">Public</string>
     <string name="sharing_option_friends">Friends</string>
-    <string name="sharing_option_no_one">No One</string>
+    <string name="sharing_option_select">Choose from contacts</string>
     <string name="sharing_location_key">sharing_location</string>
     <string name="sharing_location_title">Sharing Location</string>
     <string name="sharing_location_summary">Choose who can see your location</string>
