@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -61,6 +62,7 @@ import de.dennisguse.opentracks.data.models.WeightFormatter;
 import de.dennisguse.opentracks.data.FirestoreCRUDUtil;
 import de.dennisguse.opentracks.data.interfaces.ReadCallback;
 import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
+import android.content.ContentResolver;
 
 
 import android.app.DatePickerDialog;
@@ -314,8 +316,8 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         {
             editDateOfBirth.setText(DOBText.getText().toString());
         }
-        editHeight.setText(heightText.getText().toString());
-        editWeight.setText(weightText.getText().toString());
+        editHeight.setText(heightToEdit);
+        editWeight.setText(weightToEdit);
 
         Spinner spinnerGender = formView.findViewById(R.id.spinnerGender);
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getContext(),
@@ -402,8 +404,8 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
         UserModel user = new UserModel(nickname, location, dateToLong(dateOfBirth), gender, Integer.valueOf(height), Integer.valueOf(weight));
 
-        FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
-        FirestoreCRUDUtil.getInstance().getEntry("users", systemID(), callback);
+        FirestoreCRUDUtil.getInstance().createEntry("users", uniqueId(), user.toJSON(), null);
+        FirestoreCRUDUtil.getInstance().getEntry("users", uniqueId(), callback);
     }
 
     ReadCallback callback = new ReadCallback() {
@@ -599,7 +601,7 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                     showToast("Updated sharing permissions and data will be shared on the leaderboard.");
                     leaderboardSwitch.setChecked(true); // Visually indicate sharing is enabled
                     user.setSocialAllow(true);
-                    FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
+                    FirestoreCRUDUtil.getInstance().createEntry("users", uniqueId(), user.toJSON(), null);
                 })
                 .setNegativeButton("DENY", (dialog, which) -> {
 //                    UserModel userModel = new UserModel(); // we need to get current UserID and initialize.
@@ -607,7 +609,7 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                     showToast("Sharing not enabled. Data will remain private.");
                     leaderboardSwitch.setChecked(false); // Visually indicate sharing is not enabled
                     user.setSocialAllow(false);
-                    FirestoreCRUDUtil.getInstance().createEntry("users", systemID(), user.toJSON(), null);
+                    FirestoreCRUDUtil.getInstance().createEntry("users", uniqueId(), user.toJSON(), null);
                 })
                 .show();
     }
@@ -652,14 +654,20 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        FirestoreCRUDUtil.getInstance().getEntry("users", systemID(), callback);
+        FirestoreCRUDUtil.getInstance().getEntry("users", uniqueId(), callback);
     }
 
     //TODO: Remove once there is offline data persistence through Firestore
-    public static String systemID() {
+    public String uniqueId() {
         String id = System.getProperty("http.agent");
         id = id.replace(" ", "");
-        return id;
+
+        ContentResolver contentResolver = requireActivity().getContentResolver();
+        String androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID);
+
+        String uniqueId = id + androidId;
+
+        return uniqueId;
     }
 
 }
