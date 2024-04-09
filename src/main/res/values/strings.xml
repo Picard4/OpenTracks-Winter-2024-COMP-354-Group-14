@@ -849,7 +849,7 @@ limitations under the License.
     <string name="tab_text_2">Tab 2</string>
     <string name="calculate_moving_average">Moving Average</string>
 
-    <!-- competency -->
+    <!-- competency list -->
     <string-array name="competencies">
         <item> Beginner </item>
         <item> Intermediate </item>

@@ -70,6 +70,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
         });
 
+
         Spinner competencies = findViewById(R.id.spinner_competency);
         competencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
