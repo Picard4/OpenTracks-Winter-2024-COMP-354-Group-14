@@ -50,17 +50,17 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         findViewById(R.id.btnTen).setOnClickListener(v -> {
             numberOfUsers = 10;
-            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
         });
 
         findViewById(R.id.btnTwentyFive).setOnClickListener(v -> {
             numberOfUsers = 25;
-            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
         });
 
         findViewById(R.id.btnFifty).setOnClickListener(v -> {
-            numberOfUsers = 50;
-            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            numberOfUsers = 0;
+            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
         });
 
         android.view.View averageButton = findViewById(R.id.btnAverageScoreAggregation);
