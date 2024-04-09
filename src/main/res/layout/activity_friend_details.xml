@@ -1,0 +1,13 @@
+<!-- activity_your_activity_name.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No user info"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
