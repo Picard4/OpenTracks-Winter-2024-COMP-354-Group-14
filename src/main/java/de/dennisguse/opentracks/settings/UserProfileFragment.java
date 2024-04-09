@@ -3,7 +3,6 @@ package de.dennisguse.opentracks.settings;
 import static de.dennisguse.opentracks.settings.PreferencesUtils.getUnitSystem;
 
 import android.app.AlertDialog;
-import android.app.Activity;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,13 +11,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +26,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.Intent;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
@@ -48,25 +45,23 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Height;
 import de.dennisguse.opentracks.data.models.HeightFormatter;
-import de.dennisguse.opentracks.data.models.Speed;
-import de.dennisguse.opentracks.data.models.SpeedFormatter;
 import de.dennisguse.opentracks.data.models.UserModel;
 import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
 
 import android.app.DatePickerDialog;
-import android.widget.DatePicker;
+
 import java.util.Calendar;
 import java.util.Locale;
-import android.widget.ArrayAdapter;
+
 import android.widget.Spinner;
-import java.util.Arrays;
-import java.util.Locale;
+
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -266,8 +261,6 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         TextView DOBText = getView().findViewById(R.id.dateOfBirth);
         TextView heightText = getView().findViewById(R.id.userHeight);
         TextView weightText = getView().findViewById(R.id.userWeight);
-//        TextView countryText = getView().findViewById(R.id.userLocation);
-//        TextView genderText = getView().findViewById(R.id.gender);
 
 
         // Initialize all the EditText fields and Spinners.
@@ -294,37 +287,26 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         editHeight.setText(heightText.getText().toString());
         editWeight.setText(weightText.getText().toString());
 
+        // Gender spinner
         Spinner spinnerGender = formView.findViewById(R.id.spinnerGender);
-        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.gender_options, android.R.layout.simple_spinner_item);
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] genderOptions = new String[]{"Male", "Female", "Other"};
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(formView.getContext(), android.R.layout.simple_spinner_dropdown_item, genderOptions);
         spinnerGender.setAdapter(genderAdapter);
 
+        // Location spinner
         Spinner spinnerLocation = formView.findViewById(R.id.spinnerLocation);
-        String[] isoCountryCodes = Locale.getISOCountries();
-        String[] countryNames = new String[isoCountryCodes.length];
-
-        for (int i = 0; i < isoCountryCodes.length; i++) {
-            Locale locale = new Locale("", isoCountryCodes[i]);
-            countryNames[i] = locale.getDisplayCountry();
-        }
-
-        Arrays.sort(countryNames); // Sort the country names alphabetically
-
-        // Move Canada to the beginning of the array
-        for (int i = 0; i < countryNames.length; i++) {
-            if (countryNames[i].equalsIgnoreCase("Canada")) {
-                String temp = countryNames[i];
-                System.arraycopy(countryNames, 0, countryNames, 1, i);
-                countryNames[0] = temp;
-                break;
+        SortedSet<String> countryOptions = new TreeSet<>();
+        for(Locale locale : Locale.getAvailableLocales()) {
+            if (!TextUtils.isEmpty(locale.getDisplayCountry()) && !locale.getDisplayCountry().equals("Canada")) {
+                countryOptions.add(locale.getDisplayCountry());
             }
         }
+        String[] countries = new String[countryOptions.size() + 1];
+        countries[0] = "Canada";
+        System.arraycopy(countryOptions.toArray(new String[0]), 0, countries, 1, countryOptions.size());
 
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, countryNames);
-        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerLocation.setAdapter(locationAdapter);
+        ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(formView.getContext(), android.R.layout.simple_spinner_dropdown_item, countries);
+        spinnerLocation.setAdapter(countryAdapter);
 
 
         // Set up the AlertDialog.
