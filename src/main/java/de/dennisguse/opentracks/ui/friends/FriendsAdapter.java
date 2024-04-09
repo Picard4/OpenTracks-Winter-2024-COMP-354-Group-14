@@ -30,6 +30,7 @@ public class FriendsAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        //final String PostKey = getItem(position);
 
         View friendsListItemView = convertView;
         FriendsViewHolder holder = null;
@@ -50,7 +51,7 @@ public class FriendsAdapter extends ArrayAdapter<String> {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getContext(), FriendClActivity.class);
-
+                //  intent.putExtra("PostKey", PostKey);
                 // Start the activity
                 getContext().startActivity(intent);
 
