@@ -49,22 +49,15 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
 
-        /* Button Events */
-        android.view.View averageButton = findViewById(R.id.btnAverageScoreAggregation);
-        android.view.View bestButton = findViewById(R.id.btnBestScoreAggregation);
-        android.view.View everyoneButton = findViewById(R.id.btnEveryone);
-        android.view.View thisSeasonButton = findViewById(R.id.btnThisSeason);
-        android.view.View allResortsButton = findViewById(R.id.btnAllResorts);
+        int optionAvailableColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks);
+        int optionSelectedColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks_transparent);
 
         android.view.View tenButton = findViewById(R.id.btnTen);
         android.view.View twentyFiveButton = findViewById(R.id.btnTwentyFive);
-        android.view.View allButton = findViewById(R.id.btnFifty);
+        android.view.View allButton = findViewById(R.id.btnAll);
 
         android.view.View refreshButton = findViewById(R.id.btnRefresh);
         android.view.View backButton = findViewById(R.id.back);
-
-        int optionAvailableColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks);
-        int optionSelectedColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks_transparent);
 
         refreshButton.setOnClickListener(v -> leaderboardPagerAdapter.refreshLeaderboardFragmentData());
 
@@ -75,7 +68,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
             findViewById(R.id.btnTen).setBackgroundColor(optionSelectedColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
-            findViewById(R.id.btnFifty).setBackgroundColor(optionAvailableColor);
+            findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
         twentyFiveButton.setOnClickListener(v -> {
@@ -83,15 +76,16 @@ public class LeaderboardActivity extends AppCompatActivity {
             leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
             findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionSelectedColor);
-            findViewById(R.id.btnFifty).setBackgroundColor(optionAvailableColor);
+            findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
-
-        findViewById(R.id.btnAll).setOnClickListener(v -> {
-            numberOfUsers = 50;
-            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+        allButton.setOnClickListener(v -> {
+            numberOfUsers = 0;
+            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
+            findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
+            findViewById(R.id.btnAll).setBackgroundColor(optionSelectedColor);
         });
-
 
         Spinner competencies = findViewById(R.id.spinner_competency);
         competencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -116,25 +110,11 @@ public class LeaderboardActivity extends AppCompatActivity {
         competency_adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         competencies.setAdapter(competency_adapter);
 
-
         android.view.View averageButton = findViewById(R.id.btnAverageScoreAggregation);
         android.view.View bestButton = findViewById(R.id.btnBestScoreAggregation);
         android.view.View everyoneButton = findViewById(R.id.btnEveryone);
         android.view.View thisSeasonButton = findViewById(R.id.btnThisSeason);
         android.view.View allResortsButton = findViewById(R.id.btnAllResorts);
-
-        int optionAvailableColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks);
-        int optionSelectedColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks_transparent);
-
-
-        allButton.setOnClickListener(v -> {
-            numberOfUsers = 0;
-            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
-            findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
-            findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
-            findViewById(R.id.btnFifty).setBackgroundColor(optionSelectedColor);
-        });
-
  
         averageButton.setBackgroundColor(optionSelectedColor);
         everyoneButton.setBackgroundColor(optionSelectedColor);
@@ -172,6 +152,4 @@ public class LeaderboardActivity extends AppCompatActivity {
             allResortsButton.setBackgroundColor(optionSelectedColor);
         });
     }
-
-
 }
