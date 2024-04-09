@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Sharpening Information">
+    <PreferenceCategory android:title="@string/sharpening_text">
 
 
         <EditTextPreference
             android:key="last_sharpening_date"
             android:title="@string/settings_maintenance_last_sharpening_date"
+            android:dialogTitle="@string/settings_maintenance_last_sharpening_date_dialog"
             android:inputType="date"/>
         <ListPreference
             android:key="base_angle"
             android:title="@string/settings_maintenance_base_angle"
-            android:dialogTitle="Base angle"
+            android:dialogTitle="@string/settings_maintenance_base_angle"
             android:entries="@array/angle_entries"
             android:entryValues="@array/angle_values"
             android:defaultValue="0"
@@ -20,7 +21,7 @@
         <ListPreference
             android:key="Edge_angle"
             android:title="@string/settings_maintenance_edge_angle"
-            android:dialogTitle="Edge Angle "
+            android:dialogTitle="@string/settings_maintenance_edge_angle"
             android:entries="@array/angle_entries"
             android:entryValues="@array/angle_values"
             android:defaultValue="0"
@@ -29,7 +30,7 @@
         <ListPreference
             android:key="sharpening_interval"
             android:title= "@string/settings_maintenance_sharpening_interval"
-            android:dialogTitle="Select sharpening interval"
+            android:dialogTitle="@string/settings_maintenance_sharpening_interval"
             android:entries="@array/interval_entries"
             android:entryValues="@array/interval_values"
             android:defaultValue="0"

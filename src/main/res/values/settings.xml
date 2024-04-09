@@ -429,5 +429,7 @@
     </integer-array>
 
     <string name="prefs_last_version_key" translatable="false">lastVersionKey</string>
-
+    <string name="settings_stats_display_key" translatable="false">settingsStatsDisplay</string>
+    <string name="plotting_metric_key" translatable="false">plottingMetricKey</string>
+    <string name="plotting_frequency_key" translatable="false">plottingFreqKey</string>
 </resources>

@@ -751,6 +751,28 @@ public class PreferencesUtils {
         return resources.getString(R.string.stats_custom_layout_default_layout) + CsvLayoutUtils.ITEM_SEPARATOR + getLayoutColumnsByDefault() + CsvLayoutUtils.ITEM_SEPARATOR + buildDefaultFields();
     }
 
+
+    public static int getMetricPreferenceValue()
+    {
+        try{
+            return getInt(R.string.plotting_metric_key,0);
+        }
+        catch(Exception e)
+        {
+            return 0;
+        }
+    }
+    public static int getFrequencyPreferenceValue()
+    {
+        try{
+            return getInt(R.string.plotting_frequency_key,0);
+        }
+        catch(Exception e)
+        {
+            return 0;
+        }
+    }
+
     public static String getDefaultLayoutName() {
         return resources.getString(R.string.stats_custom_layout_default_layout);
     }
