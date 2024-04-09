@@ -14,6 +14,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 import de.dennisguse.opentracks.R;
 
+
 public class SkiProfileFragment extends PreferenceFragmentCompat {
     private static final String PREF_LEADERBOARD_TERMS_ACCEPTED = "leaderboard_terms_accepted";
 
@@ -21,14 +22,20 @@ public class SkiProfileFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings_ski_profile);
 
-        // Handle Sharing Location preference click
-        Preference sharingPref = findPreference("sharing_location");
-        if (sharingPref != null) {
-            sharingPref.setOnPreferenceClickListener(preference -> {
-                showEditSharingPreferencesDialog();
+
+        SwitchPreferenceCompat shareLocationSwitch = (SwitchPreferenceCompat) findPreference("live_location_sharing");
+
+        shareLocationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean isChecked = (boolean) newValue; // Extract new state
+                if (isChecked) {
+                    showEditSharingPreferencesDialog();
+                }
                 return true;
-            });
-        }
+            }
+        });
+
 
         // Handle Leaderboard Participation preference change
         SwitchPreferenceCompat leaderboardParticipationPref = findPreference("leaderboard_participation");
@@ -114,6 +121,17 @@ public class SkiProfileFragment extends PreferenceFragmentCompat {
                 radioGroup.check(R.id.radio_public);
                 break;
         }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(formView); // Set the inflated formView as the dialog's content
+        // (Optionally set title, buttons, etc.)
+
+        // Create the dialog object
+        AlertDialog dialog = builder.create();
+
+        // Display the dialog
+        dialog.show();
+
     }
 
 
