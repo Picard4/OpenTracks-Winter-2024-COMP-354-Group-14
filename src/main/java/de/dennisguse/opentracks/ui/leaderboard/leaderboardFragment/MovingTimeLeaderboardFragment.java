@@ -1,79 +1,122 @@
 package de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import java.time.Duration;
 import de.dennisguse.opentracks.data.models.Ranking;
 import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
 public class MovingTimeLeaderboardFragment extends LeaderboardFragment {
 
-    // Temporary boolean to confirm that refresh works when expected to; delete once Issue 67 is finished.
-    private boolean averageRefresh;
-    private boolean bestRefresh;
-
     @Override
     protected List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
-        // TODO: Replace the test data with code that gathers the appropriate Ranking data
-        List<Ranking> latestRankingsData;
-        if (!averageRefresh)
-            // Get a different data set if this is the first time the rankings data is being collected
-            latestRankingsData = getTestData();
-        else
-            latestRankingsData = getAltTestData();
-        // All future rankings data collections should be refreshes
-        averageRefresh = true;
-        return latestRankingsData;
+        Map<String, SummedStatTrackUser> statsMap = new HashMap<>();
+        for (LeaderboardPagerAdapter.PlaceHolderTrackUser trackUser : latestLeaderboardData) {
+            if (!trackUser.socialAllow)
+                continue;
+
+            statsMap.computeIfAbsent(trackUser.nickname, k -> new SummedStatTrackUser(trackUser));
+            SummedStatTrackUser existingRecord = statsMap.get(trackUser.nickname);
+            existingRecord.getPlaceHolderTrackUser().trackStatistics.setMovingTime(
+                    existingRecord.getPlaceHolderTrackUser().trackStatistics.getMovingTime().plus(
+                            trackUser.trackStatistics.getMovingTime()
+                    )
+            );
+            existingRecord.incrementSumFactorCount();
+        }
+
+        List<SummedStatTrackUser> latestSummedLeaderboardData = new ArrayList<>(statsMap.values());
+        latestSummedLeaderboardData.sort(new SortByAverageMovingTime());
+
+        List<Ranking> rankingsData = new ArrayList<>();
+        int rank = 0;
+        int consecutiveTies = 0;
+        String lastScore = "";
+        for (SummedStatTrackUser summedStatTrackUser : latestSummedLeaderboardData) {
+            Duration averageMovingTime = summedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getMovingTime().dividedBy(summedStatTrackUser.getSumFactorCount());
+            Ranking nextRanking = new Ranking(
+                    ++rank,
+                    summedStatTrackUser.getPlaceHolderTrackUser().nickname,
+                    summedStatTrackUser.getPlaceHolderTrackUser().location,
+                    getTimeDisplay(averageMovingTime)
+            );
+            if (nextRanking.getScore().equals(lastScore)) {
+                consecutiveTies++;
+                nextRanking.setRank(rank - consecutiveTies);
+            }
+            else
+                consecutiveTies = 0;
+            rankingsData.add(nextRanking);
+            lastScore = nextRanking.getScore();
+        }
+        return rankingsData;
+    }
+
+    private class SortByAverageMovingTime implements Comparator<SummedStatTrackUser> {
+        @Override
+        public int compare(SummedStatTrackUser user1, SummedStatTrackUser user2) {
+            return user2.getPlaceHolderTrackUser().trackStatistics.getMovingTime().compareTo(
+                    user1.getPlaceHolderTrackUser().trackStatistics.getMovingTime());
+        }
+    }
+
+    private String getTimeDisplay(Duration duration) {
+        long seconds = duration.getSeconds();
+        long absSeconds = Math.abs(seconds);
+        String positive = String.format(
+                "%d:%02d:%02d",
+                absSeconds / 3600,
+                (absSeconds % 3600) / 60,
+                absSeconds % 60);
+        return seconds < 0 ? "-" + positive : positive;
     }
 
     @Override
     protected List<Ranking> calculateLatestBestRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
-        // TODO: Replace the test data with code that gathers the appropriate Ranking data
-        List<Ranking> latestRankingsData;
-        if (!bestRefresh)
-            // Get a different data set if this is the first time the rankings data is being collected
-            latestRankingsData = getAltTestData();
-        else
-            latestRankingsData = getTestData();
-        // All future rankings data collections should be refreshes
-        bestRefresh = true;
-        return latestRankingsData;
+        Map<String, LeaderboardPagerAdapter.PlaceHolderTrackUser> statsMap = new HashMap<>();
+        for (LeaderboardPagerAdapter.PlaceHolderTrackUser trackUser : latestLeaderboardData) {
+            if (!trackUser.socialAllow)
+                continue;
+
+            statsMap.computeIfAbsent(trackUser.nickname, k -> trackUser);
+            if (statsMap.get(trackUser.nickname).trackStatistics.getMovingTime().compareTo(trackUser.trackStatistics.getMovingTime()) < 0) {
+                statsMap.put(trackUser.nickname, trackUser);
+            }
+        }
+
+        latestLeaderboardData = new ArrayList<>(statsMap.values());
+        latestLeaderboardData.sort(new SortByBestMovingTime());
+
+        List<Ranking> rankingsData = new ArrayList<>();
+        int rank = 0;
+        int consecutiveTies = 0;
+        String lastScore = "";
+        for (LeaderboardPagerAdapter.PlaceHolderTrackUser trackUser : latestLeaderboardData) {
+            Ranking nextRanking = new Ranking(
+                    ++rank,
+                    trackUser.nickname,
+                    trackUser.location,
+                    getTimeDisplay(trackUser.trackStatistics.getMovingTime())
+            );
+            if (nextRanking.getScore().equals(lastScore)) {
+                consecutiveTies++;
+                nextRanking.setRank(rank - consecutiveTies);
+            }
+            else
+                consecutiveTies = 0;
+            rankingsData.add(nextRanking);
+            lastScore = nextRanking.getScore();
+        }
+        return rankingsData;
     }
 
-    private List<Ranking> getTestData() {
-        List<Ranking> rankings = new ArrayList<>();
-        rankings.add(new Ranking(1, "Da bes", "Steamboat Springs",  Double.toString(25)));
-        rankings.add(new Ranking(2, "Second place", "North California CA",  Double.toString(24)));
-        rankings.add(new Ranking(3, "Tertiary", "Steamboat Springs, Color Red",  Double.toString(23)));
-        rankings.add(new Ranking(4,  "Quad Runner", "Montreal",  Double.toString(22)));
-        rankings.add(new Ranking(5,  "Quintuple champ", "Steamboat Springs",  Double.toString(21)));
-        rankings.add(new Ranking(6,  "Gang of Six", "Montreal",  Double.toString(20)));
-        rankings.add(new Ranking(7,  "Seven", "Steamboat Springs",  Double.toString(19)));
-        rankings.add(new Ranking(8,  "Eight", "Montreal",  Double.toString(18)));
-        rankings.add(new Ranking(9,  "Ninth", "Montreal",  Double.toString(17)));
-        rankings.add(new Ranking(10,  "DoubleDigits", "Steamboat Springs",  Double.toString(16)));
-        rankings.add(new Ranking(11,  "El e Ven", "Montreal",  Double.toString(15)));
-        rankings.add(new Ranking(12,  "Twelve", "Montreal",  Double.toString(14)));
-        rankings.add(new Ranking(13,  "XIII", "Montreal",  Double.toString(13)));
-        rankings.add(new Ranking(14,  "Four Teen", "Steamboat Springs",  Double.toString(12)));
-        rankings.add(new Ranking(15, "Fif Teen", "Montreal",  Double.toString(11)));
-        rankings.add(new Ranking(16, "Six Teen", "Steamboat Springs",  Double.toString(10)));
-        rankings.add(new Ranking(17,  "Seven+10", "Montreal",  Double.toString(9)));
-        rankings.add(new Ranking(18,  "Eight een", "Montreal",  Double.toString(8)));
-        rankings.add(new Ranking(19,  "Nineteen", "Steamboat Springs",  Double.toString(7)));
-        rankings.add(new Ranking(20,  "10+10", "Steamboat Springs",  Double.toString(6)));
-        rankings.add(new Ranking(21,  "Twenty-first", "Montreal",  Double.toString(5)));
-        rankings.add(new Ranking(22,  "TwoTwo", "Montreal",  Double.toString(4)));
-        rankings.add(new Ranking(23,  "TwoThree", "Steamboat Springs",  Double.toString(3)));
-        rankings.add(new Ranking(24,  "The day", "Montreal",  Double.toString(2)));
-        rankings.add(new Ranking(25,  "The saved day", "Montreal",  Double.toString(1)));
-        return rankings;
-    }
-
-    private List<Ranking> getAltTestData() {
-        List<Ranking> rankings = new ArrayList<>();
-        rankings.add(new Ranking(1, "Da bes", "Steamboat Springs",  Double.toString(25)));
-        rankings.add(new Ranking(2,  "The saved day", "Montreal",  Double.toString(1)));
-        return rankings;
+    private class SortByBestMovingTime implements Comparator<LeaderboardPagerAdapter.PlaceHolderTrackUser> {
+        @Override
+        public int compare(LeaderboardPagerAdapter.PlaceHolderTrackUser user1, LeaderboardPagerAdapter.PlaceHolderTrackUser user2) {
+            return user2.trackStatistics.getMovingTime().compareTo(user1.trackStatistics.getMovingTime());
+        }
     }
 }

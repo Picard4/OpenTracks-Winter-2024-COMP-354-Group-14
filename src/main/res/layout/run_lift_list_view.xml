@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/run_lift_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.OpenTracks.PrimaryHeader"
+            android:text="@string/run_lift_name" />
+
+        <TextView
+            android:id="@+id/run_lift_elevation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.OpenTracks.PrimaryHeader"
+            android:text="@string/run_lift_elevation" />
+
+        <TextView
+            android:id="@+id/run_lift_distance"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.OpenTracks.PrimaryHeader"
+            android:text="@string/run_lift_distance" />
+
+        <TextView
+            android:id="@+id/run_lift_time"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.OpenTracks.PrimaryHeader"
+            android:text="@string/run_lift_time" />
+
+        <TextView
+            android:id="@+id/run_lift_speed"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.OpenTracks.PrimaryHeader"
+            android:text="@string/run_lift_speed" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/stats_separator" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/run_lift_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/run_lift_list_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="?attr/textAppearanceHeadline4"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/run_lift_lift_empty_message" />
+
+</LinearLayout>

@@ -121,6 +121,13 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
 
+    public void setNumberOfUsers(int numberOfUsers) {
+        movingTimeLeaderboardFragment.setDisplayAmount(numberOfUsers);
+        distanceLeaderboardFragment.setDisplayAmount(numberOfUsers);
+        maxSpeedLeaderboardFragment.setDisplayAmount(numberOfUsers);
+        averageMovingSpeedLeaderboardFragment.setDisplayAmount(numberOfUsers);
+        refreshLeaderboardFragmentData();
+    }
     private List<PlaceHolderTrackUser> readLatestLeaderboardData() {
         // This is where we get the data from the database for the runs that will be in the leaderboard.
         List<PlaceHolderTrackUser> testData = new ArrayList();
@@ -214,6 +221,18 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         stats.setMaxSpeed(new Speed(150));
         stats.setMovingTime(Duration.ofMinutes(59));
         testData.add(new PlaceHolderTrackUser("User Ten","Steamboat Springs", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(134));
+        stats.setMaxSpeed(new Speed(130));
+        stats.setMovingTime(Duration.ofMinutes(59));
+        testData.add(new PlaceHolderTrackUser("User Eleven","Steamboat Springs", true, stats));
+
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(159));
+        stats.setMaxSpeed(new Speed(120));
+        stats.setMovingTime(Duration.ofMinutes(34));
+        testData.add(new PlaceHolderTrackUser("User Twelve","Steamboat Springs", true, stats));
 
         stats = new TrackStatistics();
         stats.setTotalDistance(new Distance(100));

@@ -82,3 +82,5 @@ captures/
 Appfile
 releasePlayStore/*
 Gemfile.lock
+
+.DS_Store

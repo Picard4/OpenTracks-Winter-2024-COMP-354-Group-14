@@ -2,12 +2,19 @@ package de.dennisguse.opentracks.ui.leaderboard;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
 
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
@@ -42,36 +49,73 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
 
-        /* Button Events */
-        
-        findViewById(R.id.btnRefresh).setOnClickListener(v -> leaderboardPagerAdapter.refreshLeaderboardFragmentData());
+        int optionAvailableColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks);
+        int optionSelectedColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks_transparent);
 
-        findViewById(R.id.back).setOnClickListener(v -> onBackPressed());
+        android.view.View tenButton = findViewById(R.id.btnTen);
+        android.view.View twentyFiveButton = findViewById(R.id.btnTwentyFive);
+        android.view.View allButton = findViewById(R.id.btnAll);
 
-        findViewById(R.id.btnTen).setOnClickListener(v -> {
+        android.view.View refreshButton = findViewById(R.id.btnRefresh);
+        android.view.View backButton = findViewById(R.id.back);
+
+        refreshButton.setOnClickListener(v -> leaderboardPagerAdapter.refreshLeaderboardFragmentData());
+
+        backButton.setOnClickListener(v -> onBackPressed());
+
+        tenButton.setOnClickListener(v -> {
             numberOfUsers = 10;
-            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            findViewById(R.id.btnTen).setBackgroundColor(optionSelectedColor);
+            findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
+            findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
-        findViewById(R.id.btnTwentyFive).setOnClickListener(v -> {
+        twentyFiveButton.setOnClickListener(v -> {
             numberOfUsers = 25;
-            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
+            findViewById(R.id.btnTwentyFive).setBackgroundColor(optionSelectedColor);
+            findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
-        findViewById(R.id.btnFifty).setOnClickListener(v -> {
-            numberOfUsers = 50;
-            //leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+        allButton.setOnClickListener(v -> {
+            numberOfUsers = 0;
+            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
+            findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
+            findViewById(R.id.btnAll).setBackgroundColor(optionSelectedColor);
         });
+
+        Spinner competencies = findViewById(R.id.spinner_competency);
+        competencies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView)view).setText(null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ArrayList<String> competency_list = new ArrayList<>();
+        competency_list.add("All");
+        competency_list.add("Beginner");
+        competency_list.add("Intermediate");
+        competency_list.add("Expert");
+
+        ArrayAdapter<String> competency_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, competency_list);
+        competency_adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        competencies.setAdapter(competency_adapter);
 
         android.view.View averageButton = findViewById(R.id.btnAverageScoreAggregation);
         android.view.View bestButton = findViewById(R.id.btnBestScoreAggregation);
         android.view.View everyoneButton = findViewById(R.id.btnEveryone);
         android.view.View thisSeasonButton = findViewById(R.id.btnThisSeason);
         android.view.View allResortsButton = findViewById(R.id.btnAllResorts);
-
-        int optionAvailableColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks);
-        int optionSelectedColor = ContextCompat.getColor(getApplicationContext(), R.color.opentracks_transparent);
-
+ 
         averageButton.setBackgroundColor(optionSelectedColor);
         everyoneButton.setBackgroundColor(optionSelectedColor);
 

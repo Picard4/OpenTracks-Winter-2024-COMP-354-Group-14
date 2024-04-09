@@ -10,22 +10,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.dennisguse.opentracks.R;
 
 public class FriendsAdapter extends ArrayAdapter<String> {
     Context context;
-    int[] images;
-    String[] username;
+    int images;
+    ArrayList<String> username;
 
-    public FriendsAdapter(Context context, String[] username, int[] images) {
+    public FriendsAdapter(Context context, ArrayList<String> username, int images) {
         super(context, R.layout.friends_list_item,R.id.user_name, username);
         this.context = context;
         this.images = images;
         this.username = username;
     }
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -41,13 +42,13 @@ public class FriendsAdapter extends ArrayAdapter<String> {
             holder = (FriendsViewHolder) friendsListItemView.getTag();
         }
 
-        holder.userImages.setImageResource(images[position]);
-        holder.username.setText(username[position]);
+        holder.userImages.setImageResource(images);
+        holder.username.setText(username.get(position));
 
         friendsListItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "You clicked:" + username[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "You clicked:" + username.get(position), Toast.LENGTH_SHORT).show();
             }
         });
 
