@@ -100,9 +100,15 @@ limitations under the License.
     <style name="MaterialSwitchPreferenceCompat" parent="@style/Preference.SwitchPreferenceCompat.Material">
         <item name="widgetLayout">@layout/view_preference_switch</item>
     </style>
+
     <string-array name="display_options">
         <item>10</item>
         <item>25</item>
         <item>50</item>
     </string-array>
+
+    <style name="circularProfilePic">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

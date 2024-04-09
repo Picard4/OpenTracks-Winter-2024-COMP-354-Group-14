@@ -1,5 +1,11 @@
 package de.dennisguse.opentracks;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import android.content.Context;
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import android.widget.Toast;
 
 public class UserMaintenanceData {
     private int sharpeningInterval;
@@ -87,5 +93,26 @@ public class UserMaintenanceData {
     public void setLastWaxingDate(LocalDate lastWaxingDate) {
         this.lastWaxingDate = lastWaxingDate;
     }
+    public static void showDatePickerDialog(Context context, LocalDate currentDate, final DateUpdateListener listener) {
+        Calendar calendar = Calendar.getInstance();
+        if (currentDate != null) {
+            calendar.set(currentDate.getYear(), currentDate.getMonthValue() - 1, currentDate.getDayOfMonth());
+        }
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                LocalDate newDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
+                listener.onDateSet(newDate);
+            }
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+
+    public interface DateUpdateListener {
+        void onDateSet(LocalDate newDate);
+    }
 }

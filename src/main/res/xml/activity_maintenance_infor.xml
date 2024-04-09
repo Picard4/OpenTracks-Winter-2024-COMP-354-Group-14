@@ -8,7 +8,7 @@
             android:key="last_sharpening_date"
             android:title="@string/settings_maintenance_last_sharpening_date"
             android:dialogTitle="@string/settings_maintenance_last_sharpening_date_dialog"
-            android:inputType="date"/>
+            />
         <ListPreference
             android:key="base_angle"
             android:title="@string/settings_maintenance_base_angle"
@@ -43,7 +43,7 @@
         <EditTextPreference
             android:key="last_waxing_date"
             android:title="@string/settings_maintenance_last_wax_date"
-            android:inputType="date"/>
+            />
         <ListPreference
             android:key="wax_type"
             android:title="@string/settings_maintenance_wax_type"

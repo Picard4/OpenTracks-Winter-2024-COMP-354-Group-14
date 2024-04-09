@@ -23,11 +23,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.ContentProviderUtils;
 import de.dennisguse.opentracks.data.ShareContentProvider;
+import de.dennisguse.opentracks.data.models.Chairlift;
+import de.dennisguse.opentracks.data.models.SkiRun;
 import de.dennisguse.opentracks.data.models.Track;
 import de.dennisguse.opentracks.data.tables.MarkerColumns;
 import de.dennisguse.opentracks.data.tables.TrackPointsColumns;
 import de.dennisguse.opentracks.data.tables.TracksColumns;
 import de.dennisguse.opentracks.io.file.TrackFileFormat;
+import de.dennisguse.opentracks.services.TrackDifferentiate;
 import de.dennisguse.opentracks.settings.PreferencesUtils;
 import de.dennisguse.opentracks.stats.OverallStatistics;
 import de.dennisguse.opentracks.services.TrackDifferentiate;
@@ -64,7 +67,6 @@ public class IntentDashboardUtils {
      * version 2: replaced pause/resume trackpoints for track segmentation (lat=100 / lat=200) by TrackPoint.Type.
      */
     private static final int CURRENT_VERSION = 2;
-
     private static final String EXTRAS_OPENTRACKS_IS_RECORDING_THIS_TRACK = "EXTRAS_OPENTRACKS_IS_RECORDING_THIS_TRACK";
     private static final String EXTRAS_SHOULD_KEEP_SCREEN_ON = "EXTRAS_SHOULD_KEEP_SCREEN_ON";
     private static final String EXTRAS_SHOW_WHEN_LOCKED = "EXTRAS_SHOULD_KEEP_SCREEN_ON";
@@ -76,7 +78,6 @@ public class IntentDashboardUtils {
     private static final int NONE_SELECTED = -1;
     
     // Internal reference to sorted TrackPoints into two categories (1) chairLift (2) SkiRun, with internal objects to call for relevant info displaying
-    private TrackDifferentiate trackDifferentiate;
 
     private IntentDashboardUtils() {
     }
@@ -89,6 +90,15 @@ public class IntentDashboardUtils {
      * @param isRecording are we currently recording?
      * @param trackIds the track ids
      */
+
+    private static TrackDifferentiate trackDifferentiate; // Add internal reference
+
+    public static void setTrackDifferentiate(TrackDifferentiate trackDifferentiate) {
+        IntentDashboardUtils.trackDifferentiate = trackDifferentiate;
+    }
+
+
+
     public static void showTrackOnMap(Context context, boolean isRecording, Track.Id... trackIds) {
         Map<String, String> options = TrackFileFormat.toPreferenceIdLabelMap(context.getResources(), IntentDashboardUtils.SHOW_ON_MAP_TRACK_FILE_FORMATS);
         options.put(IntentDashboardUtils.PREFERENCE_ID_DASHBOARD, context.getString(R.string.show_on_dashboard));
@@ -289,6 +299,8 @@ public class IntentDashboardUtils {
      */
     public TrackDifferentiate getTrackDifferentiate(Context context, Track.Id tid){
     	trackDifferentiate = new TrackDifferentiate(tid, context);
+        trackDifferentiate.differentiate();
+        IntentDashboardUtils.setTrackDifferentiate(trackDifferentiate);
         return trackDifferentiate;
     }
 }
