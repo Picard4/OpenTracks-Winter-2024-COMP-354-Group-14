@@ -134,10 +134,12 @@ public class TrackStoppedActivity extends AbstractTrackDeleteActivity implements
 
         //Save run on the external DB
         //NOTE - The UI should be augmented to display success/failure to the user
+        //TODO: The next line should not be commented out
         //FirestoreCRUDUtil.getInstance().createEntry(CRUDConstants.RUNS_TABLE, track.getUuid().toString(), track.toJSON(), null);
 
         //Save run on the external DB
         //NOTE - The UI should be augmented to display success/failure to the user
+        //TODO: The next line should not be commented out
         //FirestoreCRUDUtil.getInstance().createEntry(CRUDConstants.RUNS_TABLE, track.getUuid().toString(), track.toJSON(), null);
 
         TrackUtils.updateTrack(TrackStoppedActivity.this, track, viewBinding.trackEditName.getText().toString(),
