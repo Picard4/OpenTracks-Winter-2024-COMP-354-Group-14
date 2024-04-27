@@ -46,7 +46,7 @@ public class FirestoreCRUDUtilTest {
 
     @Test
     public void testCreateEntry_Failure() {
-        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
         ActionCallback callback = mock(ActionCallback.class);
         JsonObject jsonData = generateMockData();
 
@@ -55,8 +55,8 @@ public class FirestoreCRUDUtilTest {
             ((ActionCallback) invocation.getArgument(3)).onFailure();
             return null;
         }).when(firestoreCRUDUtil).createEntry(isNull(), anyString(), any(JsonObject.class), any(ActionCallback.class));
-        firestoreCRUDUtil.createEntry(CRUDConstants.RUNS_TABLE, trackId, jsonData, callback);
-
+        firestoreCRUDUtil.createEntry(null, trackId, jsonData, callback);
+ 
         verify(callback).onFailure();
     }
     @Test
@@ -96,9 +96,7 @@ public class FirestoreCRUDUtilTest {
 
     @Test
     public void testCreateAndRetrieveEntry_Failure() {
-        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
-        ReadCallback readCallback = mock(ReadCallback.class);
-        ReadCallback readCallback = mock(ReadCallback.class);
+        FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
         ActionCallback createCallback = mock(ActionCallback.class);
         JsonObject jsonData = generateMockData();
 
@@ -183,7 +181,7 @@ public class FirestoreCRUDUtilTest {
 
     @Test
     public void testDeleteEntry_Failure() {
-        FirestoreCRUDUtil firestoreCRUDUtil = FirestoreCRUDUtil.getInstance();
+        FirestoreCRUDUtil firestoreCRUDUtil = mock(FirestoreCRUDUtil.class);
         ActionCallback callback = mock(ActionCallback.class);
 
         // Force failure by passing a null run id
@@ -191,7 +189,7 @@ public class FirestoreCRUDUtilTest {
             ((ActionCallback) invocation.getArgument(2)).onFailure();
             return null;
         }).when(firestoreCRUDUtil).deleteEntry(anyString(), isNull(), any(ActionCallback.class));
-        firestoreCRUDUtil.deleteEntry(CRUDConstants.RUNS_TABLE, trackId, callback);
+        firestoreCRUDUtil.deleteEntry(CRUDConstants.RUNS_TABLE, null, callback);
 
         verify(callback).onFailure();
     }
@@ -231,6 +229,7 @@ public class FirestoreCRUDUtilTest {
             return null;
         }).when(firestoreCRUDUtil).getEntry(isNull(), anyString(), any(ReadCallback.class));
 
+        firestoreCRUDUtil.getEntry(null, trackId, callback);
         verify(callback).onFailure();
     }
 
