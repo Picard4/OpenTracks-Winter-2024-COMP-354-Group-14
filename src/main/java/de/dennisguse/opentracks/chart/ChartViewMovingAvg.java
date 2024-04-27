@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Random;
 
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Marker;
@@ -214,7 +215,7 @@ public class ChartViewMovingAvg extends View {
                 fontSizeMedium) {
             @Override
             protected Double extractDataFromChartPoint(@NonNull ChartPoint chartPoint) {
-                return chartPoint.speed();
+                return new Random().nextInt(80) + 20.0;
             }
 
             @Override
@@ -237,7 +238,7 @@ public class ChartViewMovingAvg extends View {
                 fontSizeMedium) {
             @Override
             protected Double extractDataFromChartPoint(@NonNull ChartPoint chartPoint) {
-                return chartPoint.altitude();
+                return new Random().nextInt(30) + 5.0;
             }
 
             @Override

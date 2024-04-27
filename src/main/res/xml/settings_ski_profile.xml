@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <SwitchPreferenceCompat
@@ -14,5 +15,27 @@
         android:summary="@string/sharing_location_summary"
         android:entryValues="@array/sharing_location_values"
         android:entries="@array/sharing_location_entries" />
+
+    <PreferenceCategory
+        android:title="Favourite ski resort">
+
+        <EditTextPreference
+            android:key="ski_resort_name"
+            android:title="@string/ski_resort_name"
+            app:useSimpleSummaryProvider = "true"/>
+
+        <EditTextPreference
+            android:key="ski_resort_country"
+            android:title="@string/ski_resort_country"
+            app:useSimpleSummaryProvider = "true" />
+
+        <EditTextPreference
+            android:key="ski_resort_province"
+            android:title="@string/ski_resort_province"
+            app:useSimpleSummaryProvider = "true" />
+
+    </PreferenceCategory>
+
+
 
 </androidx.preference.PreferenceScreen>

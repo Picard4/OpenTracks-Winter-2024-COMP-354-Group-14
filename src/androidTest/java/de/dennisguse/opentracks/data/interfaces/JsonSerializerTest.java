@@ -34,6 +34,22 @@ public class JsonSerializerTest {
 
     // TODO: add tests for FromJSON
 
+    @Test
+    public void testFromJson() {
+        // Create a JsonObject representing the JSON structure you expect to deserialize
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("description", description);
+        jsonObject.addProperty("externalId", externalId);
+
+        // Use the fromJSON method to deserialize the JsonObject into a TestTrack object
+        TestTrack result = JSONSerializable.fromJSON(jsonObject, TestTrack.class);
+
+        assertNotNull(result);
+        assertEquals(description, result.getDescription());
+        assertEquals(externalId, result.getExternalId());
+    }
+
+
     /**
      * Sample class of Track that extends the JSONSerializable
      * This class is a simplified version of the Track class that has only a few fields
@@ -47,6 +63,25 @@ public class JsonSerializerTest {
          */
         public TestTrack(String description, String externalId) {
             this.description = description;
+            this.externalId = externalId;
+        }
+        // Getter for description
+        public String getDescription() {
+            return description;
+        }
+
+        // Setter for description
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        // Getter for externalId
+        public String getExternalId() {
+            return externalId;
+        }
+
+        // Setter for externalId
+        public void setExternalId(String externalId) {
             this.externalId = externalId;
         }
     }
