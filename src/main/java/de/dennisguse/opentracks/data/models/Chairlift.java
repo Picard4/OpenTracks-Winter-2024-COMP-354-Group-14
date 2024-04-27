@@ -16,6 +16,9 @@ public class Chairlift {
 
     private static final Map<Integer, Chairlift> validChairlifts = new HashMap<>();
 
+    public Chairlift(ArrayList<TrackPoint> liftPoints) {
+    }
+
     public int getId() {
         return id;
     }

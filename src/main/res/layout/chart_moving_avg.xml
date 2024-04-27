@@ -13,8 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
 <de.dennisguse.opentracks.chart.ChartViewMovingAvg xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chart_view_moving_avg"
+    android:layout_above="@+id/chart_view"
+    android:layout_alignBaseline="@+id/chart_view"
+    android:layout_alignBottom="@+id/chart_view"
+    android:layout_alignEnd="@+id/chart_view"
+    android:layout_alignStart="@+id/chart_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

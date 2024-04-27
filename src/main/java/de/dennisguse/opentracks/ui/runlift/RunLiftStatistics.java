@@ -137,7 +137,6 @@ public class RunLiftStatistics {
         }
 
         public Speed getMaxSpeed() { return maxSpeed; }
-
         public boolean hasGain() {
             return gain_m != null;
         }
@@ -185,7 +184,6 @@ public class RunLiftStatistics {
             avgHeartRate = trackStatistics.getAverageHeartRate();
             maxSpeed = trackStatistics.getMaxSpeed();
             totalTime = trackStatistics.getTotalTime();
-
             //set(trackStatistics);
             if (lastTrackPoint == null) {
                 return;
