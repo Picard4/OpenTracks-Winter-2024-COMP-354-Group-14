@@ -1,9 +1,5 @@
 package de.dennisguse.opentracks;
-
-import static android.app.PendingIntent.getActivity;
-
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
@@ -22,7 +18,10 @@ import de.dennisguse.opentracks.data.models.Track;
 import de.dennisguse.opentracks.databinding.ActivitySeasonalBinding;
 import de.dennisguse.opentracks.ui.aggregatedStatistics.AggregatedStatisticsAdapter;
 import de.dennisguse.opentracks.ui.aggregatedStatistics.AggregatedStatisticsModel;
-import de.dennisguse.opentracks.ui.aggregatedStatistics.StatisticsActivity;
+
+import static android.app.PendingIntent.getActivity;
+
+import android.os.Bundle;
 
 
 /**
@@ -41,7 +40,7 @@ public class SeasonalActivity extends AbstractActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Seasonal Activity!");
+        setTitle("Seasonal Activity");
         seasonsRecyclerView = findViewById(R.id.seasons_recyclerView);
 
         GoToIndividualSite(findViewById(R.id.Winter2022_Button));

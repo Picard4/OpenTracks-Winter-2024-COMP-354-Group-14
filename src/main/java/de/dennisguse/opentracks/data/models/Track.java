@@ -56,6 +56,8 @@ public class Track implements JSONSerializable<Track> {
 
     private TrackStatistics trackStatistics = new TrackStatistics();
 
+    private TrackSkiGear trackSkiGear = new TrackSkiGear();
+
     @VisibleForTesting
     public Track() {
         this(ZoneOffset.UTC);
@@ -135,6 +137,14 @@ public class Track implements JSONSerializable<Track> {
 
     public void setTrackStatistics(@NonNull TrackStatistics trackStatistics) {
         this.trackStatistics = trackStatistics;
+    }
+
+    public TrackSkiGear getTrackSkiGear() {
+        return trackSkiGear;
+    }
+
+    public void setTrackSkiGear(TrackSkiGear trackSkiGear) {
+        this.trackSkiGear = trackSkiGear;
     }
 
     @Override

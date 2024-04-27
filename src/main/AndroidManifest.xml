@@ -388,6 +388,8 @@
         <activity
             android:name=".SeasonalActivity"
             android:exported="false" />
+        <activity android:name=".TrackViewGearActivity"
+            android:exported="false" />
         <provider
             android:name=".data.ShareContentProvider"
             android:authorities="${applicationId}.content"

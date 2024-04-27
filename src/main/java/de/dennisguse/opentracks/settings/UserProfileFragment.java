@@ -42,7 +42,7 @@ import de.dennisguse.opentracks.data.models.SpeedFormatter;
 import de.dennisguse.opentracks.data.models.Weight;
 import de.dennisguse.opentracks.data.models.WeightFormatter;
 
- // You can choose any value for the request code
+// You can choose any value for the request code
 
 
 public class UserProfileFragment extends PreferenceFragmentCompat {
@@ -313,4 +313,5 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
 
 
+  
 }
