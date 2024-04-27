@@ -894,4 +894,11 @@ limitations under the License.
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="calculate_moving_average">Moving Average</string>
+  
+    <!-- Name of seasons & lifetime -->
+    <string name="icon_seasons_name">Seasonal Data</string>
+    <string name="Life_Time_Data">Life Time Data</string>
+    <string name="Winter_2024">Winter 2024 Season</string>
+    <string name="Winter_2023">Winter 2023 Season</string>
+    <string name="Winter_2022">Winter 2022 Season</string>
 </resources>
