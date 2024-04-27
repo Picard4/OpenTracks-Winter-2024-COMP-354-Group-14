@@ -93,6 +93,10 @@ public class TrackEditActivity extends AbstractActivity implements ChooseActivit
             activityType = track.getActivityType();
         }
 
+        if (activityType != ActivityType.SKIING) {
+            viewBinding.fields.trackEditGear.setVisibility(View.INVISIBLE);
+        }
+
         setActivityTypeIcon(activityType);
         viewBinding.fields.trackEditActivityTypeIcon.setOnClickListener(v -> ChooseActivityTypeDialogFragment.showDialog(getSupportFragmentManager(), this, viewBinding.fields.trackEditActivityType.getText().toString()));
 
