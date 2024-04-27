@@ -10,13 +10,19 @@ import de.dennisguse.opentracks.data.TrackPointIterator;
 import de.dennisguse.opentracks.data.models.*;
 
 /**
- * The TrackDifferentiate class is responsible for differentiating ski lift and ski run segments from a track.
- * It analyzes the altitude changes of track points to identify upward movements as ski lifts and downward movements as ski runs.
- * It also utilizes the enum status of TrackPoint to determine if in idle status.
- * The class maintains counts of ski lift and ski run segments, it keeps track of points of lift and run activity and provides method for
- * differentiation of points into the two categories.
+ * The TrackDifferentiate class is responsible for differentiating ski lift and
+ * ski run segments from a track.
+ * Stores trackpoints in arraylists, which are stored in another arraylist.
+ * Outside arraylist contains "runs": whether it is a chairlift, a ski run or a
+ * waiting segment.
+ * Inside arraylist contains the trackpoints (or segments) of said "runs".
+ * It will group trackpoints in 3 categories: idle, lift and run.
+ * It will iterate through the trackpoints chronologically continusly add
+ * trackpoints to an arraylist unless certain conditions are met.
+ * Once those conditions are met, it will start a new group of trackpoints.
  */
 public class TrackDifferentiate {
+
 
     private final ContentProviderUtils contentProviderUtils;
     private final Track.Id trackId;
@@ -25,67 +31,109 @@ public class TrackDifferentiate {
     private boolean down;
     private ArrayList<TrackPoint> liftPoints;
     private ArrayList<TrackPoint> runPoints;
+    private ArrayList<ArrayList<TrackPoint>> runs = new ArrayList<ArrayList<TrackPoint>>();
+    private ArrayList<ArrayList<TrackPoint>> lifts = new ArrayList<ArrayList<TrackPoint>>();
+
+    private Chairlift chairlift;
+    private SkiRun skiRun;
+
+    public Chairlift getChairlift() {
+        return chairlift;
+    }
+
+    public void setChairlift(Chairlift chairlift) {
+        this.chairlift = chairlift;
+    }
+
+    public SkiRun getSkiRun() {
+        return skiRun;
+    }
+
+    public void setSkiRun(SkiRun skiRun) {
+        this.skiRun = skiRun;
+    }
 
     public TrackDifferentiate(Track.Id tid, Context c) {
         trackId = tid;
         contentProviderUtils = new ContentProviderUtils(c);
-
-        // list of trackpoints grouped per run (index 0 is first run, 1 second run,
-        // etc...)
-        liftPoints = new ArrayList<>();
-        runPoints = new ArrayList<>();
-
-        liftCount = 0;
+        runPoints = new ArrayList<TrackPoint>();
         runCount = 0;
         prevType = TrackPoint.Type.IDLE;
+
+        liftPoints = new ArrayList<>();
+        Chairlift chairLift = new Chairlift(liftPoints);
+        SkiRun skiRun = new SkiRun("run", runPoints, 0);
+
+        // Initalize fields by differentiate
+        differentiate();
+        SkiRun run = new SkiRun("run", runPoints, 0);
+        //lift = new Chairlift("lift", 1, , trackId, liftPoints); // OBS : most likely this generalizes all chairLifts into a single chairLift object.
 
     }
 
     public void differentiate() {
         // iterate through all trackpoints and store them in arraylists
         try (TrackPointIterator tpi = contentProviderUtils.getTrackPointLocationIterator(trackId, null)) {
-            ArrayList<TrackPoint> track = null;
+            TrackPoint trackpoint;
+            TrackPoint lastTrackpoint;
+            trackpoint = tpi.next();
+            lastTrackpoint = trackpoint;
             while (tpi.hasNext()) {
-                TrackPoint trackpoint = tpi.next();
+                trackpoint = tpi.next();
 
-                // if idle point do nothing
-                if (trackpoint.getType() == TrackPoint.Type.IDLE) {
-                    prevType = trackpoint.getType();
+                // if trackpoint goes from idle to non idle (or vice versa) or if your altitude
+                // gain changes from positive to negative (or vice versa)
+                if (trackpoint.getType() != prevType || (lastTrackpoint.hasAltitudeGain() && trackpoint.hasAltitudeLoss())
+                        || (lastTrackpoint.hasAltitudeLoss() && trackpoint.hasAltitudeGain())) {}
 
-                    // if trackpoint starts going up after being idle
-                } else if (prevType == TrackPoint.Type.IDLE
-                        && (trackpoint.getAltitude().compare(tpi.next().getAltitude()) < 0)) {
-                    track = new ArrayList<TrackPoint>();
-                    track.add(trackpoint);
-                    down = false;
-
-                    // if trackpoint is not idle but next trackpoint does not move in altitude
-                } else if (trackpoint.getType() != TrackPoint.Type.IDLE
-                        && (trackpoint.getAltitude().compare(tpi.next().getAltitude()) == 0)) {
-                    track.add(trackpoint);
-                    if (down == true) {
-                        // if it was marked down add to run list
-                        runPoints.set(runCount, trackpoint);
-                        runCount++;
-                    } else {
-                        // if marked up add to lift list
-                        liftPoints.add(liftCount, trackpoint);
-                        liftCount++;
-                    }
-
-                    // if trackpoint starts going down after being idle
-                } else if (prevType == TrackPoint.Type.IDLE
-                        && (trackpoint.getAltitude().compare(tpi.next().getAltitude()) > 0)) {
-                    track = new ArrayList<TrackPoint>();
-                    track.add(trackpoint);
-                    down = true;
-
+                
+                // Determine if point is a run point or lift point
+                // BOTH : if trackpoint goes from idle to non idle (or vice versa)
+                // RUN : if your altitude gain changes from positive to negative.
+                // LIFT : if your altitude gain changes from negative or 0 to positive.
+                if (trackpoint.getType() != prevType || (lastTrackpoint.hasAltitudeLoss() && trackpoint.hasAltitudeGain()
+                		|| (lastTrackpoint.getAltitude().toM() == 0 && trackpoint.hasAltitudeGain()))) {
+                    liftCount++;
+                    liftPoints = new ArrayList<TrackPoint>();
+                    liftPoints.add(trackpoint);
+                    lifts.set(liftCount, liftPoints);
                 }
+                
+ 
+                else if (trackpoint.getType() != prevType || (lastTrackpoint.hasAltitudeGain() && trackpoint.hasAltitudeLoss())) {
+
+                    runCount++;
+                    runPoints = new ArrayList<TrackPoint>();
+                    runPoints.add(trackpoint);
+                    runs.set(runCount, runPoints);
+
+                    // if none of the conditions above are met, it must be part of the same run
+                }
+                // If types are equal check if they are part of the same segment of ride / run
+                else if (trackpoint.getType() == prevType || (lastTrackpoint.hasAltitudeLoss() && trackpoint.hasAltitudeGain()
+                		|| (lastTrackpoint.getAltitude().toM() == 0 && trackpoint.hasAltitudeGain())))
+                {
+                	// Trackpoint part of same ride segment
+                	liftPoints.add(trackpoint);
+                    lifts.set(liftCount, liftPoints);
+                }
+                
+                else // if none of the conditions above are met, it must be part of the same run segment
+                {
+
+                    runPoints.add(trackpoint);
+                    runs.set(runCount, runPoints);
+                }
+                prevType = trackpoint.getType();
             }
         }
     }
 
     public List<TrackPoint> getLiftPoints() {
         return liftPoints;
+    }
+
+    public List<ArrayList<TrackPoint>> getRuns() {
+        return runs;
     }
 }

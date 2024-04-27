@@ -394,6 +394,10 @@ limitations under the License.
     <string name="settings_ski_profile_title">Ski Profile</string>
     <string name="settings_ski_profile_summary">Personalized ski profile</string>
 
+    <string name="ski_resort_name">Name</string>
+    <string name="ski_resort_country">Country</string>
+    <string name="ski_resort_province">Province</string>
+
     <!-- Settings Advanced -->
     <string name="settings_advanced">Advanced</string>
     <string name="settings_default_trackfileformat">Export/sharing file format</string>
@@ -448,16 +452,36 @@ limitations under the License.
     <string name="settings_maintenance_wax_title">Waxing Information</string>
 
     <string name="settings_maintenance_last_sharpening_date">Date of Last Sharpening</string>
+    <string name="settings_maintenance_last_sharpening_date_dialog"> Date of last sharpening (DD/MM):</string>
     <string name="settings_maintenance_sharpening_date">DD:MM:YYYY</string>
     <string name="settings_maintenance_base_angle">Base Angle </string>
     <string name="settings_maintenance_edge_angle">Edge Angle </string>
     <string name="settings_maintenance_sharpening_interval">Sharpening Interval</string>
+
+
 
     <string name="settings_maintenance_last_wax_date">Date of Last Waxing</string>
     <string name="settings_maintenance_wax_date">DD:MM:YYYY</string>
     <string name="settings_maintenance_wax_type">Wax Type</string>
     <string name="settings_maintenance_wax_type_input">Type</string>
     <string name="settings_maintenance_wax_interval">Waxing Interval</string>
+
+    <string name="sharpening_text">Sharpening Information</string>
+    <string name="waxing_text">Waxing Information</string>
+
+    <string name="ski_season_text">Ski Seasons And Dates</string>
+    <string name="ski_season_year">Filter by year</string>
+    <string name="dialogue_ski_season_year">Year of the season (YYYY):</string>
+    <string name="ski_visit_date">visit date</string>
+    <string name="ski_distance">distance</string>
+
+
+
+
+    <string name="settings_ski_season">Ski History</string>
+    <string name="settings_ski_session">Ski sessions for each season</string>
+    <string name="settings_ski_season_key">Ski_season_key</string>
+
 
     <!-- Angle Entries for Display -->
     <string-array name="angle_entries">
@@ -491,6 +515,11 @@ limitations under the License.
         <item>50 km</item>
         <item>75 km</item>
         <item>100 km</item>
+        <item>125 km</item>
+        <item>150 km</item>
+        <item>175 km</item>
+        <item>200 km</item>
+
     </string-array>
 
     <string-array name="interval_values">
@@ -499,6 +528,10 @@ limitations under the License.
         <item>50 km</item>
         <item>75 km</item>
         <item>100 km</item>
+        <item>125 km</item>
+        <item>150 km</item>
+        <item>175 km</item>
+        <item>200 km</item>
     </string-array>
 
     <string-array name="wax_type_entries">
@@ -825,6 +858,20 @@ limitations under the License.
 
     <string name="introduction_osm_dashboard">OpenTracks itself does not provide a map. Please install OSMDashboard to view your recordings on a map.</string>
 
+    <string name="settings_stats_display_summary">Default Plotting Values</string>
+    <string name="settings_stats_display_title">Statistics Display</string>
+    <string name="settings_daily_stats_title">Daily Statistics</string>
+
+    <string name="run_lift_name">Name</string>
+    <string name="run_lift_elevation">Elevation</string>
+    <string name="run_lift_distance">Distance</string>
+    <string name="run_lift_time">Time</string>
+    <string name="run_lift_speed">Speed</string>
+    <string name="run_lift_lift_empty_message">There are not any runs/lifts yet</string>
+    <string name="track_recorded_calculate_moving_average">Calculate Moving Average</string>
+    <string name="lift">Lift</string>
+    <string name="run">Run</string>
+
     <string name="profile_picture_menu">profile_picture_menu</string>
 
     <!-- Edit button - Haithm-->
@@ -852,10 +899,20 @@ limitations under the License.
     <string name="title_activity_leaderboard">LeaderboardActivity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+
     <string name="calculate_moving_average">Moving Average</string>\
 
     <string name="settings_skiing_type_title">Type of Skiing</string>
     <string name="settings_skiing_type_option_1">Downhill</string>
     <string name="settings_skiing_type_option_2">Touring</string>
     <string name="settings_skiing_type_option_3">Snowpark</string>
+
+    <string name="calculate_moving_average">Moving Average</string>
+  
+    <!-- Name of seasons & lifetime -->
+    <string name="icon_seasons_name">Seasonal Data</string>
+    <string name="Life_Time_Data">Life Time Data</string>
+    <string name="Winter_2024">Winter 2024 Season</string>
+    <string name="Winter_2023">Winter 2023 Season</string>
+    <string name="Winter_2022">Winter 2022 Season</string>
 </resources>

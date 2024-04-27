@@ -8,16 +8,16 @@ public record AltitudeGainLoss(float gain_m, float loss_m) {
     private static boolean isSkiing;
     private static boolean isChairlift;
 
-    public AltitudeGainLoss(float gain_m, float loss_m) {
-        this.gain_m = gain_m;
-        this.loss_m = loss_m;
-    }
+    private static boolean isWaiting;
 
     public static boolean isSkiing(){
         return isSkiing;
     }
     public static boolean isChairlift(){
         return isChairlift;
+    }
+    private boolean isWaiting() {
+        return  isWaiting;
     }
     public boolean shouldStartNewSegment(List<TrackPoint> trackPoints, int currentIndex){
         TrackPoint currentPoint = trackPoints.get(currentIndex);
@@ -39,14 +39,20 @@ public record AltitudeGainLoss(float gain_m, float loss_m) {
                 return true;
 
             }
+            else if (altitudeChange < 0.5){
+                isChairlift = false;
+                isSkiing = false;
+                isWaiting = true;
+                return true;
+            }
+            else{
+                return false;
+            }
         }
         isChairlift = false;
         isSkiing = false;
         return false;
     }
-
-
-
 
 
 

@@ -19,6 +19,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +50,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import java.util.Objects;
+
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Height;
 import de.dennisguse.opentracks.data.models.HeightFormatter;
@@ -73,6 +76,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+ // You can choose any value for the request code
+
+
 public class UserProfileFragment extends PreferenceFragmentCompat {
 
     private static final int PERMISSION_REQUEST_CODE = 1001;
@@ -81,6 +87,18 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
     SwitchPreference leaderboardSwitch;
     private Context applicationContext;
+
+    private void startImagePicker() {
+        try {
+            ImagePicker.with(this)
+                    .crop()
+                    .compress(1024)
+                    .maxResultSize(1080, 1080)
+                    .start();
+        } catch (Exception e) {
+            Log.e("UserProfileFragment", "Error starting image picker: " + e.getMessage());
+        }
+    }
 
     private void startImagePicker() {
         try {
@@ -654,5 +672,6 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
 
         return uniqueId;
     }
+
 
 }

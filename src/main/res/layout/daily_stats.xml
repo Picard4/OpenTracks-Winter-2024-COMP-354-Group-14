@@ -32,6 +32,12 @@
             android:layout_width="match_parent"
             android:layout_height="@android:dimen/app_icon_size" />
 
+        <Button
+            android:id="@+id/saveIMG"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export as image" />
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/dailyChart"
             android:layout_width="match_parent"

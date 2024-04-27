@@ -22,5 +22,26 @@
         android:entries="@array/skiing_type_options"
         android:entryValues="@array/skiing_type_values"
         app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory
+        android:title="Favourite ski resort">
+
+        <EditTextPreference
+            android:key="ski_resort_name"
+            android:title="@string/ski_resort_name"
+            app:useSimpleSummaryProvider = "true"/>
+
+        <EditTextPreference
+            android:key="ski_resort_country"
+            android:title="@string/ski_resort_country"
+            app:useSimpleSummaryProvider = "true" />
+
+        <EditTextPreference
+            android:key="ski_resort_province"
+            android:title="@string/ski_resort_province"
+            app:useSimpleSummaryProvider = "true" />
+
+    </PreferenceCategory>
+
+
 
 </androidx.preference.PreferenceScreen>

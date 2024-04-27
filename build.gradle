@@ -128,7 +128,11 @@ android {
 }
 
 dependencies {
+
     implementation 'com.google.firebase:firebase-firestore:24.10.3'
+    implementation 'junit:junit:4.12'
+    androidTestImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -140,6 +144,7 @@ dependencies {
     implementation 'androidx.core:core:1.12.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation 'androidx.mediarouter:mediarouter:1.6.0'
+    implementation 'androidx.activity:activity-compose:1.8.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.github.dhaval2404:imagepicker:2.1'
