@@ -68,6 +68,7 @@ import android.widget.Spinner;
 import java.util.Arrays;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -536,66 +537,67 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
     }
 
 
-    private void displayCustomSharingDialog(){
+    private void displayCustomSharingDialog() {
+        ReadCallback sharingCallback = new ReadCallback() {
+            @Override
+            public void onSuccess(JsonObject data) {
+                UserModel user = JSONSerializable.fromJSON(data, UserModel.class);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        // Array to store user information
-        String[] userInfo = new String[6];
-        int[] textViewIds = {R.id.nickname, R.id.userLocation, R.id.dateOfBirth, R.id.userHeight, R.id.userWeight, R.id.gender};
+                // Array to store user information
+                String[] userInfo = new String[6];
+                int[] textViewIds = {R.id.nickname, R.id.userLocation, R.id.dateOfBirth, R.id.userHeight, R.id.userWeight, R.id.gender};
 
-        // Array to store detail labels
-        String[] detailNames = {"Nickname", "Location", "Date of Birth", "Height", "Weight", "Gender"};
+                // Array to store detail labels
+                String[] detailNames = {"Nickname", "Location", "Date of Birth", "Height", "Weight", "Gender"};
 
-        StringBuilder alertMessageBuilder = new StringBuilder("Do you allow OpenTracks to store and display the following information on the leaderboard?\n\n");
+                StringBuilder alertMessageBuilder = new StringBuilder("Do you allow OpenTracks to store and display the following information on the leaderboard?\n\n");
 
-        // Retrieve values from TextViews and populate user info
-        for (int i = 0; i < textViewIds.length; i++) {
+                // Retrieve values from TextViews and populate user info
+                for (int i = 0; i < textViewIds.length; i++) {
 
-            TextView textView = getView().findViewById(textViewIds[i]);
+                    TextView textView = getView().findViewById(textViewIds[i]);
 
-            if(textView!=null) {
-                userInfo[i] = textView.getText().toString();
+                    if(textView!=null) {
+                        userInfo[i] = textView.getText().toString();
 
-                // Construct custom message
-                alertMessageBuilder.append(detailNames[i]).append(": ").append(userInfo[i]).append("\n");
+                        // Construct custom message
+                        alertMessageBuilder.append(detailNames[i]).append(": ").append(userInfo[i]).append("\n");
 
-            }
-        }
+                    }
+                }
 
+                String alertMessage = alertMessageBuilder.toString();
 
-        TextView heightText = getView().findViewById(R.id.userHeight);
-        String heightToEdit = heightText.getText().toString();
-        heightToEdit = removeCharsFromString(heightToEdit);
-        TextView weightText = getView().findViewById(R.id.userWeight);
-        String weightToEdit = weightText.getText().toString();
-        weightToEdit= removeCharsFromString(weightToEdit);
-
-        UserModel user = new UserModel(userInfo[0], userInfo[1], dateToLong(userInfo[2]), userInfo[5], Integer.valueOf(heightToEdit), Integer.valueOf(weightToEdit));
-
-
-        String alertMessage = alertMessageBuilder.toString();
-
-        builder.setTitle("Confirm Selection")
-
-                .setMessage(alertMessage)
-                .setPositiveButton("ALLOW", (dialog, which) -> {
+                builder.setTitle("Confirm Selection")
+                        .setMessage(alertMessage)
+                        .setPositiveButton("ALLOW", (dialog, which) -> {
 //                    UserModel userModel = new UserModel(); // Assume you have a way to initialize or get the current UserModel
 //                    userModel.setSocialAllow(true);
-                    showToast("Updated sharing permissions and data will be shared on the leaderboard.");
-                    leaderboardSwitch.setChecked(true); // Visually indicate sharing is enabled
-                    user.setSocialAllow(true);
-                    FirestoreCRUDUtil.getInstance().createEntry("users", uniqueId(), user.toJSON(), null);
-                })
-                .setNegativeButton("DENY", (dialog, which) -> {
+                            showToast("Updated sharing permissions and data will be shared on the leaderboard.");
+                            leaderboardSwitch.setChecked(true); // Visually indicate sharing is enabled
+                            user.setSocialAllow(true);
+                            FirestoreCRUDUtil.getInstance().updateEntry("users", uniqueId(), user.toJSON(), null);
+                        })
+                        .setNegativeButton("DENY", (dialog, which) -> {
 //                    UserModel userModel = new UserModel(); // we need to get current UserID and initialize.
- //                   userModel.setSocialAllow(false);
-                    showToast("Sharing not enabled. Data will remain private.");
-                    leaderboardSwitch.setChecked(false); // Visually indicate sharing is not enabled
-                    user.setSocialAllow(false);
-                    FirestoreCRUDUtil.getInstance().createEntry("users", uniqueId(), user.toJSON(), null);
-                })
-                .show();
+                            //                   userModel.setSocialAllow(false);
+                            showToast("Sharing not enabled. Data will remain private.");
+                            leaderboardSwitch.setChecked(false); // Visually indicate sharing is not enabled
+                            user.setSocialAllow(false);
+                            FirestoreCRUDUtil.getInstance().updateEntry("users", uniqueId(), user.toJSON(), null);
+                        })
+                        .show();
+            }
+
+            @Override
+            public void onFailure() {
+                showToast("Please save your user profile first");
+            }
+        };
+
+        FirestoreCRUDUtil.getInstance().getEntry("users", uniqueId(), sharingCallback);
     }
     @Override
     //TODO: fix this
