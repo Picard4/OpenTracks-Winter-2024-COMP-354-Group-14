@@ -19,6 +19,11 @@
 	
 		    // Constructor
 		    public SkiRun(String name, List<TrackPoint> trackPoints, double userWeight) {
+                // 0 is a "default" value setting.
+                // sets the weight to 180 (approx. average adult weight in Canada in lbs)
+                if (userWeight == 0) {
+                    userWeight = 180;
+                }
 		        this.name = name;
 		        this.trackPoints = trackPoints;
 		        this.userWeight = userWeight;

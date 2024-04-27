@@ -32,6 +32,7 @@ public class TrackDifferentiate {
     private ArrayList<TrackPoint> liftPoints;
     private ArrayList<TrackPoint> runPoints;
     private ArrayList<ArrayList<TrackPoint>> runs = new ArrayList<ArrayList<TrackPoint>>();
+    private ArrayList<ArrayList<TrackPoint>> lifts = new ArrayList<ArrayList<TrackPoint>>();
 
     private Chairlift chairlift;
     private SkiRun skiRun;
@@ -61,11 +62,11 @@ public class TrackDifferentiate {
 
         liftPoints = new ArrayList<>();
         Chairlift chairLift = new Chairlift(liftPoints);
-        SkiRun skiRun = new SkiRun(runPoints);
+        SkiRun skiRun = new SkiRun("run", runPoints, 0);
 
         // Initalize fields by differentiate
         differentiate();
-        run = new SkiRun("run", runPoints);
+        SkiRun run = new SkiRun("run", runPoints, 0);
         //lift = new Chairlift("lift", 1, , trackId, liftPoints); // OBS : most likely this generalizes all chairLifts into a single chairLift object.
 
     }
@@ -82,8 +83,8 @@ public class TrackDifferentiate {
 
                 // if trackpoint goes from idle to non idle (or vice versa) or if your altitude
                 // gain changes from positive to negative (or vice versa)
-                if (trackpoint.getType != prevType || (lastTrackPoint.hasAltitudeGain() && trackpoint.hasAltitudeLoss())
-                        || (lastTrackPoint.hasAltitudeLoss() && trackpoint.hasAltitudeGain())) {
+                if (trackpoint.getType() != prevType || (lastTrackpoint.hasAltitudeGain() && trackpoint.hasAltitudeLoss())
+                        || (lastTrackpoint.hasAltitudeLoss() && trackpoint.hasAltitudeGain())) {}
 
                 
                 // Determine if point is a run point or lift point
@@ -107,9 +108,6 @@ public class TrackDifferentiate {
                     runs.set(runCount, runPoints);
 
                     // if none of the conditions above are met, it must be part of the same run
-                } else {
-
-                    
                 }
                 // If types are equal check if they are part of the same segment of ride / run
                 else if (trackpoint.getType() == prevType || (lastTrackpoint.hasAltitudeLoss() && trackpoint.hasAltitudeGain()
@@ -137,7 +135,5 @@ public class TrackDifferentiate {
 
     public List<ArrayList<TrackPoint>> getRuns() {
         return runs;
-    }
-
     }
 }
