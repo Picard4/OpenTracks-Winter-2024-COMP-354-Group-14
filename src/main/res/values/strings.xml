@@ -900,8 +900,6 @@ limitations under the License.
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
 
-    <string name="calculate_moving_average">Moving Average</string>\
-
     <string name="settings_skiing_type_title">Type of Skiing</string>
     <string name="settings_skiing_type_option_1">Downhill</string>
     <string name="settings_skiing_type_option_2">Touring</string>

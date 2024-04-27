@@ -100,18 +100,6 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void startImagePicker() {
-        try {
-            ImagePicker.with(this)
-                    .crop()
-                    .compress(1024)
-                    .maxResultSize(1080, 1080)
-                    .start();
-        } catch (Exception e) {
-            Log.e("UserProfileFragment", "Error starting image picker: " + e.getMessage());
-        }
-    }
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings_user_profile);
