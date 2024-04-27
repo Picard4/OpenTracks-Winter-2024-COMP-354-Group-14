@@ -28,7 +28,6 @@ import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.UUID;
 
-import de.dennisguse.opentracks.data.interfaces.JSONSerializable;
 import de.dennisguse.opentracks.stats.TrackStatistics;
 
 /**
@@ -38,7 +37,7 @@ import de.dennisguse.opentracks.stats.TrackStatistics;
  * @author Rodrigo Damazio
  */
 //TODO Do not default initialize attributes; might be confusing for debugging
-public class Track implements JSONSerializable<Track> {
+public class Track {
 
     private Track.Id id;
 
