@@ -139,19 +139,17 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         stats.setMovingTime(Duration.ofMinutes(900));
         testData.add(new PlaceHolderTrackUser("User One", "Steamboat Springs", true, stats));
 
-        if (altTestData) {
-            stats = new TrackStatistics();
-            stats.setTotalDistance(new Distance(550));
-            stats.setMaxSpeed(new Speed(50));
-            stats.setMovingTime(Duration.ofMinutes(950));
-            testData.add(new PlaceHolderTrackUser("User One","North California CA", true, stats));
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(550));
+        stats.setMaxSpeed(new Speed(50));
+        stats.setMovingTime(Duration.ofMinutes(950));
+        testData.add(new PlaceHolderTrackUser("User One","North California CA", true, stats));
 
-            stats = new TrackStatistics();
-            stats.setTotalDistance(new Distance(100));
-            stats.setMaxSpeed(new Speed(90));
-            stats.setMovingTime(Duration.ofHours(2));
-            testData.add(new PlaceHolderTrackUser("User Two", "Steamboat Springs", true, stats));
-        }
+        stats = new TrackStatistics();
+        stats.setTotalDistance(new Distance(100));
+        stats.setMaxSpeed(new Speed(90));
+        stats.setMovingTime(Duration.ofHours(2));
+        testData.add(new PlaceHolderTrackUser("User Two", "Steamboat Springs", true, stats));
 
         stats = new TrackStatistics();
         stats.setTotalDistance(new Distance(150));
