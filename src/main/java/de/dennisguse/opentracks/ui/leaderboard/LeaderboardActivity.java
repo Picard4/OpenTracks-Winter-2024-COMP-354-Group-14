@@ -6,7 +6,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -37,6 +36,11 @@ public class LeaderboardActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                /*
+                This method only exists out of obligation.
+                We just need an onPageSelected override to ensure that the leaderboardPagerAdapter's
+                currentLeaderboardFragment remains up to date when the user switches leaderboards.
+                */
             }
 
             @Override
@@ -46,6 +50,11 @@ public class LeaderboardActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                /*
+                This method only exists out of obligation.
+                We just need an onPageSelected override to ensure that the leaderboardPagerAdapter's
+                currentLeaderboardFragment remains up to date when the user switches leaderboards.
+                */
             }
         });
 

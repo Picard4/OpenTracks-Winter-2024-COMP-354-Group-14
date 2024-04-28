@@ -38,10 +38,10 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     }
 
     public enum LeaderboardType {
-        MovingTime(0, "Moving Time"),
-        Distance(1, "Distance"),
-        MaxSpeed(2, "Max Speed"),
-        AverageMovingSpeed(3, "Average Speed");
+        MOVING_TIME(0, "Moving Time"),
+        DISTANCE(1, "Distance"),
+        MAX_SPEED(2, "Max Speed"),
+        AVERAGE_MOVING_SPEED(3, "Average Speed");
 
         // Assisted by https://stackoverflow.com/questions/1067352/can-i-set-enum-start-value-in-java
         private final int value;
@@ -62,13 +62,13 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     }
 
     public void setCurrentLeaderboardFragment(int position) {
-        if (position == LeaderboardPagerAdapter.LeaderboardType.MovingTime.value)
+        if (position == LeaderboardPagerAdapter.LeaderboardType.MOVING_TIME.value)
             currentLeaderboardFragment = movingTimeLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.Distance.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.DISTANCE.value)
             currentLeaderboardFragment = distanceLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.MaxSpeed.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.MAX_SPEED.value)
             currentLeaderboardFragment = maxSpeedLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.AVERAGE_MOVING_SPEED.value)
             currentLeaderboardFragment = averageMovingSpeedLeaderboardFragment;
         currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
@@ -81,27 +81,27 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // Return the appropriate Fragment for each tab position
-        if (position == LeaderboardPagerAdapter.LeaderboardType.MovingTime.value)
+        if (position == LeaderboardPagerAdapter.LeaderboardType.MOVING_TIME.value)
             return movingTimeLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.Distance.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.DISTANCE.value)
             return distanceLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.MaxSpeed.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.MAX_SPEED.value)
             return maxSpeedLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.value)
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.AVERAGE_MOVING_SPEED.value)
             return averageMovingSpeedLeaderboardFragment;
-        return null;
+        return currentLeaderboardFragment;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == LeaderboardPagerAdapter.LeaderboardType.MovingTime.value)
-            return LeaderboardPagerAdapter.LeaderboardType.MovingTime.getTitle();
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.Distance.value)
-            return LeaderboardPagerAdapter.LeaderboardType.Distance.getTitle();
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.MaxSpeed.value)
-            return LeaderboardPagerAdapter.LeaderboardType.MaxSpeed.getTitle();
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.value)
-            return LeaderboardPagerAdapter.LeaderboardType.AverageMovingSpeed.getTitle();
+        if (position == LeaderboardPagerAdapter.LeaderboardType.MOVING_TIME.value)
+            return LeaderboardPagerAdapter.LeaderboardType.MOVING_TIME.getTitle();
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.DISTANCE.value)
+            return LeaderboardPagerAdapter.LeaderboardType.DISTANCE.getTitle();
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.MAX_SPEED.value)
+            return LeaderboardPagerAdapter.LeaderboardType.MAX_SPEED.getTitle();
+        else if (position == LeaderboardPagerAdapter.LeaderboardType.AVERAGE_MOVING_SPEED.value)
+            return LeaderboardPagerAdapter.LeaderboardType.AVERAGE_MOVING_SPEED.getTitle();
         return null;
     }
 
