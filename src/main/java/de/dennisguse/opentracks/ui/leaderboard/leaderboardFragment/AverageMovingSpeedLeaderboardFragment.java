@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import de.dennisguse.opentracks.data.models.Ranking;
-import de.dennisguse.opentracks.data.models.Distance;
+import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
-public class DistanceLeaderboardFragment extends LeaderboardFragment {
+public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
 
     @Override
     protected List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
@@ -24,15 +24,15 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
             }
             else {
                 SummedStatTrackUser existingRecord = statsMap.get(trackUser.nickname);
-                existingRecord.getPlaceHolderTrackUser().trackStatistics.setTotalDistance(
-                        new Distance(existingRecord.getPlaceHolderTrackUser().trackStatistics.getTotalDistance().distance_m()
-                                + trackUser.trackStatistics.getTotalDistance().distance_m())
+                existingRecord.getPlaceHolderTrackUser().trackStatistics.setMaxSpeed(
+                        new Speed(existingRecord.getPlaceHolderTrackUser().trackStatistics.getAverageMovingSpeed().speed_mps()
+                                + trackUser.trackStatistics.getAverageMovingSpeed().speed_mps())
                 );
                 existingRecord.incrementSumFactorCount();
             }
         }
         List<SummedStatTrackUser> latestSummedLeaderboardData = new ArrayList<>(statsMap.values());
-        latestSummedLeaderboardData.sort(new SortByAverageDistance());
+        latestSummedLeaderboardData.sort(new SortByAverageAverageMovingSpeed());
 
         List<Ranking> rankingsData = new ArrayList<>();
         int rank = 0;
@@ -43,7 +43,7 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
                     ++rank,
                     summedStatTrackUser.getPlaceHolderTrackUser().nickname,
                     summedStatTrackUser.getPlaceHolderTrackUser().location,
-                    getDistanceDisplay(getAverageDistanceFromSummedStatTrackUser(summedStatTrackUser))
+                    getAverageMovingSpeedDisplay(getAverageSpeedFromSummedStatTrackUser(summedStatTrackUser))
             );
             if (nextRanking.getScore().equals(lastScore)) {
                 consecutiveTies++;
@@ -55,28 +55,6 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
             lastScore = nextRanking.getScore();
         }
         return rankingsData;
-    }
-
-    private class SortByAverageDistance implements Comparator<SummedStatTrackUser> {
-        @Override
-        public int compare(SummedStatTrackUser user1, SummedStatTrackUser user2) {
-            Distance user1AverageDistance = getAverageDistanceFromSummedStatTrackUser(user1);
-            Distance user2AverageDistance = getAverageDistanceFromSummedStatTrackUser(user2);
-
-            if (user1AverageDistance.lessThan(user2AverageDistance))
-                return 1;
-            else if (user1AverageDistance.greaterThan(user2AverageDistance))
-                return -1;
-            return 0;
-        }
-    }
-
-    private String getDistanceDisplay(Distance distance) {
-        return distance.distance_m() + " m";
-    }
-
-    private Distance getAverageDistanceFromSummedStatTrackUser(SummedStatTrackUser summedStatTrackUser) {
-        return new Distance(summedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getTotalDistance().distance_m() / summedStatTrackUser.getSumFactorCount());
     }
 
     @Override
@@ -87,12 +65,12 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
                 continue;
 
             if (!statsMap.containsKey(trackUser.nickname) ||
-                    statsMap.get(trackUser.nickname).trackStatistics.getTotalDistance().lessThan(trackUser.trackStatistics.getTotalDistance())) {
+                    statsMap.get(trackUser.nickname).trackStatistics.getAverageMovingSpeed().lessThan(trackUser.trackStatistics.getAverageMovingSpeed())) {
                 statsMap.put(trackUser.nickname, trackUser);
             }
         }
         latestLeaderboardData = new ArrayList<>(statsMap.values());
-        latestLeaderboardData.sort(new SortByBestDistance());
+        latestLeaderboardData.sort(new SortByBestAverageMovingSpeed());
 
         List<Ranking> rankingsData = new ArrayList<>();
         int rank = 0;
@@ -103,7 +81,7 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
                     ++rank,
                     trackUser.nickname,
                     trackUser.location,
-                    getDistanceDisplay(trackUser.trackStatistics.getTotalDistance())
+                    getAverageMovingSpeedDisplay(trackUser.trackStatistics.getAverageMovingSpeed())
             );
             if (nextRanking.getScore().equals(lastScore)) {
                 consecutiveTies++;
@@ -117,18 +95,39 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
         return rankingsData;
     }
 
-    private class SortByBestDistance implements Comparator<LeaderboardPagerAdapter.PlaceHolderTrackUser> {
-        @Override
-        public int compare(LeaderboardPagerAdapter.PlaceHolderTrackUser user1, LeaderboardPagerAdapter.PlaceHolderTrackUser user2) {
-            Distance user1Distance = user1.trackStatistics.getTotalDistance();
-            Distance user2Distance = user2.trackStatistics.getTotalDistance();
+    private String getAverageMovingSpeedDisplay(Speed averageMovingSpeed) {
+        return getScoreDecimalFormat().format(averageMovingSpeed.speed_mps()) + " mps";
+    }
 
-            if (user1Distance.lessThan(user2Distance))
+    private Speed getAverageSpeedFromSummedStatTrackUser(SummedStatTrackUser summedStatTrackUser) {
+        return new Speed(summedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getAverageMovingSpeed().speed_mps() / summedStatTrackUser.getSumFactorCount());
+    }
+
+    private class SortByAverageAverageMovingSpeed implements Comparator<SummedStatTrackUser> {
+        @Override
+        public int compare(SummedStatTrackUser user1, SummedStatTrackUser user2) {
+            Speed user1AverageSpeed = getAverageSpeedFromSummedStatTrackUser(user1);
+            Speed user2AverageSpeed = getAverageSpeedFromSummedStatTrackUser(user2);
+
+            if (user1AverageSpeed.lessThan(user2AverageSpeed))
                 return 1;
-            else if (user1Distance.greaterThan(user2Distance))
+            else if (user1AverageSpeed.greaterThan(user2AverageSpeed))
                 return -1;
             return 0;
         }
     }
 
+    private class SortByBestAverageMovingSpeed implements Comparator<LeaderboardPagerAdapter.PlaceHolderTrackUser> {
+        @Override
+        public int compare(LeaderboardPagerAdapter.PlaceHolderTrackUser user1, LeaderboardPagerAdapter.PlaceHolderTrackUser user2) {
+            Speed user1AverageSpeed = user1.trackStatistics.getAverageMovingSpeed();
+            Speed user2AverageSpeed = user2.trackStatistics.getAverageMovingSpeed();
+
+            if (user1AverageSpeed.lessThan(user2AverageSpeed))
+                return 1;
+            else if (user1AverageSpeed.greaterThan(user2AverageSpeed))
+                return -1;
+            return 0;
+        }
+    }
 }

@@ -76,6 +76,9 @@
             android:name=".ui.friends.FriendsActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.friends.FriendClActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity

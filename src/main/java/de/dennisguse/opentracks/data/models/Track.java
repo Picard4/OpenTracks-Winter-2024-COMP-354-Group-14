@@ -47,6 +47,7 @@ public class Track {
 
     private String name = "";
     private String description = "";
+    private String user = "defaultUser";
     private String activityTypeLocalized = "";
 
     private ActivityType activityType;

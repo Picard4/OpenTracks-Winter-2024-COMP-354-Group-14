@@ -311,6 +311,7 @@ limitations under the License.
     <string name="menu_aggregated_statistics">Aggregated stats</string>
     <string name="menu_friends">Friends</string>
     <string name="menu_profile">Profile</string>
+    <string name="search_hint">Search...</string>
     <string name="search">Search</string>
     <string name="invite">Invite</string>
     <string name="menu_delete">Delete</string>
@@ -913,4 +914,11 @@ limitations under the License.
     <string name="Winter_2024">Winter 2024 Season</string>
     <string name="Winter_2023">Winter 2023 Season</string>
     <string name="Winter_2022">Winter 2022 Season</string>
+
+    <!-- competency list -->
+    <string-array name="competencies">
+        <item> Beginner </item>
+        <item> Intermediate </item>
+        <item> Expert </item>
+    </string-array>
 </resources>

@@ -14,6 +14,7 @@ public class CRUDConstants {
     public static final String TAG_UPDATED = "UPDATED";
     public static final String TAG_DELETED = "DELETED";
     public static final String TAG_GET = "GET";
+    public static final String TAG_GET_COLLECTION = "GET_COLLECTION";
 
     // Error tag
     public static final String TAG_ERROR = "ERROR";
@@ -23,12 +24,15 @@ public class CRUDConstants {
     public static final String ERROR_UPDATING_DOCUMENT = "Error updating entry: ";
     public static final String ERROR_DELETING_DOCUMENT = "Error deleting entry: ";
     public static final String ERROR_RETRIEVING_ENTRY = "Error retrieving entry: ";
+    public static final String ERROR_RETRIEVING_COLLECTION = "Error retrieving collection: ";
+
 
     // Success messages
     public static final String SUCCESS_CREATING_DOCUMENT = "Success creating entry: ";
     public static final String SUCCESS_UPDATING_DOCUMENT = "Success updating entry: ";
     public static final String SUCCESS_DELETING_DOCUMENT = "Success deleting entry: ";
     public static final String SUCCESS_RETRIEVING_ENTRY = "Success retrieving entry: ";
+    public static final String SUCCESS_RETRIEVING_COLLECTION = "Success retrieving collection: ";
 
     // Reference
     public static final String CRUD_OPERATION = "CRUD_OPERATION";
