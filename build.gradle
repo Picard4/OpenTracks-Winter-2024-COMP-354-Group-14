@@ -1,16 +1,20 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-
 buildscript {
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath 'com.android.tools.build:gradle:8.3.2'
         classpath 'com.google.gms:google-services:4.4.1'
     }
 }
+
+plugins {
+    id "org.sonarqube" version "3.0"
+}
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
 
 allprojects {
     repositories {
@@ -129,6 +133,7 @@ android {
 
 dependencies {
     implementation 'com.google.firebase:firebase-firestore:24.10.3'
+    implementation 'com.google.firebase:firebase-database:20.3.1'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
