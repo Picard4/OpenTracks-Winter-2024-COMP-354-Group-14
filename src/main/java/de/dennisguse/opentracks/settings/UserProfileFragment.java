@@ -48,6 +48,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.Objects;
@@ -431,6 +432,11 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
         }
 
         @Override
+        public void onSuccess(ArrayList<JsonObject> data) {
+
+        }
+
+        @Override
         public void onFailure() {
             showToast("User profile was not saved!");
         }
@@ -595,6 +601,11 @@ public class UserProfileFragment extends PreferenceFragmentCompat {
                             FirestoreCRUDUtil.getInstance().updateEntry("users", uniqueId(), user.toJSON(), null);
                         })
                         .show();
+            }
+
+            @Override
+            public void onSuccess(ArrayList<JsonObject> data) {
+
             }
 
             @Override
