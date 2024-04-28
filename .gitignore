@@ -84,3 +84,4 @@ releasePlayStore/*
 Gemfile.lock
 
 .DS_Store
+/.idea/sonarlint
