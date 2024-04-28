@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import de.dennisguse.opentracks.R;
@@ -14,9 +16,14 @@ import de.dennisguse.opentracks.data.models.Ranking;
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
     private List<Ranking> displayedRankingList;
+    private static int numberOfRanksToDisplay = 10;
 
     public LeaderboardAdapter(List<Ranking> displayedRankingList) {
         this.displayedRankingList = displayedRankingList;
+    }
+
+    public static void setNumberOfRanksToDisplay(int numberOfRanks) {
+        numberOfRanksToDisplay = numberOfRanks;
     }
 
     @NonNull
@@ -40,15 +47,34 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         return displayedRankingList.size();
     }
 
-    public void setDisplayedRankingList(List<Ranking> displayedRankingList) {
-        // This if statement is just here to improve efficiency if the user switched LeaderboardFragments but not LeaderboardType
-        if (this.displayedRankingList == displayedRankingList)
+    public void setDisplayedRankingList(List<Ranking> rankingListToDisplay) {
+        List<Ranking> filteredRankingListToDisplay = displayOnlySetAmountOfRanks(rankingListToDisplay);
+
+        // This if statement is just here to improve efficiency if the user switched LeaderboardFragments but not anything else
+        if (this.displayedRankingList == filteredRankingListToDisplay)
             return;
 
-        this.displayedRankingList = displayedRankingList;
+        this.displayedRankingList = filteredRankingListToDisplay;
 
-        // Since the rankingList could have been remade from the ground up, we have to call notifyDataSetChanged();
+        // Since the displayedRankingList could have been remade from the ground up, we have to call notifyDataSetChanged();
         notifyDataSetChanged();
+    }
+
+    private List<Ranking> displayOnlySetAmountOfRanks(List<Ranking> rankingListToDisplay) {
+        // Display all the ranks if all ranks are needed or the largest-numbered rank is less than the number of ranks we wish to display
+        if (numberOfRanksToDisplay <= 0 || rankingListToDisplay.get(rankingListToDisplay.size() - 1).getRank() <= numberOfRanksToDisplay)
+            return rankingListToDisplay;
+
+        // The Top X restriction is based on the Rank, not the User's Ranking.
+        // If three Users are tied for 25th and we want the Top 25, the three 25th place Rankings should all be shown.
+        List<Ranking> newRankingListToDisplay = new ArrayList<>();
+        for (int i = 0; i < rankingListToDisplay.size(); i++) {
+            Ranking nextRanking = rankingListToDisplay.get(i);
+            if (nextRanking.getRank() > numberOfRanksToDisplay)
+                break;
+            newRankingListToDisplay.add(nextRanking);
+        }
+        return  newRankingListToDisplay;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

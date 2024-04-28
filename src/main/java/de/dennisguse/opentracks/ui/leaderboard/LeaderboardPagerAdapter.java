@@ -12,6 +12,7 @@ import de.dennisguse.opentracks.data.models.Distance;
 import de.dennisguse.opentracks.data.models.Speed;
 import de.dennisguse.opentracks.stats.TrackStatistics;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.AverageMovingSpeedLeaderboardFragment;
+import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardAdapter;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.MaxSpeedLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.DistanceLeaderboardFragment;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
@@ -34,7 +35,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         averageMovingSpeedLeaderboardFragment = new AverageMovingSpeedLeaderboardFragment();
 
         currentLeaderboardFragment = movingTimeLeaderboardFragment;
-        currentLeaderboardType = LeaderboardFragment.LeaderboardType.Average;
+        currentLeaderboardType = LeaderboardFragment.LeaderboardType.AVERAGE;
         refreshLeaderboardFragmentData();
     }
 
@@ -122,13 +123,11 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
 
-    public void setNumberOfUsers(int numberOfUsers) {
-        movingTimeLeaderboardFragment.setDisplayAmount(numberOfUsers);
-        distanceLeaderboardFragment.setDisplayAmount(numberOfUsers);
-        maxSpeedLeaderboardFragment.setDisplayAmount(numberOfUsers);
-        averageMovingSpeedLeaderboardFragment.setDisplayAmount(numberOfUsers);
-        refreshLeaderboardFragmentData();
+    public void changeNumberOfDisplayedRanks(int numberOfUsers) {
+        LeaderboardAdapter.setNumberOfRanksToDisplay(numberOfUsers);
+        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
     }
+
     private List<PlaceHolderTrackUser> readLatestLeaderboardData() {
         // This is where we get the data from the database for the runs that will be in the leaderboard.
         List<PlaceHolderTrackUser> testData = new ArrayList();
@@ -157,7 +156,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         stats.setMovingTime(Duration.ofHours(1));
         testData.add(new PlaceHolderTrackUser("User Two", "Steamboat Springs", true, stats));
 
-        if (altTestData) {
+        if (!altTestData) {
             stats = new TrackStatistics();
             stats.setTotalDistance(new Distance(1000));
             stats.setMaxSpeed(new Speed(20));
@@ -177,7 +176,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         stats.setMovingTime(Duration.ofHours(6));
         testData.add(new PlaceHolderTrackUser("User Four","Steamboat Springs", true, stats));
 
-        if (altTestData) {
+        if (!altTestData) {
             stats = new TrackStatistics();
             stats.setTotalDistance(new Distance(2500));
             stats.setMaxSpeed(new Speed(55));
@@ -191,7 +190,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         stats.setMovingTime(Duration.ofHours(4));
         testData.add(new PlaceHolderTrackUser("User Five","North California CA", true, stats));
 
-        if (altTestData) {
+        if (!altTestData) {
             stats = new TrackStatistics();
             stats.setTotalDistance(new Distance(1000));
             stats.setMaxSpeed(new Speed(50));
@@ -223,7 +222,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         stats.setMovingTime(Duration.ofMinutes(30));
         testData.add(new PlaceHolderTrackUser("User Nine", "North California CA", true, stats));
 
-        if (altTestData) {
+        if (!altTestData) {
             stats = new TrackStatistics();
             stats.setTotalDistance(new Distance(154));
             stats.setMaxSpeed(new Speed(150));
@@ -241,6 +240,90 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
             stats.setMaxSpeed(new Speed(120));
             stats.setMovingTime(Duration.ofMinutes(34));
             testData.add(new PlaceHolderTrackUser("User Twelve","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(154));
+            stats.setMaxSpeed(new Speed(150));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Thirteen","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(134));
+            stats.setMaxSpeed(new Speed(130));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Fourteen","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(159));
+            stats.setMaxSpeed(new Speed(120));
+            stats.setMovingTime(Duration.ofMinutes(34));
+            testData.add(new PlaceHolderTrackUser("User Fifteen","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(154));
+            stats.setMaxSpeed(new Speed(150));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Sixteen","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(134));
+            stats.setMaxSpeed(new Speed(130));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Seventeen","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(159));
+            stats.setMaxSpeed(new Speed(120));
+            stats.setMovingTime(Duration.ofMinutes(34));
+            testData.add(new PlaceHolderTrackUser("User Eighteen","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(154));
+            stats.setMaxSpeed(new Speed(150));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Nineteen","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(134));
+            stats.setMaxSpeed(new Speed(130));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Twenty","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(159));
+            stats.setMaxSpeed(new Speed(120));
+            stats.setMovingTime(Duration.ofMinutes(34));
+            testData.add(new PlaceHolderTrackUser("User Twenty One","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(154));
+            stats.setMaxSpeed(new Speed(150));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Twenty Two","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(134));
+            stats.setMaxSpeed(new Speed(130));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Twenty Three","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(159));
+            stats.setMaxSpeed(new Speed(120));
+            stats.setMovingTime(Duration.ofMinutes(34));
+            testData.add(new PlaceHolderTrackUser("User Twenty Four","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(154));
+            stats.setMaxSpeed(new Speed(150));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Twenty Five","Steamboat Springs", true, stats));
+
+            stats = new TrackStatistics();
+            stats.setTotalDistance(new Distance(134));
+            stats.setMaxSpeed(new Speed(130));
+            stats.setMovingTime(Duration.ofMinutes(59));
+            testData.add(new PlaceHolderTrackUser("User Twenty Six","Steamboat Springs", true, stats));
         }
 
         stats = new TrackStatistics();

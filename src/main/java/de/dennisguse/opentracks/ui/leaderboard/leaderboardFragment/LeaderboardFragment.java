@@ -26,16 +26,13 @@ public abstract class LeaderboardFragment extends Fragment {
     private List<Ranking> averageRankingList;
     private List<Ranking> bestRankingList;
 
-    private int displayAmount = 0;
-
     public LeaderboardFragment() {
         leaderboardAdapter = new LeaderboardAdapter(new ArrayList<>());
-
     }
 
     public enum LeaderboardType {
-        Average,
-        Best;
+        AVERAGE,
+        BEST;
     }
 
     @Nullable
@@ -53,51 +50,15 @@ public abstract class LeaderboardFragment extends Fragment {
     protected abstract List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData);
     protected abstract List<Ranking> calculateLatestBestRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData);
 
-    public void setDisplayAmount(int newDisplayAmount){
-        this.displayAmount = newDisplayAmount;
-    }
-
-    public void displayOnlySetAmount() {
-        // Display all the ranks
-        if (this.displayAmount <= 0)
-            return;
-
-        int currentDisplayAmount = this.displayAmount;
-
-        // Average Ranking List
-        // In case there is less rankings then the requested amount
-        if (this.averageRankingList.size() < currentDisplayAmount)
-            currentDisplayAmount = this.averageRankingList.size();
-
-        List<Ranking> newAverageRankingList = new ArrayList<>();
-        for (int i = 0; i < currentDisplayAmount; i++) {
-            newAverageRankingList.add(this.averageRankingList.get(i));
-        }
-        this.averageRankingList = newAverageRankingList;
-
-        // Best Ranking List
-        // In case there is less rankings then the requested amount
-        currentDisplayAmount = this.displayAmount;
-        if (this.bestRankingList.size() < currentDisplayAmount)
-            currentDisplayAmount = this.bestRankingList.size();
-
-        List<Ranking> newBestRankingList = new ArrayList<>();
-        for (int i = 0; i < currentDisplayAmount; i++) {
-            newBestRankingList.add(this.bestRankingList.get(i));
-        }
-        this.bestRankingList = newBestRankingList;
-    }
     public void updateRankingLists(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
         this.averageRankingList = calculateLatestAverageRankingsData(latestLeaderboardData);
         this.bestRankingList = calculateLatestBestRankingsData(latestLeaderboardData);
-
-        displayOnlySetAmount();
     }
 
     public void setDisplayedRankingList(LeaderboardType leaderboardType) {
-        if (leaderboardType == LeaderboardType.Average)
+        if (leaderboardType == LeaderboardType.AVERAGE)
             leaderboardAdapter.setDisplayedRankingList(averageRankingList);
-        else if (leaderboardType == LeaderboardType.Best)
+        else if (leaderboardType == LeaderboardType.BEST)
             leaderboardAdapter.setDisplayedRankingList(bestRankingList);
     }
 
