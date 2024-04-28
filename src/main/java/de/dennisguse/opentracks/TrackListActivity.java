@@ -156,7 +156,7 @@ public class TrackListActivity extends AbstractTrackDeleteActivity implements Co
         viewBinding.friendsButton.setOnClickListener((view)->startActivity(IntentUtils.newIntent(this, FriendsActivity.class)));
         viewBinding.profileButton.setOnClickListener((view)->startActivity(IntentUtils.newIntent(this, ProfileActivity.class)));
         viewBinding.aggregatedStatsButton.setOnClickListener((view) -> startActivity(IntentUtils.newIntent(this, AggregatedStatisticsActivity.class)));
-        viewBinding.aggregatedSeasonalStatsButton.setOnClickListener((view) -> startActivity(IntentUtils.newIntent(this, SeasonalActivity.class)));
+        viewBinding.gearButton.setOnClickListener((view) -> startActivity(IntentUtils.newIntent(this, TrackViewGearActivity.class)));
         viewBinding.leaderboardButton.setOnClickListener((view) -> startActivity(IntentUtils.newIntent(this, LeaderboardActivity.class)));
         viewBinding.sensorStartButton.setOnClickListener((view) -> {
             LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

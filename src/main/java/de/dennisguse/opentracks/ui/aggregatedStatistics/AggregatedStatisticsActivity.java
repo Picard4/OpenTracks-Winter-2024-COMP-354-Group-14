@@ -21,6 +21,7 @@ import java.util.List;
 
 import de.dennisguse.opentracks.AbstractActivity;
 import de.dennisguse.opentracks.R;
+import de.dennisguse.opentracks.SeasonalActivity;
 import de.dennisguse.opentracks.data.TrackSelection;
 import de.dennisguse.opentracks.data.models.Track;
 import de.dennisguse.opentracks.databinding.AggregatedStatsBinding;
@@ -123,6 +124,10 @@ public class AggregatedStatisticsActivity extends AbstractActivity implements Fi
         if (item.getItemId() == R.id.visualize_daily_stats) {
             startActivity(IntentUtils.newIntent(this, DailyStatsActivity.class));
             return true;
+        }
+
+        if(item.getItemId() == R.id.seasons_page){
+            startActivity(IntentUtils.newIntent(this, SeasonalActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
