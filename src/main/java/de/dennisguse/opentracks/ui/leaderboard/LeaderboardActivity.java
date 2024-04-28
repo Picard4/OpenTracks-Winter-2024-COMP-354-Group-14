@@ -72,6 +72,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> onBackPressed());
 
+        tenButton.setBackgroundColor(optionSelectedColor);
         tenButton.setOnClickListener(v -> {
             numberOfUsers = 10;
             leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
