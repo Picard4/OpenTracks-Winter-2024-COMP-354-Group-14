@@ -37,7 +37,7 @@ limitations under the License.
     <string name="sharing_option_share_with">Share With</string>
     <string name="sharing_option_public">Public</string>
     <string name="sharing_option_friends">Friends</string>
-    <string name="sharing_option_no_one">No One</string>
+    <string name="sharing_option_select">Choose from contacts</string>
     <string name="sharing_location_key">sharing_location</string>
     <string name="sharing_location_title">Sharing Location</string>
     <string name="sharing_location_summary">Choose who can see your location</string>
@@ -889,12 +889,31 @@ limitations under the License.
     <string name="gender">Gender</string>
     <string name="location">Location/Country</string>
     <string name="profile_picture">Profile Picture</string>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+
     <!-- HA -->
 
     <string name="title_activity_leaderboard">LeaderboardActivity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+
+    <string name="settings_skiing_type_title">Type of Skiing</string>
+    <string name="settings_skiing_type_option_1">Downhill</string>
+    <string name="settings_skiing_type_option_2">Touring</string>
+    <string name="settings_skiing_type_option_3">Snowpark</string>
+
     <string name="calculate_moving_average">Moving Average</string>
+  
+    <!-- Name of seasons & lifetime -->
+    <string name="icon_seasons_name">Seasonal Data</string>
+    <string name="Life_Time_Data">Life Time Data</string>
+    <string name="Winter_2024">Winter 2024 Season</string>
+    <string name="Winter_2023">Winter 2023 Season</string>
+    <string name="Winter_2022">Winter 2022 Season</string>
 
     <!-- competency list -->
     <string-array name="competencies">
@@ -902,5 +921,4 @@ limitations under the License.
         <item> Intermediate </item>
         <item> Expert </item>
     </string-array>
-
 </resources>
