@@ -20,4 +20,11 @@
         app:iconTint="?attr/colorOnBackground"
         android:title="@string/daily_stats_name"
         />
+    <item
+        android:id="@+id/seasons_page"
+        android:icon="@drawable/ic_seasonal_activity_24dp"
+        app:showAsAction="always"
+        app:iconTint="?attr/colorOnBackground"
+        android:title="@string/icon_seasons_name"
+        />
 </menu>

@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="21dp"
             android:layout_marginBottom="5dp"
-            android:text="@string/nickname"
+            android:text="Nickname"
             android:textColor="#FF5722"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -84,8 +84,9 @@
             android:id="@+id/dateOfBirth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date_of_birth"
+            android:text="DOB"
             android:textSize="16sp" />
+        <!--android:text="@string/date_of_birth"-->
 
     </LinearLayout>
 
@@ -112,7 +113,7 @@
             android:id="@+id/gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gender"
+            android:text="Gender"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -140,7 +141,7 @@
             android:id="@+id/userHeight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/stats_empty_value_integer"
+            android:text="0"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -168,7 +169,7 @@
             android:id="@+id/userWeight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/stats_empty_value_integer"
+            android:text="0"
             android:textSize="16sp" />
 
     </LinearLayout>

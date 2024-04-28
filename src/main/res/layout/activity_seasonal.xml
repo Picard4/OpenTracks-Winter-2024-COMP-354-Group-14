@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/seasonalActivityView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:visibility="visible"
     tools:context=".SeasonalActivity">
-
 
 
     <LinearLayout
@@ -21,55 +22,76 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/track_list_toolbar"
+                android:id="@+id/season_list_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:visibility="visible"
                 app:navigationIcon="@drawable/ic_seasonal_activity_24dp"
                 app:title="Seasonal Data" />
         </com.google.android.material.appbar.AppBarLayout>
 
+        <TextView
+            android:id="@+id/seasonalEmptyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="There is no data for any season."
+            android:textAlignment="center"
+            android:visibility="invisible" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/seasons_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
 
         <Button
-            android:id="@+id/activity_game_answer1_btn"
+            android:id="@+id/LifeTime_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/white"
-            android:text="2023_Season"
+            android:text="@string/Life_Time_Data"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="HardcodedText" />
 
         <Button
-            android:id="@+id/activity_game_answer2_btn"
+            android:id="@+id/Winter2024_Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/white"
-            android:text="2022_Season"
+            android:text="@string/Winter_2024"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_game_answer1_btn"
             tools:ignore="HardcodedText" />
 
         <Button
-            android:id="@+id/activity_game_answer3_btn"
+            android:id="@+id/Winter2023_Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@android:color/white"
-            android:text="Life_Time_Data"
+            android:text="@string/Winter_2023"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_game_answer2_btn"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/Winter2022_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/white"
+            android:text="@string/Winter_2022"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:ignore="HardcodedText" />
 
     </LinearLayout>
