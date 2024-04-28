@@ -20,8 +20,6 @@ import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFr
 
 public class LeaderboardActivity extends AppCompatActivity {
 
-    private int numberOfUsers = 10;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,26 +70,26 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> onBackPressed());
 
+        // The default number of ranks shown is 10.
+        // Please check the LeaderboardAdapter's fields if you wish to change the default.
         tenButton.setBackgroundColor(optionSelectedColor);
+
         tenButton.setOnClickListener(v -> {
-            numberOfUsers = 10;
-            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            leaderboardPagerAdapter.changeNumberOfDisplayedRanks(10);
             findViewById(R.id.btnTen).setBackgroundColor(optionSelectedColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
         twentyFiveButton.setOnClickListener(v -> {
-            numberOfUsers = 25;
-            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            leaderboardPagerAdapter.changeNumberOfDisplayedRanks(25);
             findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionSelectedColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
         allButton.setOnClickListener(v -> {
-            numberOfUsers = 0;
-            leaderboardPagerAdapter.setNumberOfUsers(numberOfUsers);
+            leaderboardPagerAdapter.changeNumberOfDisplayedRanks(0);
             findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionSelectedColor);
@@ -130,13 +128,13 @@ public class LeaderboardActivity extends AppCompatActivity {
         everyoneButton.setBackgroundColor(optionSelectedColor);
 
         averageButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Average);
+            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.AVERAGE);
             averageButton.setBackgroundColor(optionSelectedColor);
             bestButton.setBackgroundColor(optionAvailableColor);
         });
 
         bestButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.Best);
+            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.BEST);
             averageButton.setBackgroundColor(optionAvailableColor);
             bestButton.setBackgroundColor(optionSelectedColor);
         });
