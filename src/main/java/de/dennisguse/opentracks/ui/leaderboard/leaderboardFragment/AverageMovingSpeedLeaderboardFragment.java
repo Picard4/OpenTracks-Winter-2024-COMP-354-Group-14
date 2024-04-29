@@ -21,7 +21,7 @@ public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
 
             if (!statsMap.containsKey(trackUser.nickname)) {
                 SummedStatTrackUser nextSummedStatTrackUser = new SummedStatTrackUser(trackUser);
-                nextSummedStatTrackUser.setScoreSum(nextSummedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getAverageMovingSpeed());
+                nextSummedStatTrackUser.setScoreSum(new Speed(nextSummedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getAverageMovingSpeed().speed_mps()));
                 statsMap.put(trackUser.nickname, nextSummedStatTrackUser);
             }
             else {

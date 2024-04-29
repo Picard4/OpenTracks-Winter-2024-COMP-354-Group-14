@@ -109,6 +109,11 @@ public abstract class LeaderboardFragment extends Fragment {
             sumFactorCount = 1;
         }
 
+        public SummedStatTrackUser(LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser, Object scoreSum) {
+            this(placeHolderTrackUser);
+            setScoreSum(scoreSum);
+        }
+
         public LeaderboardPagerAdapter.PlaceHolderTrackUser getPlaceHolderTrackUser() {
             return placeHolderTrackUser;
         }
