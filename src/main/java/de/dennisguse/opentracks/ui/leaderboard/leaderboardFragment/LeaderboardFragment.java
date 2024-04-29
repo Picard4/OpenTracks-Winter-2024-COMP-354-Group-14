@@ -102,9 +102,16 @@ public abstract class LeaderboardFragment extends Fragment {
         private LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser;
         private int sumFactorCount;
 
+        private Object scoreSum;
+
         public SummedStatTrackUser(LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser) {
             this.placeHolderTrackUser = placeHolderTrackUser;
             sumFactorCount = 1;
+        }
+
+        public SummedStatTrackUser(LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser, Object scoreSum) {
+            this(placeHolderTrackUser);
+            setScoreSum(scoreSum);
         }
 
         public LeaderboardPagerAdapter.PlaceHolderTrackUser getPlaceHolderTrackUser() {
@@ -117,6 +124,14 @@ public abstract class LeaderboardFragment extends Fragment {
 
         public void incrementSumFactorCount() {
             sumFactorCount++;
+        }
+
+        public Object getScoreSum() {
+            return scoreSum;
+        }
+
+        public void setScoreSum(Object scoreSum) {
+            this.scoreSum = scoreSum;
         }
     }
 }

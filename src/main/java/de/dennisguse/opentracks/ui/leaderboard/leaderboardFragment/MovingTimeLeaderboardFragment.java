@@ -18,12 +18,11 @@ public class MovingTimeLeaderboardFragment extends LeaderboardFragment {
             if (!trackUser.socialAllow)
                 continue;
 
-            statsMap.computeIfAbsent(trackUser.nickname, k -> new SummedStatTrackUser(trackUser));
+            statsMap.computeIfAbsent(trackUser.nickname, k -> new SummedStatTrackUser(trackUser, trackUser.trackStatistics.getMovingTime().abs()));
             SummedStatTrackUser existingRecord = statsMap.get(trackUser.nickname);
-            existingRecord.getPlaceHolderTrackUser().trackStatistics.setMovingTime(
-                    existingRecord.getPlaceHolderTrackUser().trackStatistics.getMovingTime().plus(
-                            trackUser.trackStatistics.getMovingTime()
-                    )
+            Duration oldDuration = (Duration)existingRecord.getScoreSum();
+            existingRecord.setScoreSum(
+                    oldDuration.plus(trackUser.trackStatistics.getMovingTime())
             );
             existingRecord.incrementSumFactorCount();
         }
@@ -36,7 +35,8 @@ public class MovingTimeLeaderboardFragment extends LeaderboardFragment {
         int consecutiveTies = 0;
         String lastScore = "";
         for (SummedStatTrackUser summedStatTrackUser : latestSummedLeaderboardData) {
-            Duration averageMovingTime = summedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getMovingTime().dividedBy(summedStatTrackUser.getSumFactorCount());
+            Duration totalMovingTime = (Duration)summedStatTrackUser.getScoreSum();
+            Duration averageMovingTime = totalMovingTime.dividedBy(summedStatTrackUser.getSumFactorCount());
             Ranking nextRanking = new Ranking(
                     ++rank,
                     summedStatTrackUser.getPlaceHolderTrackUser().nickname,
@@ -58,8 +58,9 @@ public class MovingTimeLeaderboardFragment extends LeaderboardFragment {
     private class SortByAverageMovingTime implements Comparator<SummedStatTrackUser> {
         @Override
         public int compare(SummedStatTrackUser user1, SummedStatTrackUser user2) {
-            return user2.getPlaceHolderTrackUser().trackStatistics.getMovingTime().compareTo(
-                    user1.getPlaceHolderTrackUser().trackStatistics.getMovingTime());
+            Duration user1MovingTime = (Duration) user1.getScoreSum();
+            Duration user2MovingTime = (Duration) user2.getScoreSum();
+            return user2MovingTime.compareTo(user1MovingTime);
         }
     }
 
