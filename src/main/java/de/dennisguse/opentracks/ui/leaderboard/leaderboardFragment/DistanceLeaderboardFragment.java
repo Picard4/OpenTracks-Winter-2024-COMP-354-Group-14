@@ -20,13 +20,15 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
                 continue;
 
             if (!statsMap.containsKey(trackUser.nickname)) {
-                statsMap.put(trackUser.nickname, new SummedStatTrackUser(trackUser));
+                SummedStatTrackUser nextSummedStatTrackUser = new SummedStatTrackUser(trackUser);
+                nextSummedStatTrackUser.setScoreSum(new Distance(nextSummedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getTotalDistance().distance_m()));
+                statsMap.put(trackUser.nickname, nextSummedStatTrackUser);
             }
             else {
                 SummedStatTrackUser existingRecord = statsMap.get(trackUser.nickname);
-                existingRecord.getPlaceHolderTrackUser().trackStatistics.setTotalDistance(
-                        new Distance(existingRecord.getPlaceHolderTrackUser().trackStatistics.getTotalDistance().distance_m()
-                                + trackUser.trackStatistics.getTotalDistance().distance_m())
+                Distance oldDistance = (Distance)existingRecord.getScoreSum();
+                existingRecord.setScoreSum(
+                        new Distance(oldDistance.distance_m() + trackUser.trackStatistics.getTotalDistance().distance_m())
                 );
                 existingRecord.incrementSumFactorCount();
             }
@@ -76,7 +78,8 @@ public class DistanceLeaderboardFragment extends LeaderboardFragment {
     }
 
     private Distance getAverageDistanceFromSummedStatTrackUser(SummedStatTrackUser summedStatTrackUser) {
-        return new Distance(summedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getTotalDistance().distance_m() / summedStatTrackUser.getSumFactorCount());
+        Distance distance = (Distance)summedStatTrackUser.getScoreSum();
+        return new Distance(distance.distance_m() / summedStatTrackUser.getSumFactorCount());
     }
 
     @Override

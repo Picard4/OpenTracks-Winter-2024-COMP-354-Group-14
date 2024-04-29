@@ -20,13 +20,15 @@ public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
                 continue;
 
             if (!statsMap.containsKey(trackUser.nickname)) {
-                statsMap.put(trackUser.nickname, new SummedStatTrackUser(trackUser));
+                SummedStatTrackUser nextSummedStatTrackUser = new SummedStatTrackUser(trackUser);
+                nextSummedStatTrackUser.setScoreSum(new Speed(nextSummedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getAverageMovingSpeed().speed_mps()));
+                statsMap.put(trackUser.nickname, nextSummedStatTrackUser);
             }
             else {
                 SummedStatTrackUser existingRecord = statsMap.get(trackUser.nickname);
-                existingRecord.getPlaceHolderTrackUser().trackStatistics.setMaxSpeed(
-                        new Speed(existingRecord.getPlaceHolderTrackUser().trackStatistics.getAverageMovingSpeed().speed_mps()
-                                + trackUser.trackStatistics.getAverageMovingSpeed().speed_mps())
+                Speed oldSpeed = (Speed)existingRecord.getScoreSum();
+                existingRecord.setScoreSum(
+                        new Speed(oldSpeed.speed_mps() + trackUser.trackStatistics.getAverageMovingSpeed().speed_mps())
                 );
                 existingRecord.incrementSumFactorCount();
             }
@@ -100,7 +102,8 @@ public class AverageMovingSpeedLeaderboardFragment extends LeaderboardFragment {
     }
 
     private Speed getAverageSpeedFromSummedStatTrackUser(SummedStatTrackUser summedStatTrackUser) {
-        return new Speed(summedStatTrackUser.getPlaceHolderTrackUser().trackStatistics.getAverageMovingSpeed().speed_mps() / summedStatTrackUser.getSumFactorCount());
+        Speed averageSpeed = (Speed)summedStatTrackUser.getScoreSum();
+        return new Speed(averageSpeed.speed_mps() / summedStatTrackUser.getSumFactorCount());
     }
 
     private class SortByAverageAverageMovingSpeed implements Comparator<SummedStatTrackUser> {
