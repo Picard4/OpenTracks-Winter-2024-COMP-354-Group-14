@@ -20,9 +20,9 @@ import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardAd
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
 
 public class LeaderboardActivity extends AppCompatActivity {
-    private static int TEN_BUTTON_VALUE = 10;
-    private static int TWENTY_FIVE_BUTTON_VALUE = 25;
-    private static int ALL_BUTTON_VALUE = 0;
+    private static final int TEN_BUTTON_VALUE = 10;
+    private static final int TWENTY_FIVE_BUTTON_VALUE = 25;
+    private static final int ALL_BUTTON_VALUE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
