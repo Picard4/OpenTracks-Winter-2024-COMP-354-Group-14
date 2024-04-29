@@ -18,6 +18,9 @@ import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.data.models.Ranking;
 import de.dennisguse.opentracks.ui.leaderboard.LeaderboardPagerAdapter;
 
+/**
+ * The base class for every Leaderboard supported by OpenTracks.
+ */
 public abstract class LeaderboardFragment extends Fragment {
 
     private static DecimalFormat scoreDecimalFormat;
@@ -30,7 +33,7 @@ public abstract class LeaderboardFragment extends Fragment {
         leaderboardAdapter = new LeaderboardAdapter(new ArrayList<>());
     }
 
-    public enum LeaderboardType {
+    public enum RankingListType {
         AVERAGE,
         BEST;
     }
@@ -47,18 +50,41 @@ public abstract class LeaderboardFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Reads the sent latestLeaderboardData to rank every user in the latestLeaderboardData by the average of their scores across their provided tracks
+     * that they are willing to share with the public.
+     * What exactly the "score" is depends on the child class that implements this method.
+     * @param latestLeaderboardData The leaderboard data that this LeaderboardFragment's Average Ranking list will be based on.
+     * @return A list of Average Rankings calculated from the sent latestLeaderboardData, in order from first to last.
+     */
     protected abstract List<Ranking> calculateLatestAverageRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData);
+
+    /**
+     * Reads the sent latestLeaderboardData to rank every user in the latestLeaderboardData by their best score across their provided tracks
+     * that they are willing to share with the public.
+     * What exactly the "score" is depends on the child class that implements this method.
+     * @param latestLeaderboardData The leaderboard data that this LeaderboardFragment's Best Ranking list will be based on.
+     * @return A list of Best Rankings calculated from the sent latestLeaderboardData, in order from first to last.
+     */
     protected abstract List<Ranking> calculateLatestBestRankingsData(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData);
 
+    /**
+     * Updates every Ranking list stored in this LeaderboardFragment using the sent latestLeaderboardData.
+     * @param latestLeaderboardData The data that every Ranking list stored in this LeaderboardFragment will be based on.
+     */
     public void updateRankingLists(List<LeaderboardPagerAdapter.PlaceHolderTrackUser> latestLeaderboardData) {
         this.averageRankingList = calculateLatestAverageRankingsData(latestLeaderboardData);
         this.bestRankingList = calculateLatestBestRankingsData(latestLeaderboardData);
     }
 
-    public void setDisplayedRankingList(LeaderboardType leaderboardType) {
-        if (leaderboardType == LeaderboardType.AVERAGE)
+    /**
+     * Changes the Ranking list that this LeaderboardFragment is displaying in the GUI.
+     * @param rankingListType The type of Ranking list that this LeaderboardFragment ought to display.
+     */
+    public void setDisplayedRankingList(RankingListType rankingListType) {
+        if (rankingListType == RankingListType.AVERAGE)
             leaderboardAdapter.setDisplayedRankingList(averageRankingList);
-        else if (leaderboardType == LeaderboardType.BEST)
+        else if (rankingListType == RankingListType.BEST)
             leaderboardAdapter.setDisplayedRankingList(bestRankingList);
     }
 
@@ -68,6 +94,10 @@ public abstract class LeaderboardFragment extends Fragment {
         return scoreDecimalFormat;
     }
 
+    /**
+     * A class that assists with calculating average scores by allowing the statistic that is being
+     * tracked as a "score" to be summed within the PlaceHolderTrackUser.
+     */
     protected class SummedStatTrackUser {
         private LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser;
         private int sumFactorCount;

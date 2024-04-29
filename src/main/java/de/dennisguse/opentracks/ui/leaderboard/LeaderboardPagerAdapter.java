@@ -24,7 +24,9 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
     private MaxSpeedLeaderboardFragment maxSpeedLeaderboardFragment;
     private AverageMovingSpeedLeaderboardFragment averageMovingSpeedLeaderboardFragment;
     private LeaderboardFragment currentLeaderboardFragment;
-    private LeaderboardFragment.LeaderboardType currentLeaderboardType;
+    private LeaderboardFragment.RankingListType currentRankingListType;
+
+    // Please remove this boolean once the Leaderboard is able to use read data
     private boolean altTestData;
 
     public LeaderboardPagerAdapter(FragmentManager fm) {
@@ -35,11 +37,11 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         averageMovingSpeedLeaderboardFragment = new AverageMovingSpeedLeaderboardFragment();
 
         currentLeaderboardFragment = movingTimeLeaderboardFragment;
-        currentLeaderboardType = LeaderboardFragment.LeaderboardType.AVERAGE;
+        currentRankingListType = LeaderboardFragment.RankingListType.AVERAGE;
         refreshLeaderboardFragmentData();
     }
 
-    public enum LeaderboardType {
+    public enum LeaderboardFragmentType {
         MOVING_TIME(0, "Moving Time"),
         DISTANCE(1, "Distance"),
         MAX_SPEED(2, "Max Speed"),
@@ -49,7 +51,7 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         private final int value;
         private final String title;
 
-        private LeaderboardType(int value, String title) {
+        private LeaderboardFragmentType(int value, String title) {
             this.value = value;
             this.title = title;
         }
@@ -63,73 +65,92 @@ public class LeaderboardPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+    /**
+     * Sets the currentLeaderboardFragment based on the sent position and
+     * keeps the Ranking list it is meant to show on-screen up to date (without refreshing).
+     * @param position The position corresponding to the desired LeaderboardFragment child class you want to switch to.
+     */
     public void setCurrentLeaderboardFragment(int position) {
-        if (position == LeaderboardPagerAdapter.LeaderboardType.MOVING_TIME.value)
+        if (position == LeaderboardFragmentType.MOVING_TIME.value)
             currentLeaderboardFragment = movingTimeLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.DISTANCE.value)
+        else if (position == LeaderboardFragmentType.DISTANCE.value)
             currentLeaderboardFragment = distanceLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.MAX_SPEED.value)
+        else if (position == LeaderboardFragmentType.MAX_SPEED.value)
             currentLeaderboardFragment = maxSpeedLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.AVERAGE_MOVING_SPEED.value)
+        else if (position == LeaderboardFragmentType.AVERAGE_MOVING_SPEED.value)
             currentLeaderboardFragment = averageMovingSpeedLeaderboardFragment;
-        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
+        currentLeaderboardFragment.setDisplayedRankingList(currentRankingListType);
     }
 
     @Override
     public int getCount() {
-        return LeaderboardPagerAdapter.LeaderboardType.values().length;
+        return LeaderboardFragmentType.values().length;
     }
 
     @Override
     public Fragment getItem(int position) {
-        // Return the appropriate Fragment for each tab position
-        if (position == LeaderboardPagerAdapter.LeaderboardType.MOVING_TIME.value)
+        // Return the appropriate LeaderboardFragment for each tab position
+        if (position == LeaderboardFragmentType.MOVING_TIME.value)
             return movingTimeLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.DISTANCE.value)
+        else if (position == LeaderboardFragmentType.DISTANCE.value)
             return distanceLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.MAX_SPEED.value)
+        else if (position == LeaderboardFragmentType.MAX_SPEED.value)
             return maxSpeedLeaderboardFragment;
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.AVERAGE_MOVING_SPEED.value)
+        else if (position == LeaderboardFragmentType.AVERAGE_MOVING_SPEED.value)
             return averageMovingSpeedLeaderboardFragment;
         return currentLeaderboardFragment;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == LeaderboardPagerAdapter.LeaderboardType.MOVING_TIME.value)
-            return LeaderboardPagerAdapter.LeaderboardType.MOVING_TIME.getTitle();
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.DISTANCE.value)
-            return LeaderboardPagerAdapter.LeaderboardType.DISTANCE.getTitle();
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.MAX_SPEED.value)
-            return LeaderboardPagerAdapter.LeaderboardType.MAX_SPEED.getTitle();
-        else if (position == LeaderboardPagerAdapter.LeaderboardType.AVERAGE_MOVING_SPEED.value)
-            return LeaderboardPagerAdapter.LeaderboardType.AVERAGE_MOVING_SPEED.getTitle();
+        if (position == LeaderboardFragmentType.MOVING_TIME.value)
+            return LeaderboardFragmentType.MOVING_TIME.getTitle();
+        else if (position == LeaderboardFragmentType.DISTANCE.value)
+            return LeaderboardFragmentType.DISTANCE.getTitle();
+        else if (position == LeaderboardFragmentType.MAX_SPEED.value)
+            return LeaderboardFragmentType.MAX_SPEED.getTitle();
+        else if (position == LeaderboardFragmentType.AVERAGE_MOVING_SPEED.value)
+            return LeaderboardFragmentType.AVERAGE_MOVING_SPEED.getTitle();
         return "";
     }
 
-    public void setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType leaderboardType) {
-        if (leaderboardType == currentLeaderboardType)
+    /**
+     * Swaps the Ranking list that the currentLeaderboardFragment is showing in the GUI based on the sent rankingListType.
+     * @param rankingListType The type of Ranking list that the currentLeaderboardFragment should show in the GUI.
+     */
+    public void setCurrentLeaderboardRankingListType(LeaderboardFragment.RankingListType rankingListType) {
+        if (rankingListType == currentRankingListType)
             return;
-        currentLeaderboardType = leaderboardType;
-        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
+        currentRankingListType = rankingListType;
+        currentLeaderboardFragment.setDisplayedRankingList(currentRankingListType);
     }
 
+    /**
+     * Refreshes the Ranking list data in every LeaderboardFragment in this LeaderboardPageAdapter based off the latest available data.
+     * Ensures that the currentLeaderboardFragment is still showing the Rankings data it is meant to show as per the user's specifications.
+     */
     public void refreshLeaderboardFragmentData() {
         List<PlaceHolderTrackUser> latestLeaderboardData = readLatestLeaderboardData();
         movingTimeLeaderboardFragment.updateRankingLists(latestLeaderboardData);
         distanceLeaderboardFragment.updateRankingLists(latestLeaderboardData);
         maxSpeedLeaderboardFragment.updateRankingLists(latestLeaderboardData);
         averageMovingSpeedLeaderboardFragment.updateRankingLists(latestLeaderboardData);
-        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
+        currentLeaderboardFragment.setDisplayedRankingList(currentRankingListType);
     }
 
-    public void changeNumberOfDisplayedRanks(int numberOfUsers) {
-        LeaderboardAdapter.setNumberOfRanksToDisplay(numberOfUsers);
-        currentLeaderboardFragment.setDisplayedRankingList(currentLeaderboardType);
+    /**
+     * Sets the largest-number Rank that the LeaderboardAdapters can display and
+     * updates the Ranking list that the currentLeaderboardFragment is showing on the GUI accordingly.
+     * @param largestNumberRank The largest-number rank that can be shown on-screen by any LeaderboardAdapter.
+     */
+    public void changeLargestNumberRankToDisplay(int largestNumberRank) {
+        LeaderboardAdapter.setLargestNumberRankToDisplay(largestNumberRank);
+        currentLeaderboardFragment.setDisplayedRankingList(currentRankingListType);
     }
 
     private List<PlaceHolderTrackUser> readLatestLeaderboardData() {
-        // This is where we get the data from the database for the runs that will be in the leaderboard.
+        // This is where we get the data "from the database" for the runs that will be in the leaderboard.
+        // This method can be removed once the leaderboards can use real data.
         List<PlaceHolderTrackUser> testData = new ArrayList();
 
         TrackStatistics stats = new TrackStatistics();
