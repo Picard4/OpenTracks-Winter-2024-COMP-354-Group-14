@@ -75,21 +75,21 @@ public class LeaderboardActivity extends AppCompatActivity {
         tenButton.setBackgroundColor(optionSelectedColor);
 
         tenButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.changeNumberOfDisplayedRanks(10);
+            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(10);
             findViewById(R.id.btnTen).setBackgroundColor(optionSelectedColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
         twentyFiveButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.changeNumberOfDisplayedRanks(25);
+            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(25);
             findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionSelectedColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
         allButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.changeNumberOfDisplayedRanks(0);
+            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(0);
             findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionSelectedColor);
@@ -128,13 +128,13 @@ public class LeaderboardActivity extends AppCompatActivity {
         everyoneButton.setBackgroundColor(optionSelectedColor);
 
         averageButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.AVERAGE);
+            leaderboardPagerAdapter.setCurrentLeaderboardRankingListType(LeaderboardFragment.RankingListType.AVERAGE);
             averageButton.setBackgroundColor(optionSelectedColor);
             bestButton.setBackgroundColor(optionAvailableColor);
         });
 
         bestButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.setCurrentLeaderboardType(LeaderboardFragment.LeaderboardType.BEST);
+            leaderboardPagerAdapter.setCurrentLeaderboardRankingListType(LeaderboardFragment.RankingListType.BEST);
             averageButton.setBackgroundColor(optionAvailableColor);
             bestButton.setBackgroundColor(optionSelectedColor);
         });

@@ -16,14 +16,19 @@ import de.dennisguse.opentracks.data.models.Ranking;
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
     private List<Ranking> displayedRankingList;
-    private static int numberOfRanksToDisplay = 10;
+    private static int largestNumberRankToDisplay = 10;
 
     public LeaderboardAdapter(List<Ranking> displayedRankingList) {
         this.displayedRankingList = displayedRankingList;
     }
 
-    public static void setNumberOfRanksToDisplay(int numberOfRanks) {
-        numberOfRanksToDisplay = numberOfRanks;
+    /**
+     * Sets the largestNumberRankToDisplay, but does not change the leaderboard that is shown on-screen;
+     * you need to call setDisplayedRankingList(List<Ranking> rankingListToDisplay) for that.
+     * @param largestNumberRank The largest-number rank that can be displayed in the on-screen leaderboard.
+     */
+    public static void setLargestNumberRankToDisplay(int largestNumberRank) {
+        largestNumberRankToDisplay = largestNumberRank;
     }
 
     @NonNull
@@ -47,6 +52,11 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         return displayedRankingList.size();
     }
 
+    /**
+     * Changes the list of Rankings that is shown on-screen to the rankingListToDisplay,
+     * or a filtered version of it if some rankings are restricted from being displayed.
+     * @param rankingListToDisplay The list of Rankings to be filtered based on the largest-numbered rank we want to show, and displayed in the GUI.
+     */
     public void setDisplayedRankingList(List<Ranking> rankingListToDisplay) {
         List<Ranking> filteredRankingListToDisplay = displayOnlySetAmountOfRanks(rankingListToDisplay);
 
@@ -61,8 +71,10 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     }
 
     private List<Ranking> displayOnlySetAmountOfRanks(List<Ranking> rankingListToDisplay) {
-        // Display all the ranks if all ranks are needed or the largest-numbered rank is less than the number of ranks we wish to display
-        if (numberOfRanksToDisplay <= 0 || rankingListToDisplay.get(rankingListToDisplay.size() - 1).getRank() <= numberOfRanksToDisplay)
+        // Display all the ranks if all ranks are needed or
+        // the largest-numbered rank is less than the largest-numbered rank we wish to display.
+        if (largestNumberRankToDisplay <= 0 ||
+                rankingListToDisplay.get(rankingListToDisplay.size() - 1).getRank() <= largestNumberRankToDisplay)
             return rankingListToDisplay;
 
         // The Top X restriction is based on the Rank, not the User's Ranking.
@@ -70,13 +82,16 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         List<Ranking> newRankingListToDisplay = new ArrayList<>();
         for (int i = 0; i < rankingListToDisplay.size(); i++) {
             Ranking nextRanking = rankingListToDisplay.get(i);
-            if (nextRanking.getRank() > numberOfRanksToDisplay)
+            if (nextRanking.getRank() > largestNumberRankToDisplay)
                 break;
             newRankingListToDisplay.add(nextRanking);
         }
         return  newRankingListToDisplay;
     }
 
+    /**
+     * The class that Rankings are bound to so that they can be shown in the GUI.
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView avatar;
         TextView usernameText;
