@@ -16,9 +16,13 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 
 import de.dennisguse.opentracks.R;
+import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardAdapter;
 import de.dennisguse.opentracks.ui.leaderboard.leaderboardFragment.LeaderboardFragment;
 
 public class LeaderboardActivity extends AppCompatActivity {
+    private static int TEN_BUTTON_VALUE = 10;
+    private static int TWENTY_FIVE_BUTTON_VALUE = 25;
+    private static int ALL_BUTTON_VALUE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,26 +74,30 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> onBackPressed());
 
-        // The default number of ranks shown is 10.
-        // Please check the LeaderboardAdapter's fields if you wish to change the default.
-        tenButton.setBackgroundColor(optionSelectedColor);
+        // Get the current largest-number rank that can be shown and change the button colors accordingly.
+        if (LeaderboardAdapter.getLargestNumberRankToDisplay() == TEN_BUTTON_VALUE)
+            tenButton.setBackgroundColor(optionSelectedColor);
+        else if (LeaderboardAdapter.getLargestNumberRankToDisplay() == TWENTY_FIVE_BUTTON_VALUE)
+            twentyFiveButton.setBackgroundColor(optionSelectedColor);
+        else
+            allButton.setBackgroundColor(optionSelectedColor);
 
         tenButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(10);
+            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(TEN_BUTTON_VALUE);
             findViewById(R.id.btnTen).setBackgroundColor(optionSelectedColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
         twentyFiveButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(25);
+            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(TWENTY_FIVE_BUTTON_VALUE);
             findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionSelectedColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionAvailableColor);
         });
 
         allButton.setOnClickListener(v -> {
-            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(0);
+            leaderboardPagerAdapter.changeLargestNumberRankToDisplay(ALL_BUTTON_VALUE);
             findViewById(R.id.btnTen).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnTwentyFive).setBackgroundColor(optionAvailableColor);
             findViewById(R.id.btnAll).setBackgroundColor(optionSelectedColor);

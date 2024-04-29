@@ -22,6 +22,10 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         this.displayedRankingList = displayedRankingList;
     }
 
+    public static int getLargestNumberRankToDisplay() {
+        return largestNumberRankToDisplay;
+    }
+
     /**
      * Sets the largestNumberRankToDisplay, but does not change the leaderboard that is shown on-screen;
      * you need to call setDisplayedRankingList(List<Ranking> rankingListToDisplay) for that.
