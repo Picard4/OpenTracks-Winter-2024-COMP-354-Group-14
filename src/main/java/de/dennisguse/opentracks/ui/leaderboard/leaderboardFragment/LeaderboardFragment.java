@@ -96,12 +96,11 @@ public abstract class LeaderboardFragment extends Fragment {
 
     /**
      * A class that assists with calculating average scores by allowing the statistic that is being
-     * tracked as a "score" to be summed within the PlaceHolderTrackUser.
+     * tracked as a "score" to be summed outside of the PlaceHolderTrackUser.
      */
     protected class SummedStatTrackUser {
         private LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser;
         private int sumFactorCount;
-
         private Object scoreSum;
 
         public SummedStatTrackUser(LeaderboardPagerAdapter.PlaceHolderTrackUser placeHolderTrackUser) {
